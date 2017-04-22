@@ -1,0 +1,72 @@
+{% load i18n admin_static %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <title>Signin</title>
+
+    <!-- Bootstrap core CSS -->
+	<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrapValidator.min.css' %}" rel="stylesheet prefetch">
+    <link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ie10-viewport-bug-workaround.css' %}">
+	
+    <!-- Custom styles for this template -->
+	<link rel="stylesheet" type="text/css" href="{% static 'css/signin.css' %}">
+   	<script src="{% static 'js/ie-emulation-modes-warning.js' %}"></script>
+
+	<link rel="stylesheet" type="text/css" href="{% static 'css/ilssi.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/flexslider.css' %}" rel="stylesheet">
+    
+
+    
+	<script src="{% static 'js/jquery-1.12.4.js' %}"></script>
+	
+
+      
+  </head>
+
+  <body>
+        <header id="header">
+				<div class="frame">
+						<h1>
+								<a href="/">Innovation Lab for<br />Small Scale Irrigation</a>
+						</h1>
+						<div id="heading-ftf">
+								<a href="http://www.feedthefuture.gov/">
+										<image src="{% static 'img/ftf-logo-white.png' %}" alt="Feed the Future Logo" title="Feed the Future" />
+								 </a>
+						</div>
+				</div>
+		</header>
+		<div class="container">
+				<form class="form-signin" action='' method="POST" id="loginform">{% csrf_token %} 
+						<h2 class="form-signin-heading">Please sign in</h2>
+						
+						<label for="username" class="sr-only">UserName</label>
+						{{ form.username }}     
+						
+						<label for="inputPassword" class="sr-only">Password</label>
+						{{ form.password }}
+		<div class="checkbox">
+				<label>
+						{{ form.remember_me }} Remember me
+				</label>
+        </div>
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+				
+				</form>
+            <p style='color: red'>{{message}}</p>
+		</div> <!-- /container -->
+
+	<script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+  </body>
+</html>

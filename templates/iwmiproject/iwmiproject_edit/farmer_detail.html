@@ -1,0 +1,526 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block title %}
+    <title>Farmer list</title>
+{% endblock %}
+
+{% block main_section %}
+  <script>
+  $(function() {
+    $( "#id_date" ).datepicker();
+  });
+  
+  $(document).ready(function(){
+    $("#id_seasonstart").datepicker({
+        //format: 'dd/mm/yyyy',
+        //changeMonth: true,
+        //changeYear: true,
+        //showButtonPanel: true,
+        //dateFormat: 'MM yy',
+        //onClose: function(dateText, inst) { 
+            //$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+        //},
+        onSelect: function(selected) {
+          $("#id_seasonend").datepicker("option","minDate", selected)
+        }
+    });
+    $("#id_seasonend").datepicker({
+        //format: 'dd/mm/yyyy',
+        //changeMonth: true,
+        //changeYear: true,
+        //showButtonPanel: true,
+        //dateFormat: 'MM yy',
+        //onClose: function(dateText, inst) { 
+            //$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+       // },
+        onSelect: function(selected) {
+           $("#id_seasonstart").datepicker("option","maxDate", selected)
+        }
+    });  
+});
+  </script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+       
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+{% if user_village %}
+<input type="hidden" id="uservillage" name="uservillage" value="{{user_village}}" readonly='readonly' />
+{% elif researcher %}
+<input type="hidden" id="researcher" name="researcher" value="{{researcher}}" readonly='readonly' />
+{% elif user_country %}
+
+{% endif %}
+
+<form class="well form-horizontal" action=" " method="post"  id="farmerinfo_form">{% csrf_token %} 
+<!-- Form Name -->
+<fieldset>
+<legend>Field Info..</legend>
+
+{{ plotmanagementform.errors }}
+<div class="form-group"> 
+    {{ plotmanagementform.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farmer:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plotmanagementform.farm }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ plotmanagementform.plotID.errors }}
+    <label for="plotID" class="col-md-4 control-label">Field ID:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plotmanagementform.plotID }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ plotform.fieldtype.errors }}
+    <label for="fieldtype" class="col-md-4 control-label">Field type:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plotform.fieldtype }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ plotmanagementform.plot_size.errors }}
+    <label for="plot_size" class="col-md-4 control-label">Field size:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ plotmanagementform.plot_size }}<span class="input-group-addon">m<sup>2</sup></span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ plotform.latitude.errors }}
+    <label for="latitude" class="col-md-4 control-label">Field latitude:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plotform.latitude }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ plotform.longitude.errors }}
+    <label for="longitude" class="col-md-4 control-label">Field longitude:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plotform.longitude }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ plotmanagementform.elevation.errors }}
+    <label for="longitude" class="col-md-4 control-label">Field elevation:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ plotmanagementform.elevation }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ plotmanagementform.cropping_system.errors }}
+    <label for="cropping_system" class="col-md-4 control-label">Cropping system:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plotmanagementform.cropping_system }}
+        </div>
+</div>
+
+<!--
+<div class="form-group"> 
+    {{ plotmanagementform.crop.errors }}
+    <label for="crop" class="col-md-4 control-label">Crop:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plotmanagementform.crop }}
+        </div>
+</div>
+-->
+
+<div id='crop_one'>
+<div class="form-group"> 
+    {{ plotcropform.crop1.errors }}
+    <label for="crop1" class="col-md-4 control-label">Crop:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plotcropform.crop1 }}
+        </div>
+</div>
+<div class="form-group"> 
+    {{ plotcropform.crop1_variety.errors }}
+    <label for="crop1_variety" class="col-md-4 control-label">crop variety:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plotcropform.crop1_variety }}
+        </div>
+</div>
+<div class="form-group"> 
+    {{ plotcropform.crop1_varietytype.errors }}
+    <label for="crop1_varietytype" class="col-md-4 control-label">crop variety type:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plotcropform.crop1_varietytype }}
+        </div>
+</div>
+</div>
+
+<div id='crop_two'>
+<div class="form-group"> 
+    {{ plotcropform.crop2.errors }}
+    <label for="crop2" class="col-md-4 control-label">Crop:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plotcropform.crop2 }}
+        </div>
+</div>
+<div class="form-group"> 
+    {{ plotcropform.crop2_variety.errors }}
+    <label for="crop2_variety" class="col-md-4 control-label">crop variety:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plotcropform.crop2_variety }}
+        </div>
+</div>
+<div class="form-group"> 
+    {{ plotcropform.crop2_varietytype.errors }}
+    <label for="crop2_varietytype" class="col-md-4 control-label">crop variety type:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plotcropform.crop2_varietytype }}
+        </div>
+</div>
+</div>
+<div class="form-group"> 
+    {{ plotmanagementform.seasonstart.errors }}
+    <label for="seasonstart" class="col-md-4 control-label">Season start:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plotmanagementform.seasonstart }}
+        </div>
+</div>
+
+
+<div class="form-group" id='bed_length'> 
+    {{ bedplotform.length.errors }}
+    <label for="length" class="col-md-4 control-label">Bed length:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ bedplotform.length }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='bed_width'> 
+    {{ bedplotform.width.errors }}
+    <label for="width" class="col-md-4 control-label">Bed width:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ bedplotform.width }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='bednumber'> 
+    {{ bedplotform.numbers.errors }}
+    <label for="numbers" class="col-md-4 control-label">Number of beds:</label>
+        <div class="col-md-4 selectContainer">
+            {{ bedplotform.numbers }}
+        </div>
+</div>
+
+<div class="form-group" id='furrow_length'> 
+    {{ furrowform.length.errors }}
+    <label for="length" class="col-md-4 control-label">Furrow length:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ furrowform.length }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='furrow_width'> 
+    {{ furrowform.width.errors }}
+    <label for="width" class="col-md-4 control-label">Furrow width:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ furrowform.width }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='nfurrow'> 
+    {{ furrowform.numbers.errors }}
+    <label for="numbers" class="col-md-4 control-label">Number of furrows:</label>
+        <div class="col-md-4 selectContainer">
+            {{ furrowform.numbers }}
+        </div>
+</div>
+</fieldset>
+
+<fieldset>
+<legend>Irrigation application and management</legend>
+
+<div class="form-group"> 
+    {{ plotmanagementform.water_application.errors }}
+    <label for="water_application" class="col-md-4 control-label">Water application:</label>
+        <div class="col-md-4 selectContainer">
+        {{ plotmanagementform.water_application }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ watermanagementform.water_management_method.errors }}
+    <label for="water_management_method" class="col-md-4 control-label">Water management method:</label>
+        <div class="col-md-4 selectContainer">
+        {{ watermanagementform.water_management_method }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ plotmanagementform.rootdepth.errors }}
+    <label for="rootdepth" class="col-md-4 control-label">Rootzone depth assumed:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ plotmanagementform.rootdepth }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group" id='TDR_length'> 
+    {{ watermanagementform.rods_length.errors }}
+    <label for="rods_length" class="col-md-4 control-label">Length of the measurement rods:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ watermanagementform.rods_length }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='WFD_yellow_depth'> 
+    {{ watermanagementform.yellow_depth_detector.errors }}
+    <label for="yellow_depth_detector" class="col-md-4 control-label">Depth the yellow detector is installed:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ watermanagementform.yellow_depth_detector }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='WFD_red_depth'> 
+    {{ watermanagementform.red_depth_detector.errors }}
+    <label for="red_depth_detector" class="col-md-4 control-label">Depth the red detector is installed:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ watermanagementform.red_depth_detector }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+
+</fieldset>
+
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+
+</div>
+
+{% endblock %}
+{% block extended_javascripts_code %}
+<script>
+$(window).load(function(){
+        if ($('#id_water_management_method option:selected').text()=='WFD' || $('#id_water_management_method:selected').text()=='WFD WUA'){
+            $("#WFD_red_depth,#WFD_yellow_depth").show();
+            $("#id_red_depth_detector#id_yellow_depth_detector").val();
+            $('#TDR_length').hide();
+        }
+        else if ($('#id_water_management_method option:selected').text() == 'TDR(soil moisture)') {
+          $('#TDR_length').show();
+          $("#WFD_red_depth,#WFD_yellow_depth").hide();
+          $("#id_red_depth_detector,#id_yellow_depth_detector").val();
+        }
+        else{
+            //value='';
+            $("#WFD_red_depth,#WFD_yellow_depth,#TDR_length").hide();
+            
+            $("#id_red_depth_detector,#id_yellow_depth_detector,#id_rods_length").val();
+        }
+    });
+
+$(document).ready(function() {
+            $("#id_water_management_method").change(function() {
+                if ($(this).val() == 'WFD' || $(this).val() == 'WFD WUA') {
+                  //thisvalue ='';
+                  $("#WFD_red_depth,#WFD_yellow_depth").show();
+                  $("#id_red_depth_detector,#id_yellow_depth_detector").val('');
+                  $("#TDR_length").hide();
+                  $("#id_rods_length").val(0);
+                }
+                else if ($(this).val()== 'TDR(soil moisture)'){
+                   //thisvalue ='';
+                 $("#TDR_length").show();
+                 $("#id_rods_length").val('');
+                 $("#WFD_red_depth,#WFD_yellow_depth").hide();
+                 $("#id_red_depth_detector,#id_yellow_depth_detector").val(0);
+                }
+                else{
+                  $("#WFD_red_depth,#WFD_yellow_depth,#TDR_length").hide();
+                  $("#id_red_depth_detector,#id_yellow_depth_detector,#id_rods_length").val(0);
+                }
+            });
+            
+          
+    });
+  
+</script>
+
+<script>
+$( function() {
+
+  $('#id_crop').autocomplete({
+      //minLength:3,
+      source: "/crop_select/"
+    });
+});
+</script>
+<script>
+$(window).load(function(){
+if ($('#id_cropping_system').val() == 'Monocropping') {
+    $('#crop_one').show();
+    $('#id_crop1').val();
+    $('#id_crop1_variety').val();
+    $('#id_crop1_varietytype').val();
+    
+    $('#crop_two').hide();
+    $('#id_crop2').val('N/A');
+    $('#id_crop2_variety').val('N/A');
+    $('select[name=crop2_varietytype] option:eq(1)').attr('selected', 'selected');
+    
+}
+else if ($('#id_cropping_system').val() == 'Intercropping') {
+    $('#crop_two').show();
+    $('#id_crop2').val();
+    $('#id_crop2_variety').val();
+    $('#id_crop2_varietytype').val();
+    $('#crop_one').show();
+    $('#id_crop1').val();
+    $('#id_crop1_variety').val();
+    $('#id_crop1_varietytype').val();
+}
+});
+
+
+$(document).ready(function() {
+  $("#id_cropping_system").change(function() {
+    if ($(this).val() == 'Monocropping') {
+      $('#crop_one').show();
+      $('#crop_two').hide();
+      $('#id_crop2').val('N/A');
+      $('#id_crop2_variety').val('N/A');
+      $('select[name=crop2_varietytype] option:eq(1)').attr('selected', 'selected');
+    }
+    else if ($(this).val() == 'Intercropping') {
+        $('#crop_one,#crop_two').show();
+        $('#id_crop2').val('');
+        $('#id_crop2_variety').val('');
+        $('#id_crop2_varietytype').prop('selectedIndex',0);
+    }
+  })
+});
+</script>
+<script>
+$( function() {
+  $('#id_crop1,#id_crop2').autocomplete({
+      source: "/crop_select/"
+    });
+});
+
+
+
+/*
+$( function() {
+  $('#id_crop_variety1').autocomplete({
+      source: "/crop1_variety/"
+    });
+});
+
+$( function() {
+  $('#id_crop_variety2').autocomplete({
+      source: "/crop2_variety/"
+    });
+});
+*/
+</script>
+<script>
+
+$(window).load(function(){
+  var url = "/get_farmer_name/" + $('#id_farm').val() + "/get_farmer_name";
+  $.getJSON(url, function(farmer_name) {
+    //alert(farmer_name);
+    var options = '<option value="' + farmer_name[0] + '">' + farmer_name[1] + ' ' + farmer_name[2] + ' ' + farmer_name[3] + '</option>';
+    $("#id_farm").html(options);
+    $("#id_farm option:selected").attr('selected', 'selected');
+  })
+});
+
+$(window).load(function(){
+  var url = "/get_plot_name/" + $('#id_plotID').val() + "/get_plot_name";
+  $.getJSON(url, function(plot_name) {
+    var options = '<option value="' + plot_name[0] + '">' + plot_name[1] + '</option>';
+    $("#id_plotID").html(options);
+    $("#id_plotID option:selected").attr('selected', 'selected');
+  })
+});
+
+/*
+$(window).load(function(){
+  var url = "/get_farm_name/" + $('#id_farm').val() + "/get_farm_name";
+  $.getJSON(url, function(plot_name) {
+    var options = '<option value="">Choose Field..</option>';
+      for (var i = 0; i < farmers.length; i++) {
+        options += '<option value="' + farmers[i].pk + '">' + farmers[i].fields['firstname'] + ' ' + farmers[i].fields['middlename'] + ' ' + farmers[i].fields['lastname'] + '</option>';
+          }
+          $("#id_farmer").html(options);
+          $("#id_farmer option:selected").attr('selected', 'selected');
+  });
+});
+*/
+</script>
+
+
+<script>
+$(window).load(function() {
+    if ($('#id_fieldtype').val() == '') {
+      $('#bed_length,#bed_width,#bednumber,#furrow_length,#furrow_width,#nfurrow').show();
+    }
+    else if ($('#id_fieldtype').val()== 'Pocket garden') { 
+        $('#bed_length,#bed_width,#bednumber,#furrow_length,#furrow_width,#nfurrow').hide();
+        $('#id_bed_length,#id_bed_width,#id_bednumber,#id_furrow_length,#id_furrow_width,#id_nfurrow').val();
+    }
+    else if ($('#id_fieldtype').val() == 'Conventional plot' || $('#id_fieldtype').val() == 'Farm') {
+        $('#bed_length,#bed_width,#bednumber,#furrow_length,#furrow_width,#nfurrow').show();
+        $('#id_bed_length,#id_bed_width,#id_bednumber,#id_furrow_length,#id_furrow_width,#id_nfurrow').val();
+    }
+});
+  
+$(document).ready(function() {
+  $("#id_fieldtype").change(function() {
+    if ($(this).val() == '') {
+      $('#bed_length,#bed_width,#bednumber,#furrow_length,#furrow_width,#nfurrow').show();
+    }
+    else if ($(this).val() == 'Pocket garden') {
+        $('#bed_length,#bed_width,#bednumber,#furrow_length,#furrow_width,#nfurrow').hide();
+        $('#id_length,#id_width,#id_numbers,#id_length,#id_width,#id_numbers').val(0);
+    }
+    else if ($(this).val() == 'Conventional plot' || $(this).val() == 'Farm') {
+        $('#bed_length,#bed_width,#bednumber,#furrow_length,#furrow_width,#nfurrow').show();
+        $('#id_length,#id_width,#id_numbers,#id_length,#id_width,#id_numbers').val('');
+    }
+  })
+});
+</script>
+
+{% endblock %}
+
+
+

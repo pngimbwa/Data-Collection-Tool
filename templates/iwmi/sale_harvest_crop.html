@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    <title>Sale of harvested crops</title>
+{% endblock %}
+
+{% block main_section %}
+
+  <script>
+  $(function() {
+    $( "#sale_date" ).datepicker();
+  });
+  </script>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+
+    <form class="well form-horizontal" action=" " method="post"  id="fuelconsumption_form">{% csrf_token %} 
+
+<!-- Form Name -->
+<fieldset>
+        <legend>Sale of harvested crops..</legend>
+                <div class="form-group"> 
+                        <label for="farmid" class="col-md-4 control-label">Farm:</label>
+                        <div class="col-md-4 selectContainer">
+                                <select name="farmid" class="form-control selectpicker" >
+                                        <option value=" " >Choose....</option>
+                                        <option>Group A</option>
+                                        <option>Group B</option>
+                                        <option >Group C</option>
+                                </select>
+                        </div>
+                </div>
+
+<div class="form-group">
+<label for="sale_date" class="col-md-4 control-label" >Date</label> 
+        <div class="col-md-4 inputGroupContainer">
+                <input name="sale_date" id="sale_date" placeholder="12-01-1999" class="form-control" type="text">
+        </div>
+</div>
+       
+<div class="form-group">
+<label for="sale_quantity" class="col-md-4 control-label">Quantity</label>  
+        <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+                <input  name="sale_quantity" id="sale_quantity" placeholder="#Sold quantity" class="form-control"  type="text"><span class="input-group-addon">Kg</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group">
+<label for="unit_market_price" class="col-md-4 control-label">Market price</label>  
+        <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+                <input  name="unit_market_price" id="unit_market_price" placeholder="#Market price" class="form-control"  type="text"><span class="input-group-addon">Tsh</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group">
+<label for="total_value" class="col-md-4 control-label">Total value</label>  
+        <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+                <input  name="total_value" id="total_value" placeholder="#Total value" class="form-control"  type="text"><span class="input-group-addon">Tsh</span>
+            </div>
+        </div>
+</div>
+
+</fieldset>
+
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block extended_javascripts_code %}
+	<script>
+    $(document).ready(function () {
+    $('#fuelconsumption_form').bootstrapValidator({
+        feedbackIcons: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            farmid: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select farm' }
+                        }
+                    },
+            family_labour_date: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please the date' }
+                        }
+                    },
+            family_activity: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill the performed activity' }
+                        }
+                    },
+            people_number: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill number of people' }
+                        }
+                    },
+            
+            people_per_acre: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill the number of people per acre' }
+                        }
+                    },   
+            total_payment: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill the total payment' }
+                        }
+                    }, 
+        }
+    }).on('success.form.bv', function (e) {
+        $('#success_message').slideDown({ opacity: 'show' }, 'slow');
+        $('#fuelconsumption_form').data('bootstrapValidator').resetForm();
+        e.preventDefault();
+        var $form = $(e.target);
+        var bv = $form.data('bootstrapValidator');
+        $.post($form.attr('action'), $form.serialize(), function (result) {
+            console.log(result);
+        }, 'json');
+    });
+});
+      //# sourceURL=pen.js
+
+    </script>
+    <script>
+            if (document.location.search.match(/type=embed/gi)) {
+                window.parent.postMessage("resize", "*");
+                }
+    </script>
+
+{% endblock %}

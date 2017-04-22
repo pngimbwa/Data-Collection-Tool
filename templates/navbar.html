@@ -1,0 +1,143 @@
+{% load i18n admin_static %}
+{% load staticfiles %}
+
+    <style>
+    .navbar-brand-image{
+        position: absolute;
+        width: 100%;
+        left: 0;
+        top: 0;
+        text-align: center;
+        margin: auto;
+        padding: 0;
+    }
+</style>
+<nav class="navbar navbar-inverse navbar-fixed-top" id="sitenav">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href='{% url "index" %}'>Go to Site</a>
+            <a  class="navbar-brand" text-align="center" href="">
+                <image src="{% static 'img/ftf-logo-white2.png' %}" alt="Feed the Future Logo" title="Feed the Future" />
+            </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    {% if user.is_authenticated %}
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{x}}Welcome,<strong>{{user}}</strong> <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href='{% url "signup:passwordchange" %}'>Change password</a></li>
+                            <li><a href="{% url 'signup:logout' %}">Logout</a></li>
+                            {% if user.is_active and user.is_superuser %}
+                                <li><a href="{% url 'admin:index' %}">{% trans 'Admin Page' %}</a></li>
+                            {% else %}
+                                <li></li>
+                            {% endif %}
+                        </ul>
+                    {% else %}
+                        <a href="{% url 'signup:login' %}">Login</a>
+                    {% endif %}
+                </li>
+                <li><a href="{% url 'signup:help' %}">Help</a></li>
+            </ul>
+        <!--<form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+        </form>-->
+        </div>
+    </div>
+</nav>
+
+<!--
+<nav id="sitenav">
+			<div class="frame">	
+				<ul>
+				<li  class="selected" id="home"><a href="/">Home</a></li>
+		
+				<li  >
+					<a href="http://ilssi.tamu.edu/about/">About</a>
+							<ul>
+		
+				<li  >
+					<a href="http://ilssi.tamu.edu/about/partners/">Partners</a>
+					
+				</li>
+				<li  >
+					<a href="http://ilssi.tamu.edu/about/people/">People</a>
+					
+				</li>
+		
+		</ul>
+
+				</li>
+				<li  >
+					<a href="http://ilssi.tamu.edu/countries/">Countries</a>
+							<ul>
+		
+				<li  >
+					<a href="http://ilssi.tamu.edu/countries/ethiopia/">Ethiopia</a>
+					
+				</li>
+				<li  >
+					<a href="http://ilssi.tamu.edu/countries/tanzania/">Tanzania</a>
+					
+				</li>
+				<li  >
+					<a href="http://ilssi.tamu.edu/countries/ghana/">Ghana</a>
+					
+				</li>
+		
+		</ul>
+
+				</li>
+				
+				<li  >
+					<a href="http://ilssi.tamu.edu/workshops/">Workshops</a>
+							<ul>
+		
+				<li  >
+					<a href="http://ilssi.tamu.edu/workshops/ethiopia/">Ethiopia</a>
+					
+				</li>
+				<li  >
+					<a href="http://ilssi.tamu.edu/workshops/ghana/">Ghana</a>
+					
+				</li>
+				<li  >
+					<a href="http://ilssi.tamu.edu/workshops/tanzania/">Tanzania</a>
+					
+				</li>
+		
+		</ul>
+
+				</li>
+				<li  >
+					<a href="http://ilssi.tamu.edu/news/">News</a>
+							<ul>
+		
+				<li  >
+					<a href="http://ilssi.tamu.edu/news/all/">All</a>
+					
+				</li>
+		
+		</ul>
+
+				</li>
+			
+		
+				
+		</ul>
+				<div class="clear"></div>
+			</div>
+		</nav>
+-->
+
+
+
+ 
+ 

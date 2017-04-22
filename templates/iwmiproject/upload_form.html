@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    <title>Form Upload</title>
+{% endblock %}
+
+{% block main_section %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+<form class="well form-horizontal" action=" " method="post" enctype="multipart/form-data">{% csrf_token %}
+{{ form.errors }}
+
+<div class="form-group"> 
+    {{ form.csv_file.errors }}
+    <label for="csv_file" class="col-md-4 control-label">Upload File</label>
+        <div class="col-md-4 selectContainer">
+           {{ form.csv_file }}
+        </div>
+</div>
+
+<div class="form-group" id='submit'>
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+
+</form>
+</div>
+{% endblock %}
+

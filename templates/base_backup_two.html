@@ -1,0 +1,267 @@
+{% load i18n admin_static %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block head %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+{% block title %}
+    <title> </title>
+{% endblock %}
+    <script src="{% static 'js/modernizr.js' %}"></script>
+    <!-- Bootstrap core CSS -->
+    <!--- <link rel="stylesheet" href="{% static 'css/bootstrap-responsive.min.css' %}" />-->
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <!--<link href="{% static 'css/bootstrap-theme.min.css' %}" rel="stylesheet prefetch">-->
+    <link href="{% static 'css/bootstrapValidator.min.css' %}" rel="stylesheet prefetch">
+    <!---JQUERY CSS -->
+   <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">-->
+    <link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet">
+    <link href="{% static 'css/jquery.timepicker.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/jsb-admin-2.css' %}" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
+    
+    <!--<link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet">-->
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{% static 'css/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
+    
+     <!-- Custom styles for this template -->
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+    
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/signin.css' %}" rel="stylesheet">
+    <!-- my styles CSS -->
+    <link href="{% static 'css/mystyles.css' %}" rel="stylesheet">
+    <style>#success_message{ display: none;}</style>
+   <script src="{% static 'js/jquery-1.12.4.js' %}"></script>
+   <script src="{% static 'js/jquery.timepicker.min.js' %}"></script>
+   
+    <script>window.console = window.console || function(t) {};</script>
+    <style>
+    .ui-timepicker { position: relative; z-index: 10000 !important; }
+    .ui-datepicker { position: relative; z-index: 10000 !important; }
+    </style> 
+
+    {% endblock %}
+     
+  </head>
+<body>
+    
+
+<div class="container-fluid">
+    
+    <div class="row">
+    {% block navbar %}
+            {% include 'navbar.html' %}
+    {% endblock %}
+    
+    {% block sidebar %}
+  
+<div class="col-sm-3 col-md-2 sidebar">
+    <div class="navbar-default sidebar" role="navigation">
+      <div class="sidebar-nav navbar-collapse">
+        <ul class="nav" id="side-menu">
+       {% if user.is_active and user.is_staff %}
+        <li class="panel">
+          <a href="#">Registration<span class="fa arrow"></span></a>
+        <ul class="nav nav-second-level">
+          <li>
+            <a href='{% url "signup:register" %}'class="list-group-item">Register Farmer</a>
+          </li>
+          <li>
+            <a href='{% url "signup:registerUser" %}'class="list-group-item">Register User</a>
+          </li>
+ 
+          </ul>
+            <!-- /.nav-second-level -->
+        </li>
+        
+        {% else %}
+        {% endif %}
+        <li class="panel">
+          <a href="#"color='red'>Farm Data<span class="fa arrow"></span></a>
+          <ul class="nav nav-second-level" class="list-group">
+            <li>
+              <a href='{% url "iwmiproject:farminfo" %}' class="list-group-item">Plot(Field) Info</a>
+            </li>
+            <li>
+              <a href='{% url "iwmiproject:remarks" %}' class="list-group-item">Remarks</a>
+            </li>
+            <li>
+              <a href='{% url "iwmiproject:landclearance" %}' class="list-group-item">Land clearance</a>
+            </li>
+            <li>
+              <a href='{% url "iwmiproject:landpreparation" %}' class="list-group-item">Land preparation</a>
+            </li>
+            <li>
+              <a href="#" >Nursery<span class="fa arrow"></span></a>
+              <ul class="nav nav-third-level">
+                <li>
+                  <a href='{% url "iwmiproject:nursery" %}' class="list-group-item">Nursery</a>
+                </li>
+                <li>
+                  <a href='{% url "iwmiproject:nurseryirrigation" %}' class="list-group-item">Nursery Irrigation</a>
+                </li>
+              </ul>
+              <!--/.nav-third-level-->
+            </li>
+            <li>
+              <a href='{% url "iwmiproject:plantingmethod" %}' class="list-group-item">Planting method</a>
+            </li>
+            <li>
+              <a href='{% url "iwmiproject:fertilizerapplication" %}' class="list-group-item">Fertilizer application</a>
+            </li>
+            <li>
+              <a href='{% url "iwmiproject:pesticideapplication" %}' class="list-group-item">Pesticide application</a>
+            </li>
+            <li>
+              <a href='{% url "iwmiproject:farmirrigation" %}' class="list-group-item">Irrigation</a>
+            </li>
+            <li>
+              <a href='{% url "iwmiproject:weeding" %}' class="list-group-item">Weeding</a>
+            </li>
+            <li>
+              <a href='{% url "iwmiproject:farmyieldlevel" %}' class="list-group-item">Farm Yield level</a>
+            </li>
+            <li>
+              <a href='{% url "iwmiproject:residue_handling" %}'class="list-group-item">Residue handling</a>
+            </li>
+            <li>
+              <a href='{% url "iwmiproject:sale_harvest_crop" %}' class="list-group-item">Sales of harvested crop</a>
+            </li>
+            <li>
+              <a href='{% url "iwmiproject:consumed_crop_by_household" %}' class="list-group-item">Consumed crop</a>
+            </li>
+            <li>
+              <a href='{% url "iwmiproject:otherwaterusage" %}' class="list-group-item">Other water usage</a>
+            </li>
+            <li>
+              <a href='{% url "iwmiproject:technology_failure" %}'class="list-group-item">Technology failure</a>
+            </li>
+            <li>
+              <a href='{% url "iwmiproject:service_repaire" %}' class="list-group-item">Service and repair</a>
+            </li>
+          </ul>
+        </li>
+        
+        <li class="panel">
+          <a href="#">Technical data<span class="fa arrow"></span></a>
+        <ul class="nav nav-second-level">
+          <li>
+            <a href='{% url "iwmiproject:waterliftingcalibration" %}' class="list-group-item">Water lifting Calibration</a>
+          </li>
+          <li>
+            <a href='{% url "iwmiproject:applicationcalibration" %}' class="list-group-item">Application calibration</a>
+          </li>
+          <li>
+            <a href='{% url "iwmiproject:soil" %}' class="list-group-item">Soil properties</a>
+          </li>
+          <li>
+            <a href='{% url "iwmiproject:soilmoisture" %}' class="list-group-item">Soil Moisture</a>
+          </li>
+          <li>
+            <a href='{% url "iwmiproject:cropmonitoring" %}'class="list-group-item">Crop Monitoring</a>
+          </li>
+          <li>
+            <a href='{% url "iwmiproject:plant_level_yield" %}' class="list-group-item">Yield plant level </a>
+          </li>
+          <li>
+            <a href='{% url "iwmiproject:bed_level_yield" %}' class="list-group-item">Yield bed level</a>
+          </li>
+          <li>
+            <a href='{% url "iwmiproject:tissuenutrientanalysis" %}' class="list-group-item">Plant nutrient analysis</a>
+          </li>
+          </ul>
+            <!-- /.nav-second-level -->
+        </li>
+                      
+   
+        </ul>
+      </div>
+    </div>
+</div>
+    {% endblock%}
+    
+    {% block main_section %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header"></h1>
+
+        </div>
+    {% endblock %}
+    
+    </div>
+    
+
+{% block footer %}
+
+<div>
+<!-- Site footer -->
+<footer class="navbar-default navbar-fixed-bottom">
+  <div class="container-fluid">
+    <p class="text-muted" align='center' >ILSSI &copy; 2016 copyright.</p>
+  </div>
+</footer>
+</div>
+{% endblock %}
+
+
+{% block javascripts %}
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    
+     <!--- JQUERY JS-->
+    <script src="{% static 'js/jquery-ui.js' %}"></script>
+    <!--<script src="{% static 'js/jquery.min.js' %}"></script>-->
+    <!--- Bootstrap JS-->
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bootstrapvalidator.min.js' %}"></script>
+	<script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+    <!--- Myscript JS-->
+    <script src="{% static 'js/script.js' %}"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="{% static 'js/sb-admin-2.js' %}"></script>
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="{% static 'js/metisMenu.min.js' %}"></script>
+    <script>
+            if (document.location.search.match(/type=embed/gi)) {
+                window.parent.postMessage("resize", "*");
+                }
+    </script>
+    
+{% endblock %}
+
+{% block extended_javascripts_code %}
+  <script>
+   /*
+      $( function() {
+        
+        $('.panel-heading a').on('click',function(e){
+          alert('yes');
+    if($(this).parents('.panel').children('.panel-collapse').hasClass('in')){
+        e.stopPropagation();
+    }
+    // You can also add preventDefault to remove the anchor behavior that makes
+    // the page jump
+     e.preventDefault();
+    });
+        
+      });
+      */
+    $(document).ready(function(){
+    $('.list-group a').on('hide.bs.collapse', function (e) {
+      e.stopPropagation();
+      //e.preventDefault();
+      })  
+    });
+    </script>
+{% endblock %}
+</body>
+</html>
+

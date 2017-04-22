@@ -1,0 +1,739 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    <title>Sale of harvested crops</title>
+{% endblock %}
+
+{% block main_section %}
+
+  <script>
+  $(function() {
+    $( "#id_date" ).datepicker({
+    	onSelect: function() {
+        $('#sale_harvest_crop_form').formValidation('revalidateField', 'date');
+    }
+    });
+  });
+  </script>
+
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <form class="well form-horizontal" action=" " method="post"  id="sale_harvest_crop_form">{% csrf_token %} 
+
+<!-- Form Name -->
+<fieldset>
+<legend>Sale of harvested crops..</legend>
+{% if user_village %}
+<input type="hidden" id="uservillage" name="uservillage" value="{{user_village}}" readonly='readonly' />
+{% elif researcher %}
+<input type="hidden" id="researcher" name="researcher" value="{{researcher}}" readonly='readonly' />
+{% elif user_country %}
+
+{% endif %}
+<label class="warning" for="message" id="message" align='center' style="color: red"><small><i>{{message}}</i></small></label>
+
+<div class="form-group"> 
+    {{ harvestedcropsaleform.date.errors }}
+    <label for="date" class="col-md-4 control-label">Date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ harvestedcropsaleform.date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ harvestedcropsaleform.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farmer:</label>
+        <div class="col-md-4 selectContainer">
+        {{ harvestedcropsaleform.farm }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ harvestedcropsaleform.plotID.errors }}
+    <label for="plotID" class="col-md-4 control-label">Plot:</label>
+        <div class="col-md-4 selectContainer">
+        {{ harvestedcropsaleform.plotID }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ harvestedcropsaleform.amount.errors }}
+    <label for="amount" class="col-md-4 control-label">Quantity:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+        {{ harvestedcropsaleform.amount }}<span class="input-group-addon">kg</span>
+        </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ harvestedcropsaleform.marketprice.errors }}
+    <label for="marketprice" class="col-md-4 control-label">Market price:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+           {{ harvestedcropsaleform.marketprice }}<span class="input-group-addon">per kg</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ harvestedcropsaleform.income.errors }}
+    <label for="income" class="col-md-4 control-label">Total value:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+           {{ harvestedcropsaleform.income }}<span class="input-group-addon">{{ currency }}</span>
+            </div>
+		   <label for="message" style="color:#D7DBDD "><small><i>Total value = (Market price) * (Quantity)</i></small></label>
+        </div>
+</div>
+<!--
+<div class="form-group"> 
+    {{ harvestedcropsaleform.expenditure.errors }}
+    <label for="expenditure" class="col-md-4 control-label">Expenditure:</label>
+        <div class="col-md-4 selectContainer">
+           {{ harvestedcropsaleform.expenditure }}
+        </div>
+</div>
+-->
+
+<div class="form-group"> 
+    {{ harvestedcropsaleform.mode_of_transport.errors }}
+    <label for="mode_of_transport" class="col-md-4 control-label">Mode of transport:</label>
+        <div class="col-md-4 selectContainer">
+             {{ harvestedcropsaleform.mode_of_transport }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ harvestedcropsaleform.distance_to_the_market.errors }}
+    <label for="distance_to_the_market" class="col-md-4 control-label">Distance to the market:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+             {{ harvestedcropsaleform.distance_to_the_market }}<span class="input-group-addon">km</span>
+            </div>
+        </div>
+</div>
+ 
+
+<div class="form-group" id='fare'> 
+    {{ harvestedcropsaleform.fare.errors }}
+    <label for="fare" class="col-md-4 control-label">Fare:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+           {{ harvestedcropsaleform.fare }}<span class="input-group-addon">{{ currency }}</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='fuel_type'> 
+    {{ harvestedcropsaleform.fuel_type.errors }}
+    <label for="fuel_type" class="col-md-4 control-label">Fuel type:</label>
+        <div class="col-md-4 selectContainer">
+             {{ harvestedcropsaleform.fuel_type }}
+        </div>
+</div>
+
+<div class="form-group" id='fuel_cost'> 
+    {{ harvestedcropsaleform.fuel_cost.errors }}
+    <label for="fuel_cost" class="col-md-4 control-label">Fuel cost:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+          {{ harvestedcropsaleform.fuel_cost }}<span class="input-group-addon">{{ currency }}</span>
+            </div>
+             
+        </div>
+</div>
+</fieldset>
+
+<fieldset>
+  <legend>Labour Info</legend>
+
+<div class="form-group"> 
+    {{ labourmanagement_form.labour.errors }}
+    <label for="labour" class="col-md-4 control-label">Labour:</label>
+        <div class="col-md-4 selectContainer">
+        {{ labourmanagement_form.labour }}
+        </div>
+</div>
+
+<div id='hireddv'>
+<div class="form-group"> 
+    {{ labourmanagement_form.hired_female_number.errors }}
+    <label for="hired_female_number" class="col-md-4 control-label">Number of hired female:</label>
+        <div class="col-md-4 selectContainer">
+            {{ labourmanagement_form.hired_female_number }}
+        </div>
+</div>
+<div class="form-group"> 
+    {{ labourmanagement_form.hired_female_time.errors }}
+    <label for="hired_female_time" class="col-md-4 control-label">Time taken per female labour:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ labourmanagement_form.hired_female_time}}<span class="input-group-addon">hr(s)</span>
+            </div>
+        </div>
+</div>
+<div class="form-group"> 
+    {{ labourmanagement_form.hired_male_number.errors }}
+    <label for="hired_male_number" class="col-md-4 control-label">Number of hired male:</label>
+        <div class="col-md-4 selectContainer">
+            {{ labourmanagement_form.hired_male_number }}
+        </div>
+</div>
+<div class="form-group"> 
+    {{ labourmanagement_form.hired_male_time.errors }}
+    <label for="hired_male_time" class="col-md-4 control-label">Time taken per male labour:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ labourmanagement_form.hired_male_time}}<span class="input-group-addon">hr(s)</span>
+            </div>
+        </div>
+</div>
+</div>
+
+<div id='familydv'>
+<div class="form-group"> 
+    {{ labourmanagement_form.family_female_number.errors }}
+    <label for="family_female_number" class="col-md-4 control-label">Number of female family  labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ labourmanagement_form.family_female_number }}
+        </div>
+</div>
+<div class="form-group"> 
+    {{ labourmanagement_form.family_female_time.errors }}
+    <label for="family_female_time" class="col-md-4 control-label">Time taken per female labour:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ labourmanagement_form.family_female_time}}<span class="input-group-addon">hr(s)</span>
+            </div>
+        </div>
+</div>
+<div class="form-group"> 
+    {{ labourmanagement_form.family_male_number.errors }}
+    <label for="family_male_number" class="col-md-4 control-label">Number of male family labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ labourmanagement_form.family_male_number}}
+        </div>
+</div>
+<div class="form-group"> 
+    {{ labourmanagement_form.family_male_time.errors }}
+    <label for="family_male_time" class="col-md-4 control-label">Time taken per male labour:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ labourmanagement_form.family_male_time}}<span class="input-group-addon">hr(s)</span>
+            </div>
+        </div>
+</div>
+</div>
+
+<div class="form-group"> 
+    {{ labourmanagement_form.wage.errors }}
+    <label for="wage" class="col-md-4 control-label">Daily wage:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+             {{ labourmanagement_form.wage }}<span class="input-group-addon">{{ currency }}</span>
+            </div>
+        </div>
+</div>
+</fieldset>
+
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block extended_javascripts_code %}
+	<script>
+    $(document).ready(function () {
+    $('#sale_harvest_crop_form').formValidation({
+        framework: 'bootstrap',
+        icon: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select farm' }
+                        }
+                    },
+			plot: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select plot' }
+                        }
+                    },
+			mode_of_transport: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose mode of transport' }
+                        }
+                    },
+			date: {
+                validators: {
+				  date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: {
+                        message: 'Please fill the date' }
+                        }
+                    },
+			distance_to_the_market: {
+                validators: {
+				  greaterThan: {
+                        value: 0,
+                        message: 'The value must be greater than zero'
+                    },
+				  numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please enter quantity' }
+                        }
+                    },
+            amount: {
+                validators: {
+				  greaterThan: {
+                        value: 0,
+                        message: 'The value must be greater than zero'
+                    },
+				  numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please enter quantity' }
+                        }
+                    },
+		  income: {
+		  		enabled:false,
+                validators: {
+				/*
+				  between: {
+                            min: 0,
+                            max: 1000000000000000000000000000000000000000000000000,
+                            message: 'Cant be negative'
+                        },
+                */
+				  numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please enter quantity' }
+                        }
+                    },
+		  expenditure: {
+                validators:{
+				  /*	greaterThan: {
+                        value: 18,
+                        message: 'The value must be greater than or equal to 18'
+                    }
+						lessThan: {
+						  value:'#id_totalvalue',
+						  message: 'The number must be less or equal to totalvalue'
+						},
+				  
+						between: {
+                            min: 0,
+                            max: 'totalvalue',
+							message: 'The number must be less or equal to totalvalue'
+                        },
+                    */
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of hired family male' }
+                }
+            },
+            marketprice: {
+                validators: {
+				  greaterThan: {
+                        value: 0,
+                        message: 'The value must be greater than zero'
+                    },
+				  numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill the marketprice' }
+                        }
+                    },
+			currency: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose currency' }
+                        }
+                    },
+            fare: {
+                validators:{
+	                	greaterThan: {
+	                        value: 0,
+	                        message: 'The value must be greater than zero'
+	                    },
+                        numeric: {
+                            message: 'invalid number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            fuel_cost: {
+                validators:{
+	                	greaterThan: {
+	                        value: 0,
+	                        message: 'The value must be greater than zero'
+	                    },
+                        numeric: {
+                            message: 'invalid number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            fuel_type: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose fuel type' }
+                        }
+                    },
+			labour: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose labour' }
+                        }
+                    },
+            hired_female_number: {
+                validators:{
+                        integer: {
+                          message: 'must be an integer'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of hired female' }
+                }
+            },
+            hired_male_number: {
+                validators:{
+                        integer: {
+                          message: 'must be an integer'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of hired male' }
+                }
+            },
+            family_female_number: {
+                validators:{
+                        integer: {
+                          message: 'must be an integer'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of hired family female' }
+                }
+            },
+            family_male_number: {
+                validators:{
+                        integer: {
+                              message: 'must be an integer'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of hired family male' }
+                }
+            },
+            wage: {
+                validators:{
+	                	greaterThan: {
+		                        value: 0,
+		                        message: 'The value must be greater than zero'
+		                    },
+                        numeric: {
+                            message: 'invalid number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill the wage' }
+                }
+            },
+            family_female_time: {
+                validators:{
+                        numeric: {
+                            message: 'invalid number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            family_male_time:{
+                validators:{
+                        numeric: {
+                            message: 'invalid number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            hired_female_time:{
+                validators:{
+                        numeric: {
+                            message: 'invalid number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            hired_male_time:{
+                validators:{
+                        numeric: {
+                            message: 'invalid number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },   
+        }
+    }).on('keyup', '[name="totalvalue"]', function(e) {
+            $('#sale_harvest_crop_form').formValidation('revalidateField', 'expenditure');
+        });
+    });
+
+      //# sourceURL=pen.js
+
+    </script>
+    <script>
+            if (document.location.search.match(/type=embed/gi)) {
+                window.parent.postMessage("resize", "*");
+                }
+    </script>
+<script>
+
+$(document).ready(function() {
+  $("#id_farm").change(function() {
+    if ($(this).val() == '') {
+      $("#id_plot").html("<option>Choose field..</option>");
+      $("#id_plot").attr('disabled', true);
+      }
+      else {
+        var url = "/plot/" + $(this).val() + "/plots";
+        $.getJSON(url, function(plots) {
+        var options = '<option value="">Choose plot..</option>';
+        for (var i = 0; i < plots.length; i++) {
+          options += '<option value="' + plots[i].pk + '">' + plots[i].fields['plotID']  + '</option>';
+        }
+        $("#id_plot").html(options);
+        $("#id_plot option:first").attr('selected', 'selected');
+        $("#id_plot").attr('disabled', false);
+      });
+    }
+  });
+});
+</script>
+<script>
+$(window).load(function() {
+  if ($('#id_income').val() =='') {
+	$('#id_income').val()
+  }
+  else{
+	$('#id_income').val()
+  }
+  });
+
+$(document).ready(function () {
+    $('#id_amount,#id_marketprice').on('mouseenter click keyup mouseleave', function () {
+    setTimeout(function () {
+		var totalvalue = $('#id_amount').val() * $('#id_marketprice').val();
+		$('#id_income').val(totalvalue);
+      },0);
+    })
+ });
+</script>
+<script>
+$(window).load(function(){
+  var url = "/get_farmer_name/" + $('#id_farm').val() + "/get_farmer_name";
+  $.getJSON(url, function(farmer_name) {
+    //alert(farmer_name);
+    var options = '<option value="' + farmer_name[0] + '">' + farmer_name[1] + ' ' + farmer_name[2] + ' ' + farmer_name[3] + '</option>';
+    $("#id_farm").html(options);
+    $("#id_farm option:selected").attr('selected', 'selected');
+  })
+});
+
+$(window).load(function(){
+  var url = "/get_plot_name/" + $('#id_plotID').val() + "/get_plot_name";
+  $.getJSON(url, function(plot_name) {
+    var options = '<option value="' + plot_name[0] + '">' + plot_name[1] + '</option>';
+    $("#id_plotID").html(options);
+    $("#id_plotID option:selected").attr('selected', 'selected');
+  })
+});
+</script>
+<script>
+$(window).load(function() {
+  if ($('#id_labour').val() == '') {
+    $('#familydv,#hireddv').hide();
+  }
+  else if ($('#id_labour').val() == 'Family')  {
+      $('#familydv').show();
+      $('#hireddv').hide();
+      $("#id_hired_female_number").val();
+      $("#id_hired_male_number").val();
+      $("#id_family_female_time").val();
+      $("#id_family_male_time").val();
+  }
+  else if ($('#id_labour').val() == 'Hired')  {
+    $('#hireddv').show();
+    $('#familydv').hide();
+    $("#id_family_female_number").val();
+    $("#id_family_male_number").val();
+    $("#id_hired_female_time").val();
+    $("#id_hired_male_time").val();
+  }
+  else{
+      $('#familydv,#hireddv').show();
+      $("#id_family_female_time,#id_family_male_time,#id_hired_female_time,#id_hired_male_time").val();
+  }
+  });
+</script>
+<script>
+    $(document).ready(function() {
+            $("#id_labour").change(function() {
+              value=0;
+                if ($(this).val() == '') {
+                    $('#familydv,#hireddv').hide();
+                }//family_female_time,family_male_time,hired_female_time,hired_male_time
+                else if ($(this).val() == 'Family')  {
+                    $('#familydv').show();
+                    $("#id_family_female_number").val('');
+                    $("#id_family_male_number").val('');
+                    $("#id_family_female_time").val('');
+                    $("#id_family_male_time").val('');
+                    $('#hireddv').hide();
+                    $("#id_hired_female_number").val(value);
+                    $("#id_hired_male_number").val(value);
+                    $("#id_hired_female_time").val(value);
+                    $("#id_hired_male_time").val(value);
+                }
+                else if ($(this).val() == 'Hired')  {
+                    $('#hireddv').show();
+                    $('#familydv').hide();
+                    $("#id_hired_female_number").val('');
+                    $("#id_hired_male_number").val('');
+                    $("#id_hired_female_time").val('');
+                    $("#id_hired_male_time").val('');
+                    $("#id_family_female_number").val(value);
+                    $("#id_family_male_number").val(value);
+                    $("#id_family_female_time").val(value);
+                    $("#id_family_male_time").val(value);
+                }
+                else{
+                    $('#familydv,#hireddv').show();
+                    $("#id_hired_female_number").val('');
+                    $("#id_hired_male_number").val(''); 
+                    $("#id_family_female_number").val('');
+                    $("#id_family_male_number").val('');
+                    $("#id_family_female_time").val('');
+                    $("#id_family_male_time").val('');
+                    $("#id_hired_female_time").val('');
+                    $("#id_hired_male_time").val('');
+                }
+            });
+    });
+</script>
+<script>
+$(window).load(function() {
+  if ($('#id_mode_of_transport').val() == '') {
+	  $('#fare,#fuel_type,#fuel_cost').hide();
+	  }
+  else if ($('#id_mode_of_transport').val() == 'Public transport') {
+	  $('#fare').show();
+	  $('#id_fare').val();
+	  $('#fuel_type,#fuel_cost').hide();
+	  $('select[name=fuel_type] option:eq(1)').attr('selected', 'selected');
+	  $('#id_fuel_cost').val(0);
+	  }
+  else if ($('#id_mode_of_transport').val() == 'Own transportation') {
+	  $('#fuel_type,#fuel_cost').show();
+	  $('#id_fuel_type,#id_fuel_cost').val();
+	  $('#fare').hide();
+	  $('#id_fare').val(0);
+	  }
+  else if ($('#id_mode_of_transport').val() == 'Foot') {
+	  $('#fare,#fuel_type,#fuel_cost').hide();
+	  $('#id_fuel_cost').val(0);
+	  $('#id_fare').val(0);
+	  $('select[name=fuel_type] option:eq(1)').attr('selected', 'selected');
+	  }
+  else{
+	  $('#fare,#fuel_type,#fuel_cost').hide();
+	  $('#id_fuel_cost').val(0);
+	  $('#id_fare').val(0);
+	  $('select[name=fuel_type] option:eq(1)').attr('selected', 'selected');
+	  }
+  });
+</script>
+<script>
+  $(document).ready(function() {
+	$("#id_mode_of_transport").change(function() {
+	  if ($(this).val() == '') {
+	  $('#fare,#fuel_type,#fuel_cost').hide();
+	  }
+	  else if ($(this).val() == 'Public transport') {
+	  $('#fare').show();
+	  $('#id_fare').val('');
+	  $('#fuel_type,#fuel_cost').hide();
+	  $('select[name=fuel_type] option:eq(1)').attr('selected', 'selected');
+	  $('#id_fuel_cost').val(0);
+	  }
+	  else if ($(this).val() == 'Own transportation') {
+	  $('#fuel_type,#fuel_cost').show();
+	  $('#id_fuel_type').prop('selectedIndex',0);
+	  $('#id_fuel_cost').val('');$('#fare').hide();
+	  $('#id_fare').val(0);
+	  }
+	  else if ($(this).val() == 'Foot') {
+		$('#fare,#fuel_type,#fuel_cost').hide();
+		$('select[name=fuel_type] option:eq(1)').attr('selected', 'selected');
+		$('#id_fuel_cost,#id_fare').val(0);
+	  }
+	  else{
+	  $('#fare,#fuel_type,#fuel_cost').hide();
+	  }
+	});
+  });
+</script>
+{% endblock %}

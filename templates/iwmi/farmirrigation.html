@@ -1,0 +1,540 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block title %}
+    <title>Farm Irrigation</title>
+{% endblock %}
+
+{% block main_section %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!--<link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet">-->
+  <script>
+  $(function() {
+    $( "#id_date" ).datepicker();
+  });
+  $(document).ready(function(){
+                  $('.timepicker').timepicker({
+                      timeFormat: 'HH:mm',
+                      //timeFormat: 'H:mm p',
+                      interval: 60,
+                      minTime: '0',
+                      //maxTime: '6:00pm',
+                      //defaultTime: '11',
+                      //startTime: '10:00',
+                      dynamic: false,
+                      dropdown: true,
+                      scrollbar: true
+                  });
+      });
+
+  </script>
+      
+      
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+<!-- Form -->
+<form class="well form-horizontal" action=" " method="post"  id="farmirrigation_form">{% csrf_token %} 
+
+<fieldset>
+<legend>Farm Irrigation</legend>
+
+<div class="form-group"> 
+    {{ farmirrigationform.date.errors }}
+    <label for="date" class="col-md-4 control-label">Date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmirrigationform.climate.errors }}
+    <label for="climate" class="col-md-4 control-label">Climate:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.climate }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmirrigationform.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farm:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.farm }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmirrigationforms.water_application.errors }}
+    <label for="water_application" class="col-md-4 control-label">Water application:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.water_application }}
+        </div>
+</div>
+<!--
+<div class="form-group"> 
+    {{ farmirrigationform.irrigation_event.errors }}
+    <label for="technology" class="col-md-4 control-label">Irrigation event:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.irrigation_event }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmirrigationform.technology.errors }}
+    <label for="repetition" class="col-md-4 control-label">Technology:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.technology }}
+        </div>
+</div>
+  -->
+
+<div class="form-group" id='bucketvolume'> 
+    {{ farmirrigationform.irrigate_whole_or_per_plant.errors }}
+    <label for="irrigate_whole_or_per_plant" class="col-md-4 control-label">Overhead application method:</label>
+        <div class="col-md-4 selectContainer">
+           {{ farmirrigationform.irrigate_whole_or_per_plant }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ farmirrigationform.start_time.errors }}
+    <label for="start_time" class="col-md-4 control-label">Start time:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.start_time }}
+        </div>
+</div>
+<div class="form-group"> 
+    {{ farmirrigationform.end_time.errors }}
+    <label for="end_time" class="col-md-4 control-label">End time:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.end_time }}
+        </div>
+</div>
+
+<!--
+<div class="form-group"> 
+    {{ farmirrigationform.quantification_method.errors }}
+    <label for="quantification_method" class="col-md-4 control-label">Quantification method:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.quantification_method }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmirrigationform.flume_location.errors }}
+    <label for="flume_location" class="col-md-4 control-label">Flume location:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.flume_location }}
+        </div>
+</div>
+<div class="form-group"> 
+    {{ farmirrigationform.waterlevel1.errors }}
+    <label for="waterlevel1" class="col-md-4 control-label">Water level1:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farmirrigationform.waterlevel1 }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmirrigationform.waterlevel2.errors }}
+    <label for="waterlevel2" class="col-md-4 control-label">Water level2:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farmirrigationform.waterlevel2 }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+<div class="form-group"> 
+    {{ farmirrigationform.furrow_irr_time.errors }}
+    <label for="furrow_irr_time" class="col-md-4 control-label">Furrow irrigation time:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farmirrigationform.furrow_irr_time }}<span class="input-group-addon">mins</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmirrigationform.nfurrorws_irrigated_once.errors }}
+    <label for="nfurrorws_irrigated_once" class="col-md-4 control-label">Nfurrorws irrigated once:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.nfurrorws_irrigated_once }}
+        </div>
+</div>
+<div class="form-group"> 
+    {{ farmirrigationform.standardvolume.errors }}
+    <label for="standardvolume" class="col-md-4 control-label">Standard volume:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farmirrigationform.standardvolume }}<span class="input-group-addon">Litre</span>
+            </div>
+        </div>
+</div>
+-->
+
+
+<div class="form-group"> 
+    {{ farmirrigationform.discharge.errors }}
+    <label for="discharge" class="col-md-4 control-label">Application rate:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farmirrigationform.discharge }}<span class="input-group-addon">m<sup>3</sup>/s</span>
+<!--this recalls the application rate calibrated for that specific field, which means it's an average of all calibrated application rates -->
+            </div>
+          
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmirrigationform.quantity_of_units.errors }}
+    <label for="quantity_of_units" class="col-md-4 control-label">Quantity of units:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.quantity_of_units }}
+        </div>
+</div>
+<div class="form-group"> 
+    {{ farmirrigationform.yellow_WFD_before_irrigation.errors }}
+    <label for="yellow_WFD_before_irrigation" class="col-md-4 control-label">Flag of yellow detector up before irrigation:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.yellow_WFD_before_irrigation }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmirrigationform.red_WFD_before_irrigation.errors }}
+    <label for="red_WFD_before_irrigation" class="col-md-4 control-label">Flag of red detector up before irrigation:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.red_WFD_before_irrigation }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmirrigationform.yellow_WFD_time_after_irrigation.errors }}
+    <label for="yellow_WFD_time_after_irrigation" class="col-md-4 control-label">Time for the yellow flag to pop up after irrigation</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farmirrigationform.yellow_WFD_time_after_irrigation }}<span class="input-group-addon">min(s)</span>
+            </div>
+        </div>
+</div>
+<div class="form-group"> 
+    {{ farmirrigationform.red_WFD_time_after_irrigation.errors }}
+    <label for="red_WFD_time_after_irrigation" class="col-md-4 control-label">Time for the red flag to pop up after irrigation:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farmirrigationform.red_WFD_time_after_irrigation }}<span class="input-group-addon">min(s)</span>
+            </div>
+        </div>
+</div>
+
+</fieldset>
+
+<fieldset>
+<legend>Fuel consumption</legend>
+
+<div class="form-group"> 
+    {{ farmirrigationform.fuel.errors }}
+    <label for="fuel" class="col-md-4 control-label">Fuel:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.fuel }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmirrigationform.amount_used.errors }}
+    <label for="amount_used" class="col-md-4 control-label">Amount consumed:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.amount_used }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmirrigationform.refilled_amount.errors }}
+    <label for="refilled_amount" class="col-md-4 control-label">Refilled amount:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.refilled_amount }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmirrigationform.fuelcost.errors }}
+    <label for="fuelcost" class="col-md-4 control-label">Cost:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ farmirrigationform.fuelcost}}<span class="input-group-addon">{{ farmirrigationform.currency }}</span>
+            </div>            
+        </div>
+</div>
+
+</fieldset>
+
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+    
+{% endblock %}
+{% block extended_javascripts_code %}
+    
+	<script>
+    $(document).ready(function () {
+    $('#farmirrigation_form').bootstrapValidator({
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            date: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill the date' }
+                        }
+                    },
+            farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose farm' }
+                        }
+                    },
+            irrigation_event: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill the event number' }
+                        }
+                    },
+            
+            technology: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose technology' }
+                        }
+                    },
+            
+            start_time: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select start time'
+                        },
+                        callback: {
+                        message: 'The start time must be earlier then the end one',
+                        callback: function(value, validator, $field) {
+                            var endTime = validator.getFieldElements('end_time').val();
+                            if (endTime === '') {
+                                  return true;
+                                }
+                            var startHour    = parseInt(value.split(':')[0], 10),
+                                startMinutes = parseInt(value.split(':')[1], 10),
+                                endHour      = parseInt(endTime.split(':')[0], 10),
+                                endMinutes   = parseInt(endTime.split(':')[1], 10);
+
+                            if (startHour < endHour || (startHour == endHour && startMinutes < endMinutes)) {
+                                // The end time is also valid
+                                // So, we need to update its status
+                                validator.updateStatus('end_time', validator.STATUS_VALID, 'callback');
+                                return true;
+                                  }
+                            return false;
+                            }
+                        }
+                      }   
+                    },
+            
+            end_time: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: {
+                      message: 'Please select end time'
+                      },
+                callback: {
+                        message: 'The end time must be later then the start one',
+                        callback: function(value, validator, $field) {
+                            var startTime = validator.getFieldElements('start_time').val();
+                            if (startTime == '') {
+                                  return true;
+                                }
+                            var startHour    = parseInt(startTime.split(':')[0], 10),
+                                startMinutes = parseInt(startTime.split(':')[1], 10),
+                                endHour      = parseInt(value.split(':')[0], 10),
+                                endMinutes   = parseInt(value.split(':')[1], 10);
+
+                            if (endHour > startHour || (endHour == startHour && endMinutes > startMinutes)) {
+                                // The start time is also valid
+                                // So, we need to update its status
+                                validator.updateStatus('start_time', validator.STATUS_VALID, 'callback');
+                                return true;
+                            }
+                            return false;
+                        }
+                    }
+                }
+            },
+              
+            total_time: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill total time taken' }
+                }
+            },
+            quantification_method: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose quantification method' }
+                }
+            },
+            flume_location: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose flume location' }
+                }
+            },
+            waterlevel1: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill water level' }
+                }
+            },
+            waterlevel2: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill water level ' }
+                }
+            },
+            furrow_irr_time: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill the time to irrigate furrow' }
+                }
+            },
+            nfurrorws_irrigated_once: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill the number of furrow irrigated at once' }
+                }
+            },
+            discharge: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill the discharge' }
+                }
+            },
+            standardvolume: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill standard volume' }
+                }
+            },
+            quantity_of_units: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill quantity of units' }
+                }
+            },
+            yellow_WFD_before_irrigation: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill yellow WFD before irrigation' }
+                }
+            },
+            red_WFD_before_irrigation: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill red WFD before irrigation' }
+                }
+            },
+            yellow_WFD_time_after_irrigation: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill yellow WFD time after irrigation' }
+                }
+            },
+            red_WFD_time_after_irrigation: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill red WFD time after irrigation' }
+                }
+            },
+            climate: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose climate' }
+                }
+            },
+            fuel: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose used fuel type' }
+                }
+            },
+            amount_used: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill amount used' }
+                }
+            },
+            refilled_amount: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill refilled amount' }
+                }
+            },
+            
+        }
+    }).on('success.form.bv', function (e) {
+        $('#success_message').slideDown({ opacity: 'show' }, 'slow');
+        $('#fuelconsumption_form').data('bootstrapValidator').resetForm();
+        e.preventDefault();
+        var $form = $(e.target);
+        var bv = $form.data('bootstrapValidator');
+        $.post($form.attr('action'), $form.serialize(), function (result) {
+            console.log(result);
+        }, 'json');
+    });
+});
+      //# sourceURL=pen.js
+
+    </script>
+    <script>
+            if (document.location.search.match(/type=embed/gi)) {
+                window.parent.postMessage("resize", "*");
+                }
+    </script>
+    
+<script>
+    $(document).ready(function() {
+            $("#id_form").change(function() {
+                if ($(this).val() == '') {
+                    $("#id_quantity_kg").attr('disabled', true);
+                    //option_lt='<input class="form-control" id="id_quantity_lt" name="quantity_lt" placeholder="#Quantity in Litre" readonly="True" type="text" /><span class="input-group-addon">litre</span>'
+                    //option_kg='<input class="form-control" id="id_quantity_kg" name="quantity_kg" placeholder="#Quantity in Kg" readonly="True" type="text" /><span class="input-group-addon">kg</span>'
+                    //$("#id_quantity_kg").html(option_kg);
+                    $("#id_quantity_lt").attr('disabled', true);
+                    //$("#id_quantity_lt").html(option_lt);
+                }
+                else if ($(this).val() == 'Liquid')  {
+                  $("#id_quantity_kg").attr('disabled', true);
+                  $("#id_quantity_lt").attr('disabled', false);
+                }
+                else{
+                  $("#id_quantity_lt").attr('disabled', true);
+                  $("#id_quantity_kg").attr('disabled',false);
+                }
+            });
+    });
+</script>
+{% endblock %}
+
+
+

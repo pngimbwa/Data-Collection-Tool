@@ -1,0 +1,142 @@
+{% load i18n admin_static %}
+{% load staticfiles %}
+
+<nav id="sitenav">
+			<div class="frame">	
+				<ul>
+				<li  class="selected" id="home"><a href="/">Home</a></li>
+		
+				<li>
+					<a href="/">Farm Operation</a>
+                    <ul>
+		
+				            <li>
+					           <a href='{% url "iwmi:weeding" %}'class="list-group-item">Weeding</a>
+					
+				            </li>
+				            <li>
+					           <a href='{% url "iwmi:fertilizerapplication" %}' class="list-group-item">Fertilizer application</a>
+					
+				            </li>
+                            <li>
+					           <a href='{% url "iwmi:pesticideapplication" %}' class="list-group-item">Pesticide application</a>
+					
+				            </li>
+                            <li>
+					           <a href='{% url "iwmi:farmirrigation" %}'class="list-group-item">Farm Irrigation</a>
+					
+				            </li>
+                            <li>
+                                    <a href='{% url "iwmi:tissuenutrientanalysis" %}' class="list-group-item">Tissue nutrient analysis</a>
+                            </li>
+                            <li>
+                                    <a href='{% url "iwmi:service_repaire" %}' class="list-group-item">Service and repaire</a>
+                            </li>
+		
+		          </ul>
+
+				</li>
+				<li  >
+					<a href="/">Farm</a>
+							<ul>
+		
+				                <li  >
+					               <a href='{% url "iwmi:farminfo" %}'class="list-group-item">Farm detail</a>
+					
+				                </li>
+				                <li  >
+                                     <a href='{% url "iwmi:nursery" %}'class="list-group-item">Nursery</a>
+					
+				                </li>
+				    
+		                  </ul>
+
+				</li>
+				<li  >
+					<a href="/">Soil</a>
+				        <ul>
+		                      <li  >
+                                    <a href='{% url "iwmi:soil" %}' class="list-group-item">Soil</a>
+					
+				                </li>
+                                <li  >
+                                    <a href='{% url "iwmi:soilmoisture" %}' class="list-group-item">Soil moisture</a>
+					
+				                </li>
+		
+		
+		              </ul>
+
+				</li>
+				<li  >
+					<a href="/">Technology</a>
+							<ul>
+		
+				                <li  >
+					               <a href='{% url "iwmi:technologycalibration" %}' class="list-group-item">Technology Calibration</a>
+					
+				                </li>
+				                <li  >
+					              <a href='{% url "iwmi:technology_failure" %}'class="list-group-item">Technology Failure</a>
+					
+				                </li>
+				    	
+		                  </ul>
+
+				</li>
+				<li  >
+					<a href="/">Yield</a>
+							<ul>
+		
+				            <li  >
+					           <a href='{% url "iwmi:farmyieldlevel" %}' class="list-group-item">Farm yield level</a>
+					
+				            </li>
+                            <li  >
+					           <a href='{% url "iwmi:plant_level_yield" %}' class="list-group-item">Plant yield level</a>
+					
+				            </li>
+                            <li  >
+					           <a href='{% url "iwmi:bed_level_yield" %}' class="list-group-item">Bed yield level</a>
+					
+				            </li>
+		
+		                  </ul>
+
+				</li>
+				<li  >
+					<a href="/">Sale</a>
+							<ul>
+		                      <li>
+                                  <a href='{% url "iwmi:sale_harvest_crop" %}' class="list-group-item">Sales of harvested crop</a>
+                                </li>
+                                <li>
+                                    <a href='{% url "iwmi:consumed_crop_by_household" %}' class="list-group-item">Consumed crop</a>
+                                </li>
+
+		</ul>
+
+				</li>
+		
+				 <!--       
+                    <li>
+                    {% if user.is_authenticated %}
+                        <a >Welcome,<strong>{{user}}</strong> <span class="caret"></span></a>
+                        <ul>
+                            <li><a href='{% url "signup:password_change" %}'>Change password</a></li>
+                            <li><a href="{% url 'signup:logout' %}">Logout</a></li>
+                            {% if user.is_active and user.is_staff %}
+                                <li><a href="{% url 'admin:index' %}">{% trans 'Admin Page' %}</a></li>
+                            {% else %}
+                                <li></li>
+                            {% endif %}
+                        </ul>
+                    {% else %}
+                        <a href="{% url 'signup:login' %}">Login</a>
+                    {% endif %}
+                </li>-->
+
+		</ul>
+				<div class="clear"></div>
+			</div>
+		</nav>

@@ -1,0 +1,319 @@
+{% load i18n admin_static %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+{% block head %}
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+   {% block title %}
+    <title>IWMI</title>
+	{% endblock %}
+    <!-- Custom CSS -->
+    <link href="{% static 'css/heroic-features.css' %}" rel="stylesheet prefetch">
+ 
+    <link rel='stylesheet' href="{% static 'css/bootstrap.css' %}" type='text/css' media='all' >
+    <link  rel='stylesheet' href="{% static 'css/another_styles.css' %}" type='text/css' media='all' >
+       
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ilssi.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/flexslider.css' %}" rel="stylesheet">
+    
+    <script src="{% static 'js/modernizr.js' %}"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery.plugins.js' %}"></script>
+  
+   <style>
+
+	  
+	  .dropdown-menu li:hover .sub-menu {
+		  visibility: visible;
+	  }
+	  
+	  .dropdown:hover .dropdown-menu {
+		  display: block;
+	  }
+	
+   </style>
+
+</head>
+{% endblock %}
+<body>
+{% block body %}
+{% block head_body %}
+   <header id="header">
+       <div class="frame">
+           <h1><a href="/">Innovation Lab for<br />Small Scale Irrigation</a></h1>
+           <div id="heading-ftf">
+               <a href="http://www.feedthefuture.gov/">
+                   <image src="{% static 'img/ftf-logo-white.png' %}" alt="Feed the Future Logo" title="Feed the Future" />
+               </a>
+           </div>
+			</div>
+   </header>	
+{% endblock %} 
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Home</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+				  <li class="dropdown">
+					 <a href="#" data-toggle="dropdown" class="dropdown-toggle">About<b class="caret"></b></a>
+						<ul class="dropdown-menu" id="menu1">
+						   <li><a href="#">What we do</a></li>
+						   <li><a href="#">Something else here</a></li>
+						   <li class="divider"></li>
+						   <li><a href="#">Another link</a></li>
+						</ul>
+				  </li>
+				   <li class="dropdown">
+					 <a href="#" data-toggle="dropdown" class="dropdown-toggle">Countries<b class="caret"></b></a>
+						<ul class="dropdown-menu" id="menu1">
+						   <li><a href="#">Tanzania</a></li>
+						   <li><a href="#">Ethiopia</a></li>
+						   <li><a href="#">Ghana</a></li>
+						</ul>
+				  </li>
+                  <li>
+                        <a href="#">Services</a>
+                  </li>
+                
+                    
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                        <li>
+                        <a href="{% url 'signup:login' %}">IWMI Tool</a>
+                        </li>
+                    </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+        <article id="main">
+            <div class="frame">
+                <div id="background" class="sidecontent">
+                    <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="5000" data-pause="hover">
+                        <!-- Carousel indicators -->
+                        <ol class="carousel-indicators">
+                            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                            <li data-target="#myCarousel" data-slide-to="1"></li>
+                            <li data-target="#myCarousel" data-slide-to="2"></li>
+							<li data-target="#myCarousel" data-slide-to="3"></li>
+							<li data-target="#myCarousel" data-slide-to="4"></li>
+							<li data-target="#myCarousel" data-slide-to="5"></li>
+							<li data-target="#myCarousel" data-slide-to="6"></li>
+						</ol>
+                        <!-- Wrapper for carousel items -->		
+                        <div class="carousel-inner">
+                            <div class="item active" >
+                                <img src="{% static 'img/picture1.jpg' %}" alt="IWMI">
+                                    <div class="carousel-caption">
+                                         <p>
+                                          <!-- Prof.Tumbo(left) and Mr.Telengenia(right) installing Drip system in rudewa-Kilosa,Morogoro,Tanzania.-->
+                                         </p>
+                                    </div>				
+                            </div>
+                            <div class="item" >
+                                <img src="{% static 'img/picture2.jpg' %}" alt="IWMI">
+                                    <div class="carousel-caption">
+                                         <!--<p>
+                                           Prof.Tumbo(left) and Mr.Telengenia(right) installing Drip system in rudewa.
+                                         </p>-->
+                                    </div>			
+                            </div>
+                            
+							<div class="item" >
+                                <img src="{% static 'img/picture3.jpg' %}" alt="IWMI">
+                                    <div class="carousel-caption">
+                                        <!--<p>
+                                           Prof.Tumbo(left) and Mr.Telengenia(right) installing Drip system in rudewa.
+                                         </p>-->
+                                    </div>			
+                            </div>
+							
+							<div class="item" >
+                                <img src="{% static 'img/picture4.jpg' %}" alt="IWMI">
+                                    <div class="carousel-caption">
+                                        <!--<p>
+                                           Prof.Tumbo(left) and Mr.Telengenia(right) installing Drip system in rudewa.
+                                         </p>-->
+                                    </div>			
+                            </div>
+							<div class="item" >
+                                <img src="{% static 'img/picture5.jpg' %}" alt="IWMI">
+                                    <div class="carousel-caption">
+                                        <!--<p>
+                                           Prof.Tumbo(left) and Mr.Telengenia(right) installing Drip system in rudewa.
+                                         </p>-->
+                                    </div>			
+                            </div>
+							<div class="item" >
+                                <img src="{% static 'img/picture6.jpg' %}" alt="IWMI">
+                                    <div class="carousel-caption">
+                                        <!--<p>
+                                           Prof.Tumbo(left) and Mr.Telengenia(right) installing Drip system in rudewa.
+                                         </p>-->
+                                    </div>			
+                            </div>
+							<div class="item" >
+                                <img src="{% static 'img/picture7.jpg' %}" alt="IWMI">
+                                    <div class="carousel-caption">
+                                        <!--<p>
+                                           Prof.Tumbo(left) and Mr.Telengenia(right) installing Drip system in rudewa.
+                                         </p>-->
+                                    </div>			
+                            </div>
+			   
+							
+                        </div>
+    <!-- Carousel controls  -->
+    <a class="carousel-control left" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+    <a class="carousel-control right" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+    </div>
+</div>
+                
+
+    <section id="sideNews" class="sidebar" style="margin-top:0.5em">
+        <div>				
+            <div style="padding:2px">
+                <div class="box dark-gray-box news">
+                    <h1>
+                        <a href="http://ilssi.tamu.edu/news/all/water-smart-investment-benefits-ripple-beyond-food-security/">
+                           International Water Management Institute.
+                        </a>
+                    </h1>
+                </div>
+                <!--img src="/media/1153/6213794032_1c1b3050c4_o.jpg" alt="6213794032_1c1b3050c4_o.jpg" class="block" /-->
+                <div class="box gray-box news">
+                    <p>International water management institute..... 
+                    </p>
+                </div>
+				<div class="box dark-gray-box news">
+                    <h1>
+                        <a href="http://ilssi.tamu.edu/news/all/water-smart-investment-benefits-ripple-beyond-food-security/">
+                           International Water Management Institute.
+                        </a>
+                    </h1>
+                </div>
+                <!--img src="/media/1153/6213794032_1c1b3050c4_o.jpg" alt="6213794032_1c1b3050c4_o.jpg" class="block" /-->
+                <div class="box gray-box news">
+                    <p>International water management institute..... 
+                    </p>
+                </div>
+				
+            </div>
+                <div class="clear"></div>	
+                <div class="clear"></div>	
+                <a href = "/" style= "float:right"> Click for more...</a>
+        </div>
+    </section>
+    <div class="clear"></div>
+                
+    <section id="aboutUs"><!--id="partners" class="sidecontent">-->
+        <div >
+            <h1 style="margin-bottom:1.0em">
+                Main Partners
+            </h1>
+        </div>
+
+        <div class="clear">	
+            <div class="quarter">
+                <a href="http://www.suanet.ac.tz" title="Sokoine University of Agriculture">
+                    <img id='resize' src="{% static 'img/logosua.jpg' %}" alt="SUA.jpg" class="block" />
+                </a>
+            </div> 
+            <div class="quarter">
+                <a href="http://www.iwmi.cgiar.org/" title="International Water Management Institute">
+                    <img src="{% static 'img/iwmi.jpg' %}" alt="IWMI.jpg" class="block" />
+                </a>
+            </div>
+                <div class="quarter">
+                    <a href="http://www.usaid.gov/" title="U.S. Agency for International Development">
+                          <img src="{% static 'img/usaid.jpg' %}" alt="USAID.jpg" class="block" />
+                      </a>
+                </div>
+                <div class="quarter">
+                    <a href="http://www.feedthefuture.gov/" title="Feed the Future">
+                         <img src="{% static 'img/ftf.jpg' %}" alt="FTF.jpg" class="block" />
+                    </a>
+                </div>
+                </div>
+        <div class="clear"></div>
+                <div >
+                    <h1 style="margin-bottom:1.0em">
+                           Other partners
+                    </h1>
+                 </div>
+            <div class="clear">		
+                <div class="quarter">
+                    <a href="http://borlaug.tamu.edu/" title="Borlaug Institute for International Agriculture (Lead Institution)">
+                        <img src="{% static 'img/borlaug.jpg' %}" alt="Borlaug.jpg" class="block" />
+                    </a>
+                </div>
+                <div class="quarter">
+                    <a href="http://www.ifpri.org/" title="International Food Policy Research Institute">
+                        <img src="{% static 'img/ifpri.jpg' %}" alt="IFPRI.jpg" class="block" />
+                    </a>
+                </div>
+                <div class="quarter">
+                    <a href="http://www.ilri.org/" title="International Livestock Research Institute">
+                        <img src="{% static 'img/ilri.jpg' %}" alt="ILRI.jpg" class="block" />
+                    </a>
+                </div>	
+            </div>
+        </section>     
+        </div>
+</article>
+{% block footer %}
+<!-- Footer -->
+ <footer id="footer">
+     <div class="frame">
+         <!--<h1><a href="/">ILSSI</a></h1>-->
+         <h4>Contact :</h4>
+     <div>
+         International Water Management Institute (IWMI) | Nile Basin and East Africa Office | C/o ILRI-Ethiopia Campus, P.O.Box 5689 | Addis Ababa, Ethiopia.
+    </div>
+    <div>
+        If you face any issue with the site, please email to 
+        <a href="mailto:pngimbwa6@gmail.com" target="_blank" title="Contact ILSI for issue with site">
+            pngimbwa6@gmail.com
+        </a> or call at  +255-717-664-456 .
+    </div>
+</div>
+</footer>
+{% endblock %}
+</div>
+<!-- /.container -->
+<!-- jQuery -->
+<script src="{% static 'js/jquery.js' %}"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+{% endblock %}
+</body>
+</html>
+
+
+
+
+
+
+
+
+

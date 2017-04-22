@@ -1,0 +1,310 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>NurseryIrrigation</title>
+{% endblock %}
+
+{% block main_section %}
+
+  <script>
+  $(function() {
+    $( "#id_date_trasplanting" ).datepicker();
+  });
+   $(function() {
+    $( "#id_date_bed_preparation" ).datepicker();
+  });
+   $(function() {
+    $( "#id_seeding_date" ).datepicker();
+  });
+  </script>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+
+    <form class="well form-horizontal" action=" " method="post"  id="nursery_form">{% csrf_token %} 
+<!-- Form Name -->
+<fieldset>
+<legend>Nursery irrigation...</legend>
+
+<div class="form-group"> 
+    {{ nurseryirrigationform.date.errors }}
+    <label for="date" class="col-md-4 control-label">Date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ nurseryirrigationform.date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ nurseryirrigationform.climate.errors }}
+    <label for="climate" class="col-md-4 control-label">Climate:</label>
+        <div class="col-md-4 selectContainer">
+        {{ nurseryirrigationform.climate }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ nurseryirrigationform.nurseryID.errors }}
+    <label for="nurseryID" class="col-md-4 control-label">Nursery ID:</label>
+        <div class="col-md-4 selectContainer">
+        {{ nurseryirrigationform.nurseryID }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ nurseryirrigationform.time_started.errors }}
+    <label for="time_started" class="col-md-4 control-label">Time started:</label>
+        <div class="col-md-4 selectContainer">
+        {{ nurseryirrigationform.time_started }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ nurseryirrigationform.time_ended.errors }}
+    <label for="time_ended" class="col-md-4 control-label">Time ended:</label>
+        <div class="col-md-4 selectContainer">
+        {{ nurseryirrigationform.time_ended }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ nurseryirrigationform.total_time.errors }}
+    <label for="total_time" class="col-md-4 control-label">Total time:</label>
+        <div class="col-md-4 selectContainer">
+        {{ nurseryirrigationform.total_time }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ nurseryirrigationform.bucket_volume.errors }}
+    <label for="bucket_volume" class="col-md-4 control-label">Bucket volume:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+             {{ nurseryirrigationform.bucket_volume }}<span class="input-group-addon">L</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ nurseryirrigationform.bucket_numbers.errors }}
+    <label for="bucket_numbers" class="col-md-4 control-label">Number of buckets:</label>
+        <div class="col-md-4 selectContainer">
+        {{ nurseryirrigationform.bucket_numbers }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ nurseryirrigationform.total_volume.errors }}
+    <label for="total_volume" class="col-md-4 control-label">Total volume:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+             {{ nurseryirrigationform.total_volume }}<span class="input-group-addon">m<sup>3</sup></span>
+            </div>
+        </div>
+</div>
+
+
+</fieldset>
+
+<fieldset>
+<legend>Labour Info</legend>
+
+<div class="form-group"> 
+    {{ nurseryirrigationform.labour.errors }}
+    <label for="labour" class="col-md-4 control-label">Labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ nurseryirrigationform.labour }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ nurseryirrigationform.hired_female_number.errors }}
+    <label for="hired_female_number" class="col-md-4 control-label">Number of hired female:</label>
+        <div class="col-md-4 selectContainer">
+            {{ nurseryirrigationform.hired_female_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ nurseryirrigationform.hired_male_number.errors }}
+    <label for="hired_male_number" class="col-md-4 control-label">Number of hired male:</label>
+        <div class="col-md-4 selectContainer">
+            {{ nurseryirrigationform.hired_male_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ nurseryirrigationform.family_female_number.errors }}
+    <label for="family_female_number" class="col-md-4 control-label">Number of female family  labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ nurseryirrigationform.family_female_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ nurseryirrigationform.family_male_number.errors }}
+    <label for="family_male_number" class="col-md-4 control-label">Number of male family labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ nurseryirrigationform.family_male_number}}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ nurseryirrigationform.wage.errors }}
+    <label for="wage" class="col-md-4 control-label">Daily wage:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+             {{ nurseryirrigationform.wage }}<span class="input-group-addon">{{ nurseryirrigationform.currency }}</span>
+            </div>
+        </div>
+</div>
+</fieldset>
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+    {% endblock %}
+    
+{% block extended_javascripts_code %}
+<script>
+        $(document).ready(function () {
+    $('#nursery_form').bootstrapValidator({
+        feedbackIcons: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            nurseryID: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill in nursery ID' }
+                        }
+                    },         
+            area: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill in nursery area' }
+                        }
+                    },
+            
+            farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select the field' }
+                        }
+                    },
+            date_bed_preparation: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please provide bed preparation date' }
+                }
+            },
+            bed_length: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter bed length' }
+                        }
+                    },
+            
+            bed_width: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter bed width' }
+                        }
+                    },
+            date_trasplanting: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill trasplanting date' }
+                        }
+                    },
+                    
+            bednumber: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter bed number' }
+                        }
+                    },
+                    
+            seed_per_bed: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter number of seed/bed' }
+                        }
+                    },
+            seedtype: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose seedtype' }
+                        }
+                    },
+            seeding_date: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select seeding_date' }
+                        }
+                    },
+                    
+        }
+    }).on('success.form.bv', function (e) {
+        $('#success_message').slideDown({ opacity: 'show' }, 'slow');
+        $('#addfarmer_form').data('bootstrapValidator').resetForm();
+        e.preventDefault();
+        var $form = $(e.target);
+        var bv = $form.data('bootstrapValidator');
+        $.post($form.attr('action'), $form.serialize(), function (result) {
+            console.log(result);
+        }, 'json');
+    });
+});
+</script>
+   
+<script>
+    $(document).ready(function() {
+            $("#id_labour").change(function() {
+              value=0;
+                if ($(this).val() == '') {
+                    $("#id_hired_female_number").attr('readonly', true);
+                    //$("#id_hired_female_number").val(value);
+                    $("#id_hired_male_number").attr('readonly', true);
+                    //$("#id_hired_male_number").val(value);
+                    $("#id_family_female_number").attr('readonly', true);
+                    //$("#id_family_female_number").val(value);
+                    $("#id_family_male_number").attr('readonly', true);
+                    //$("#id_family_male_number").val(value);
+                }
+                else if ($(this).val() == 'Family')  {
+                    $("#id_family_female_number").attr('readonly', false);
+                    $("#id_family_male_number").attr('readonly', false); 
+                    $("#id_hired_female_number").attr('readonly', true);
+                    $("#id_hired_female_number").val(value);
+                    $("#id_hired_male_number").attr('readonly', true);
+                    $("#id_hired_male_number").val(value);                    
+                }
+                else if ($(this).val() == 'Hired')  {
+                    $("#id_family_female_number").attr('readonly', true);
+                    $("#id_family_female_number").val(value);
+                    $("#id_family_male_number").attr('readonly', true);
+                    $("#id_family_male_number").val(value);
+                    $("#id_hired_female_number").attr('readonly', false);
+                    $("#id_hired_male_number").attr('readonly', false);
+                }
+                else{
+                    $("#id_family_female_number").attr('readonly', false);
+                    $("#id_family_male_number").attr('readonly', false); 
+                    $("#id_hired_female_number").attr('readonly', false);
+                    $("#id_hired_male_number").attr('readonly', false);
+                }
+            });
+    });
+</script>
+{% endblock %}
+

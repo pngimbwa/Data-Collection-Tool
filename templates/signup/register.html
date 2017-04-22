@@ -1,0 +1,1157 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>Add Farmer</title>
+{% endblock %}
+
+{% block main_section %}
+  <script>
+  $(function() {
+    $( "#id_technology_date" ).datepicker({
+        onSelect: function() {
+        $('#addfarmer_form').formValidation('revalidateField', 'technology_date');
+    }
+  });
+  });
+</script>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<style>
+  /* HOVER STYLES */
+  div#pop-up {
+      display: none;
+      position: absolute;
+      width: 280px;
+      padding: 10px;
+      background: #eeeeee;
+      color: #000000;
+      border: 1px solid #1a1a1a;
+      font-size: 90%;
+  }
+</style>
+<style>
+.input-group.input-group-unstyled input.form-control {
+    -webkit-border-radius: 4px;
+       -moz-border-radius: 4px;
+            border-radius: 4px;
+}
+.input-group-unstyled .input-group-addon {
+    border-radius: 4px;
+    border: 0px;
+    background-color: transparent;
+}
+ </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/10.0.8/css/intlTelInput.css" />
+    <form class="well form-horizontal" action=" " method="post"  id="addfarmer_form">{% csrf_token %} 
+<!-- Form Name -->
+<fieldset>
+<legend>Location Info</legend>
+
+<div class="form-group"> 
+    {{ locationform.country.errors }}
+    <label for="country" class="col-md-4 control-label">Country:</label>
+        <div class="col-md-4 selectContainer">
+        {{ locationform.country }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ locationform.region.errors }}
+    <label for="region" class="col-md-4 control-label">Region:</label>
+        <div class="col-md-4 selectContainer">
+        {{ locationform.region }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ locationform.district.errors }}
+    <label for="district" class="col-md-4 control-label">District:</label>
+        <div class="col-md-4 selectContainer">
+        {{ locationform.district }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ locationform.village.errors }}
+    <label for="village" class="col-md-4 control-label">Village:</label>
+        <div class="col-md-4 selectContainer">
+        {{ locationform.village }}
+        </div>
+</div>
+
+</fieldset>
+
+<fieldset>
+    
+<legend>Basic Info</legend>
+
+
+
+<div class="form-group"> 
+    {{ peopleform.groupchoice.errors }}
+    <label for="groupchoice" class="col-md-4 control-label">Does he/she have group?:</label>
+        <div class="col-md-4 selectContainer">
+        {{ peopleform.groupchoice }}
+        </div>
+</div>
+
+
+<div class="form-group" id='group'> 
+    {{ peopleform.group.errors }}
+    <label for="group" class="col-md-4 control-label">Group:</label>
+        <div class="col-md-4 selectContainer">
+        {{ peopleform.group }}
+        </div>
+</div>
+
+<!--
+<div class="form-group"> 
+    {{ peopleform.personID.errors }}
+    <label for="personID" class="col-md-4 control-label">PersonID</label>  
+        <div class="col-md-4 inputGroupContainer">
+        {{ peopleform.personID }}
+        <p><font color="red">{{message}}</font></p>
+        </div>
+</div>
+-->
+<div class="form-group"> 
+    {{ peopleform.firstname.errors }}
+    <label for="firstname" class="col-md-4 control-label">First Name</label>   
+        <div class="col-md-4 inputGroupContainer">
+        {{ peopleform.firstname }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ peopleform.middlename.errors }}
+    <label for="middlename" class="col-md-4 control-label" >Middle Name</label>  
+        <div class="col-md-4 inputGroupContainer">
+        {{ peopleform.middlename }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ peopleform.lastname.errors }}
+    <label for="lastname" class="col-md-4 control-label" >Last Name</label> 
+        <div class="col-md-4 inputGroupContainer">
+        {{ peopleform.lastname }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ peopleform.gender.errors }}
+    <label for="gender" class="col-md-4 control-label">Gender</label>
+        <div class="col-md-4 selectContainer">
+        {{ peopleform.gender }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ peopleform.phone.errors }}
+    <label for="phone" class="col-md-4 control-label">Phone #</label> 
+        <div class="col-md-4 inputGroupContainer">
+        {{ peopleform.phone }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ peopleform.age_group.errors }}
+    <label for="age_group" class="col-md-4 control-label">Age group:</label> 
+        <div class="col-md-4 inputGroupContainer">
+        {{ peopleform.age_group }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ peopleform.role.errors }}
+    <label for="role" class="col-md-4 control-label">Role</label> 
+        <div class="col-md-4 inputGroupContainer">
+        {{ peopleform.role }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ houseform.house_longitude_degree.errors }}
+    <label for="house_longitude" class="col-md-4 control-label">House longitude:</label> 
+        <div class="col-md-1 inputGroupContainer">
+        {{ houseform.house_longitude_degree }}
+        </div>
+        {{ houseform.house_longitude_minute.errors }}
+        <div class="col-md-1 inputGroupContainer">
+        {{ houseform.house_longitude_minute }}
+        </div>
+        {{ houseform.house_longitude_second.errors }}
+        <div class="col-md-1 inputGroupContainer">
+        {{ houseform.house_longitude_second }}
+        </div>
+        {{ houseform.house_longitude_direction.errors }}
+        <div class="col-md-1 inputGroupContainer">
+        {{ houseform.house_longitude_direction }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ houseform.house_latitude_degree.errors }}
+    <label for="house_latitude" class="col-md-4 control-label">House latitude</label> 
+        <div class="col-md-1 inputGroupContainer">
+        {{ houseform.house_latitude_degree }}
+        </div>
+        {{ houseform.house_latitude_minute.errors }}
+        <div class="col-md-1 inputGroupContainer">
+        {{ houseform.house_latitude_minute }}
+        </div>
+        {{ houseform.house_latitude_second.errors }}
+        <div class="col-md-1 inputGroupContainer">
+        {{ houseform.house_latitude_second }}
+        </div>
+        {{ houseform.house_latitude_direction.errors }}
+        <div class="col-md-1 inputGroupContainer">
+        {{ houseform.house_latitude_direction }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ houseform.House_elevation.errors }}
+    <label for="House_elevation" class="col-md-4 control-label">House elevation</label> 
+        <div class="col-md-4 inputGroupContainer">
+          <div class="input-group">
+        {{ houseform.House_elevation }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<fieldset>
+<legend>Farm Info</legend>
+<div class="form-group"> 
+    {{ peopleform.landownership.errors }}
+    <label for="landownership" class="col-md-4 control-label">Landownership</label> 
+        <div class="col-md-4 inputGroupContainer">
+        {{ peopleform.landownership }}
+        </div>
+</div>
+
+<div class="form-group" id='rented_land'> 
+    {{ peopleform.rented_land.errors }}
+    <label for="rented_land" class="col-md-4 control-label">Rented land</label> 
+        <div class="col-md-4 inputGroupContainer">
+          <div class="input-group">
+        {{ peopleform.rented_land }}<span class="input-group-addon">ha</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='owned_land'> 
+    {{ peopleform.owned_land.errors }}
+    <label for="owned_land" class="col-md-4 control-label">Owned land</label> 
+        <div class="col-md-4 inputGroupContainer">
+          <div class="input-group">
+        {{ peopleform.owned_land }}<span class="input-group-addon">ha</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='total_irrigated_owned_land'> 
+    {{ peopleform.total_irrigated_owned_land.errors }}
+    <label for="total_irrigated_owned_land" class="col-md-4 control-label">Total irrigated owned land</label> 
+        <div class="col-md-4 inputGroupContainer">
+          <div class="input-group">
+        {{ peopleform.total_irrigated_owned_land }}<span class="input-group-addon">ha</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='total_irrigated_rented_land'> 
+    {{ peopleform.total_irrigated_rented_land.errors }}
+    <label for="total_irrigated_rented_land" class="col-md-4 control-label">Total irrigated rented land</label> 
+        <div class="col-md-4 inputGroupContainer">
+          <div class="input-group">
+        {{ peopleform.total_irrigated_rented_land }}<span class="input-group-addon">ha</span>
+            </div>
+        </div>
+</div>
+<div class="form-group"> 
+    {{ peopleform.number_of_plots.errors }}
+    <label for="number_of_plots" class="col-md-4 control-label">Total number of plots</label> 
+        <div class="col-md-4 inputGroupContainer">
+        {{ peopleform.number_of_plots }}
+    </div>
+</div>
+<div class="form-group" id='irrigated_plots'> 
+    {{ peopleform.irrigated_plots.errors }}
+    <label for="irrigated_plots" class="col-md-4 control-label">Total number of irrigated plots</label> 
+        <div class="col-md-4 inputGroupContainer">
+          <div class="input-group input-group-unstyled">
+        {{ peopleform.irrigated_plots }} <span class="input-group-addon"><i class="fa fa-info-circle" aria-hidden="true" id='irrigated-plots-info-circle'></i></span>
+          </div>
+        </div>
+</div>
+
+<!--HIDDEN/POP-UP DIV-->
+<div id="pop-up">
+  <p>
+    <small><i>Number of plots that will be irrigated</i></small>
+  </p>
+</div>
+    
+<!--<label for="message" style="color:#D7DBDD "><small><i>Note: Number of plots that will be irrigated</i></small></label>-->
+
+
+</fieldset>
+
+<fieldset>
+<legend>Water source and technology</legend>
+
+<div class="form-group"> 
+    {{ peopleform.water_source.errors }}
+    <label for="water_source" class="col-md-4 control-label">Water source:</label>
+        <div class="col-md-4 selectContainer">
+        {{ peopleform.water_source }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ peopleform.pumping_source.errors }}
+    <label for="pumping_source" class="col-md-4 control-label">Pumping source:</label>
+        <div class="col-md-4 selectContainer">
+        {{ peopleform.pumping_source }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ peopleform.well_latitude_degree.errors }}
+    <label for="well_latitude" class="col-md-4 control-label">Latitude:</label>
+        <div class="col-md-1 selectContainer">
+        {{ peopleform.well_latitude_degree }}
+        </div>
+        {{ peopleform.well_latitude_minutes.errors }}
+        <div class="col-md-1 selectContainer">
+        {{ peopleform.well_latitude_minutes }}
+        </div>
+        {{ peopleform.well_latitude_seconds.errors }}
+        <div class="col-md-1 selectContainer">
+        {{ peopleform.well_latitude_seconds }}
+        </div>
+        {{ peopleform.well_latitude_direction.errors }}
+        <div class="col-md-1 selectContainer">
+        {{ peopleform.well_latitude_direction }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ peopleform.well_longitude_degree.errors }}
+    <label for="well_longitude" class="col-md-4 control-label">Longitude:</label>
+        <div class="col-md-1 selectContainer">
+        {{ peopleform.well_longitude_degree }}
+        </div>
+        {{ peopleform.well_longitude_minutes.errors }}
+        <div class="col-md-1 selectContainer">
+        {{ peopleform.well_longitude_minutes }}
+        </div>
+        {{ peopleform.well_longitude_seconds.errors }}
+        <div class="col-md-1 selectContainer">
+        {{ peopleform.well_longitude_seconds }}
+        </div>
+        {{ peopleform.well_longitude_direction.errors }}
+        <div class="col-md-1 selectContainer">
+        {{ peopleform.well_longitude_direction }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ peopleform.elevation.errors }}
+    <label for="elevation" class="col-md-4 control-label">Elevation:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+        {{ peopleform.elevation }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group" id='well_depth'> 
+    {{ peopleform.well_depth.errors }}
+    <label for="well_depth" class="col-md-4 control-label">Depth:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ peopleform.well_depth }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='well_diameter'> 
+    {{ peopleform.well_diameter.errors }}
+    <label for="well_diameter" class="col-md-4 control-label">Diameter:</label>
+        <div class="col-md-4 selectContainer">
+        <div class="input-group">
+            {{ peopleform.well_diameter }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ peopleform.technology.errors }}
+    <label for="technology" class="col-md-4 control-label">Water lifting technology:</label>
+        <div class="col-md-4 selectContainer">
+        {{ peopleform.technology }}
+        </div>
+</div>
+
+<div class="form-group" id='technology_date'> 
+    {{ peopleform.technology_date.errors }}
+    <label for="technology_date" class="col-md-4 control-label">Recieved date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ peopleform.technology_date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ peopleform.register_select.errors }}
+    <label for="register_select" class="col-md-4 control-label">Has any household member already registered?:</label>
+        <div class="col-md-4 selectContainer">
+        {{ peopleform.register_select }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ peopleform.household_members.errors }}
+    <label for="household_members" class="col-md-4 control-label">Household members:</label>
+        <div class="col-md-4 selectContainer">
+            {{ peopleform.household_members }}
+        </div>
+</div>
+
+
+</fieldset>
+
+</fieldset>
+
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+    
+    
+<script>
+    $(document).ready(function() {
+            $("#id_country").change(function() {
+                if ($(this).val() == '') {
+                    $("#id_region").html("<option>Choose Region..</option>");
+                    $("#id_region").attr('disabled', true);
+                }
+                else {
+                    var url = "/id_region/" + $(this).val() + "/regions";
+              
+                    $.getJSON(url, function(regions) {
+                        var options = '<option value="">Choose Region..</option>';
+                        for (var i = 0; i < regions.length; i++) {
+                            
+                            options += '<option value="' + regions[i].pk + '">' + regions[i].pk + '</option>';
+                        }
+                        $("#id_region").html(options);
+                        $("#id_region option:first").attr('selected', 'selected');
+                        $("#id_region").attr('disabled', false);
+                    });
+                }
+            });
+            
+            $("#id_region").change(function() {
+                if ($(this).val() == '') {
+                    $("#id_district").html("<option>Choose District..</option>");
+                    $("#id_district").attr('disabled', true);
+                }
+                else {
+                    var url = "/id_district/" + $(this).val() + "/districts";
+                    $.getJSON(url, function(districts) {
+                        var options = '<option value="">Choose Region..</option>';
+                        for (var i = 0; i < districts.length; i++) {
+                            options += '<option value="' + districts[i].pk + '">' + districts[i].pk + '</option>';
+                        }
+                        $("#id_district").html(options);
+                        $("#id_district option:first").attr('selected', 'selected');
+                        $("#id_district").attr('disabled', false);
+                    });
+                }
+            });
+            
+             $("#id_district").change(function() {
+                if ($(this).val() == '') {
+                    $("#id_village").html("<option>Choose Village..</option>");
+                    $("#id_village").attr('disabled', true);
+                }
+                else {
+                    var url = "/id_village/" + $(this).val() + "/villages";
+                    $.getJSON(url, function(villages) {
+                        var options = '<option value="">Choose Village..</option>';
+                        for (var i = 0; i < villages.length; i++) {
+                            options += '<option value="' + villages[i].pk + '">' + villages[i].pk + '</option>';
+                        }
+                        $("#id_village").html(options);
+                        $("#id_village option:first").attr('selected', 'selected');
+                        $("#id_village").attr('disabled', false);
+                    });
+                }
+            });
+             
+             $("#id_village").change(function() {
+                if ($(this).val() == '') {
+                    $("#id_household_members").attr('readonly', true);
+                    //var options = '<option value="">NONE</option>';
+                    //$("#id_household_members").html(options);
+                }
+                else {
+                    var url = "/id_household_member/" + $(this).val() + "/household_members";
+                    $.getJSON(url, function(household_members) {
+                      
+                      var options='';// = '<option value="">Choose Village..</option>';
+                        for (var i = 0; i < household_members.length; i++) {
+                          options += '<option value="' + household_members[i].pk  + '">' + household_members[i].fields['firstname'] + ' ' + household_members[i].fields['middlename'] + ' ' + household_members[i].fields['lastname'] + '</option>';
+                        }
+                        $("#id_household_members").html(options);
+                        $("#id_household_members option:first").attr('selected', 'selected');
+                        $("#id_household_members").attr('readonly', true);
+                    });
+                }
+            });
+             
+            $(window).load(function() {
+              if ($("#id_household_members option:selected")){
+                  $('select#id_household_members').val()
+                  $("#id_household_members").attr('readonly', true);
+              }
+             
+          });
+
+             
+    });
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/10.0.8/js/intlTelInput.min.js"></script>
+<script>
+$(document).ready(function () {   
+    $('#addfarmer_form').formValidation({
+        framework: 'bootstrap',
+        icon: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            country: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select country' }
+                        }
+                    },
+                    
+            region: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select region' }
+                        }
+                    },
+            
+            district: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select district' }
+                        }
+                    },
+            village: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select village' }
+                        }
+                    },
+            firstname: {
+                validators: {
+                    stringLength: { min: 2 },
+                    notEmpty: { message: 'Please supply first name' }
+                }
+            },
+            lastname: {
+                validators: {
+                    stringLength: { min: 2 },
+                    notEmpty: { message: 'Please supply last name' }
+                }
+            },
+            /*
+            phone: {
+                enabled: false,
+            },
+            */
+            technology_date: {
+                validators: {
+                    date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: {
+                        message: 'Please fill date' }
+                        }
+                    },
+            gender: {
+                validators: {
+                    notEmpty: { message: 'Please fill the gender' }
+                }
+            },
+            groupchoice: {
+                validators: {
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            group:{
+                validators: {
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            personID: {
+                validators: {
+                    notEmpty: { message: 'Please fill the ID' }
+                }
+            },
+            
+            age_group: {
+                validators: {
+                    notEmpty: { message: 'Please choose age group' }
+                }
+            },
+            house_latitude_degree:{
+                validators: {
+                    notEmpty: {
+                        message: "Please provide house latitude's degree"},
+                    between: {
+                        min: 0,
+                        max: 90,
+                        message: 'The latitude must be between 0 and 90.0'
+                    }
+                }
+            },
+            house_latitude_minute:{
+                validators: {
+                    notEmpty: {
+                        message: "Please provide house latitude's minutes"},
+                    between: {
+                        min: 0,
+                        max: 60,
+                        message: 'The latitude minute must be between 0 and 60'
+                    },
+                }
+            },
+            house_latitude_second:{
+                validators: {
+                    notEmpty: {
+                        message: "Please provide house latitude's second "},
+                    between: {
+                        min: 0,
+                        max: 60,
+                        message: 'The latitude second must be between 0 and 60'
+                    },
+                }
+            },
+            house_latitude_direction:{
+                validators: {
+                    notEmpty: {
+                        message: "Please choose house latitude's direction "},
+                }
+            },
+            House_elevation:{
+                validators: {
+                    greaterThan: {
+                        value: 0,
+                        message: 'The value must be greater than or equal to zero(0)'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill house elevation' }
+                }
+            },
+            elevation:{
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill elevation' }
+                }
+            },
+            house_longitude_degree:{
+                validators: {
+                    notEmpty: {
+                        message: "Please provide house longitude's degree "},
+                    between: {
+                        min: 0,
+                        max: 180,
+                        message: 'The longitude must be between 0 and 180.0'
+                    }
+                }
+            },
+            house_longitude_minute:{
+                validators: {
+                    notEmpty: {
+                        message: "Please provide house longitude's minute"},
+                    between: {
+                        min: 0,
+                        max: 60,
+                        message: 'The longitude minute must be between 0 and 60'
+                    },
+                }
+            },
+            house_longitude_second:{
+                validators: {
+                    notEmpty: {
+                        message: "Please provide house longitude's second"},
+                    between: {
+                        min: 0,
+                        max: 60,
+                        message: 'The longitude second must be between 0 and 60'
+                    },
+                }
+            },
+            house_longitude_direction:{
+                validators: {
+                    notEmpty: {
+                        message: "Please choose house longitude's direction"},
+                }
+            },
+            role: {
+                validators: {
+                    notEmpty: { message: 'Please choose the role' }
+                }
+            },
+            register_select: {
+                validators: {
+                    notEmpty: { message: 'Please select one' }
+                }
+            },
+            landownership: {
+                validators: {
+                    notEmpty: { message: 'Please choose the landownership' }
+                }
+            },
+            rented_land: {
+                validators: {
+                    greaterThan: {
+                        value: 0,
+                        message: 'The value must be greater than or equal to zero(0)'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'This field is required' }
+                }
+            },
+            owned_land: {
+                validators: {
+                    greaterThan: {
+                        value: 0,
+                        message: 'The value must be greater than or equal to zero(0)'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'This field is required' }
+                }
+            },
+            total_irrigated_owned_land: {
+                validators: {
+                    greaterThan: {
+                        value: 0,
+                        message: 'The value must be greater than or equal to zero(0)'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'This field is required' }
+                }
+            },
+            total_irrigated_rented_land: {
+                validators: {
+                    greaterThan: {
+                        value: 0,
+                        message: 'The value must be greater than or equal to zero(0)'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'This field is required' }
+                }
+            },
+            irrigated_plots: {
+                validators: {
+                   /*
+                    between: {
+                            min: 1,
+                            max: 10000000000000000,
+                            message: 'The number cant be less than one'
+                        },
+                    */
+                    greaterThan: {
+                        value: 0,
+                        message: 'The value must be greater than or equal to zero(0)'
+                    },
+                    integer: {
+                          message: 'invalid, must be an integer'
+                        },
+                    notEmpty: { message: 'This field is required' }
+                }
+            },
+            number_of_plots: {
+                validators: {
+                    integer: {
+                          message: 'invalid, must be an integer'
+                        },
+                    notEmpty: { message: 'Please select one' }
+                }
+            },
+            technology: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose water lifting technology:' }
+                        }
+                    },
+            well_diameter: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'This field is required' }
+                }
+            },
+            well_depth: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'This field is required' }
+                }
+            },
+            well_longitude_degree:{
+                validators: {
+                    notEmpty: {
+                        message: "Please provide longitude's degree"},
+                    between: {
+                        min: 0,
+                        max: 180,
+                        message: 'The latitude must be between 0 and 180.0'
+                    }
+                }
+            },
+            well_longitude_minutes:{
+                validators: {
+                    notEmpty: {
+                        message: "Please provide longitude's minutes"},
+                    between: {
+                        min: 0,
+                        max: 60,
+                        message: 'The longitude minute must be between 0 and 60'
+                    },
+                }
+            },
+            well_longitude_seconds:{
+                validators: {
+                    notEmpty: {
+                        message: "Please provide longitude's seconds"},
+                    between: {
+                        min: 0,
+                        max: 60,
+                        message: 'The longitude second must be between 0 and 60'
+                    },
+                }
+            },
+            well_longitude_direction:{
+                validators: {
+                    notEmpty: {
+                        message: "Please choose longitude's direction"},
+                }
+            },
+            well_latitude_degree: {
+                validators: {
+                    notEmpty: {
+                        message: "Please provide latitude's degree"},
+                    between: {
+                        min: 0,
+                        max: 90,
+                        message: 'The latitude must be between 0 and 90.0'
+                    }
+                }
+            },
+            well_latitude_minutes: {
+                validators: {
+                    notEmpty: {
+                        message: "Please provide latitude's minutes"},
+                    between: {
+                        min: 0,
+                        max: 60,
+                        message: 'The latitude minute must be between 0 and 60'
+                    },
+                }
+            },
+            well_latitude_seconds: {
+                validators: {
+                    notEmpty: {
+                        message: "Please provide latitude's seconds"},
+                    between: {
+                        min: 0,
+                        max: 60,
+                        message: 'The latitude second must be between 0 and 60'
+                    },
+                }
+            },
+            well_latitude_direction: {
+                validators: {
+                    notEmpty: {
+                        message: "Please provide latitude's direction"},
+                }
+            },
+            pumping_source: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose pumping source:' }
+                        }
+                    },
+            water_source:{
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose water source:' }
+                        }
+                    },  
+        },
+    }).on('keyup', '[name="total_land_holding"]', function(e) {
+            $('#addfarmer_form').formValidation('revalidateField', 'total_irrigated_plots_land');
+        });
+});
+</script>
+<script>
+    $(window).load(function() {
+        if($("#id_groupchoice").val()=='Yes') {
+              $("#group").show();
+              $("#id_group").val();
+            }
+        else{
+              $("#group").hide();
+              $("#id_group").val();
+            }    
+    });
+    $(document).ready(function() {
+        $("#id_groupchoice").change(function() {
+          if($("#id_groupchoice").val()=='Yes')  {
+            $("#group").show();
+            $("#id_group").val('');
+          }
+          else{
+            value='N/A';
+            $("#group").hide();
+            $("#id_group").val(value);
+            }
+        });
+    });
+</script>
+   
+<script>
+    $(window).load(function() {
+        if ($('#id_water_source').val() == 'GW' && $('#id_pumping_source').val() == 'Well') {
+              $("#well_depth,#well_diameter").show();
+              $("#id_well_depth,#id_well_diameter").val();
+            }
+        else{
+            $("#well_depth,#well_diameter").hide();
+            $("#id_well_depth,#id_well_diameter").val();
+        }
+    });
+    
+    $(document).ready(function() {
+            $("#id_pumping_source,#id_water_source").change(function() {
+                if ($('#id_water_source').val() == 'GW' && $(this).val() == 'Well') {
+                    $("#well_depth,#well_diameter").show();
+                    $("#id_well_depth,#id_well_diameter").val('');
+                }
+                else{
+                    $("#well_depth,#well_diameter").hide();
+                    $("#id_well_depth,#id_well_diameter").val(0);
+                }
+            });
+    });
+</script>
+
+<script>
+      
+    $(document).ready(function() {
+            $("#id_water_source").change(function() {
+                if ($(this).val() == '') {
+                    $("#id_pumping_source").html("<option>Choose pumping source</option>");
+                    $("#id_pumping_source").attr('disabled', true);
+                }
+                else {
+                    var url = "/id_pumping_source/" + $(this).val() + "/pumping_sources";
+              
+                    $.getJSON(url, function(pumping_sources) {
+                        var options = '<option value="">Choose pumping source..</option>';
+                        for (var i = 0; i < pumping_sources.length; i++) {
+                            
+                            options += '<option value="' + pumping_sources[i].pk + '">' + pumping_sources[i].pk + '</option>';
+                        }
+                        $("#id_pumping_source").html(options);
+                        $("#id_pumping_source option:first").attr('selected', 'selected');
+                        $("#id_pumping_source").attr('disabled', false);
+                    });
+                }
+            });
+    });
+
+</script>
+
+
+
+<script>
+  /*
+$(window).load(function(){
+  if ($('#id_register_select option:selected').text()=='Yes') {
+            $("#id_household_members").attr('readonly',false);
+        }
+  else {
+            $("#id_household_members").attr('readonly',true);
+        }
+  
+  });
+  */
+$(document).ready(function() {
+    $('#id_register_select').change(function(){
+        if ($('#id_register_select option:selected').text()=='Yes') {
+            $("#id_household_members").attr('readonly',false);
+        }
+        else {
+            $("#id_household_members").attr('readonly',true);
+        }
+    })
+});
+</script>
+
+
+<script>
+$(window).load(function(){
+  if ($('#id_landownership').val()=='') {
+    $("#rented_land,#owned_land,#total_irrigated_owned_land,#total_irrigated_rented_land").hide();
+  }
+  else if ($('#id_landownership').val() == 'All owned') {
+      $("#rented_land,#total_irrigated_rented_land").hide();
+      $("#id_rented_land,#id_total_irrigated_rented_land").val();
+      $("#owned_land,#total_irrigated_owned_land").show();
+      $("#id_owned_land,#id_total_irrigated_owned_land").val();
+  }
+  else if ($('#id_landownership').val()== 'Partly owned') {
+      $("#rented_land,#owned_land,#total_irrigated_owned_land,#total_irrigated_rented_land").show();
+      $("#id_rented_land,#id_total_irrigated_rented_land,#id_owned_land,#id_total_irrigated_owned_land").val();
+  }
+  else if ($('#id_landownership').val() == 'All rented') {
+      $("#rented_land,#total_irrigated_rented_land").show();
+      $("#id_rented_land,#id_total_irrigated_rented_land").val();
+      $("#owned_land,#total_irrigated_owned_land").hide();
+      $("#id_owned_land,#id_total_irrigated_owned_land").val();
+  }
+});
+
+$(document).ready(function() {
+  $('#id_landownership').change(function(){
+    if ($(this).val() == '') {
+      $("#rented_land,#owned_land,#total_irrigated_owned_land,#total_irrigated_rented_land").hide();
+    }
+    else if ($(this).val() == 'All owned') {
+      $("#rented_land,#total_irrigated_rented_land").hide();
+      $("#id_rented_land,#id_total_irrigated_rented_land").val(0);
+      $("#owned_land,#total_irrigated_owned_land").show();
+      $("#id_owned_land,#id_total_irrigated_owned_land").val('');
+    }
+    else if ($(this).val() == 'Partly owned') {
+      $("#rented_land,#total_irrigated_rented_land").show();
+      $("#id_rented_land,#id_total_irrigated_rented_land").val('');
+      $("#owned_land,#total_irrigated_owned_land").show();
+      $("#id_owned_land,#id_total_irrigated_owned_land").val('');
+    }
+    else if ($(this).val() == 'All rented') {
+      $("#rented_land,#total_irrigated_rented_land").show();
+      $("#id_rented_land,#id_total_irrigated_rented_land").val('');
+      $("#owned_land,#total_irrigated_owned_land").hide();
+      $("#id_owned_land,#id_total_irrigated_owned_land").val(0);
+    }
+  })
+});
+</script>
+<script>
+$(function() {
+  var moveLeft = 20;
+  var moveDown = 10;
+  $('#irrigated-plots-info-circle').hover(function(e) {
+    $('div#pop-up').show()
+    .css('top',e.pageY + moveDown)
+    .css('left', e.pageX + moveLeft)
+    .appendTo('body');
+  },function(){
+    $('div#pop-up').hide();
+  });
+  
+  $('#irrigated-plots-info-circle').mousemove(function(e) {
+    $("div#pop-up").css('top', e.pageY + moveDown).css('left', e.pageX + moveLeft);
+  });
+  //for multiple popup::
+  //http://creativeindividual.co.uk/2011/08/create-multiple-pop-up-divs-using-the-jquery-prev-method/
+});
+</script>
+
+
+<script>
+$(window).load(function(){
+  if ($('#id_technology').val() == 'No technology') {
+        $('#technology_date').hide();
+        $('#id_technology_date').val();
+    }
+    else{
+      $('#technology_date').show();
+      $('#id_technology_date').val();
+    }
+});
+  
+$(document).ready(function() {
+  $('#id_technology').change(function(){
+    if ($(this).val() == 'No technology') {
+        $('#technology_date').hide();
+        $('#id_technology_date').datepicker('setDate',new Date());
+    }
+    else{
+      $('#technology_date').show();
+      $('#id_technology_date').val('');
+    }
+  })
+});
+
+</script>
+{% endblock %}
+

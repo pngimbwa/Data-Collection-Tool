@@ -1,0 +1,552 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    <title>Otherwaterusage</title>
+{% endblock %}
+
+{% block main_section %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script>
+  $(function() {
+    $( "#id_date" ).datepicker({
+    	onSelect: function() {
+        $('#otherwaterusage_form').formValidation('revalidateField', 'date');
+    }
+    });
+  });
+  </script>
+<script>
+  $(document).ready(function(){
+    $('.timepicker').timepicker({
+      timeFormat: 'HH:mm',
+      interval: 60,
+      minTime: '0',
+      dynamic: false,
+      dropdown: true,
+      scrollbar: true,
+      change: function() {
+            $('#otherwaterusage_form').formValidation('revalidateField', 'start_time');
+            $('#otherwaterusage_form').formValidation('revalidateField', 'end_time');
+            
+              setTimeout(function () {
+                var time_started = $("#id_start_time").val().split(':')
+                var time_ended = $("#id_end_time").val().split(':');
+                var hours1 = parseInt(time_started[0], 10), 
+                    hours2 = parseInt(time_ended[0], 10),
+                    mins1 = parseInt(time_started[1], 10),
+                    mins2 = parseInt(time_ended[1], 10);
+                    var hours = hours2 - hours1, mins = 0;
+                    if(hours < 0) hours = 24 + hours;
+                    if(mins2 >= mins1) {
+                      mins = mins2 - mins1;
+                    }
+                    else {
+                      mins = (mins2 + 60) - mins1;
+                      hours--;
+                    }
+                    totaltime = (hours*60)+mins;
+                    $("#id_total_time").val(totaltime);
+                    },0);
+        }
+    });
+  });
+  </script>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+<!--<div class="col-sm-10 col-sm-offset-1 col-sm-offset-1 col-md-10 col-md-offset-1 col-md-offset-1 col-lg-10 col-lg-offset-1 col-lg-offset-1 container-fluid">
+-->
+    <form class="well form-horizontal" action=" " method="post"  id="otherwaterusage_form">{% csrf_token %} 
+
+<!-- Form Name -->
+<fieldset>
+<legend>Other water usage..</legend>
+
+{% if user_village %}
+<input type="hidden" id="uservillage" name="uservillage" value="{{user_village}}" readonly='readonly' />
+{% elif researcher %}
+<input type="hidden" id="researcher" name="researcher" value="{{researcher}}" readonly='readonly' />
+{% elif user_country %}
+
+{% endif %}
+<label class="warning" for="message" id="message" style="color: red"><small><i>{{message}}</i></small></label>
+
+
+
+<div class="form-group"> 
+    {{ otherwaterusage_form.date.errors }}
+    <label for="date" class="col-md-4 control-label">Date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ otherwaterusage_form.date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ otherwaterusage_form.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farmer:</label>
+        <div class="col-md-4 selectContainer">
+        {{ otherwaterusage_form.farm }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ otherwaterusage_form.technology.errors }}
+    <label for="technology" class="col-md-4 control-label">Technology:</label>
+        <div class="col-md-4 selectContainer">
+        {{ otherwaterusage_form.technology }}
+        </div>
+</div>
+
+<div class="form-group" id='start_time'> 
+    {{ otherwaterusage_form.start_time.errors }}
+    <label for="start_time" class="col-md-4 control-label">Time started:</label>
+        <div class="col-md-4 selectContainer">
+        {{ otherwaterusage_form.start_time }}
+        </div>
+</div>
+
+<div class="form-group" id='end_time'> 
+    {{ otherwaterusage_form.end_time.errors }}
+    <label for="end_time" class="col-md-4 control-label">Time ended:</label>
+        <div class="col-md-4 selectContainer">
+        {{ otherwaterusage_form.end_time }}
+        </div>
+</div>
+ 
+<div class="form-group" id='total_time'> 
+    {{ otherwaterusage_form.total_time.errors }}
+    <label for="total_time" class="col-md-4 control-label">Time time:</label>
+        <div class="col-md-4 selectContainer">
+        {{ otherwaterusage_form.total_time }}
+        </div>
+</div>
+
+<div class="form-group" id='lifting_technology_yes_no'> 
+    {{ otherwaterusage_form.lifting_technology_yes_no.errors }}
+    <label for="lifting_technology_yes_no" class="col-md-4 control-label">Did you fill a bucket using the water lifting technology:</label>
+        <div class="col-md-4 selectContainer">
+        {{ otherwaterusage_form.lifting_technology_yes_no }}
+        </div>
+</div>
+
+<div class="form-group" id='bucketnumber'> 
+    {{ otherwaterusage_form.bucketnumber.errors }}
+    <label for="bucketnumber" class="col-md-4 control-label">Number of bucket:</label>
+        <div class="col-md-4 selectContainer">
+        {{ otherwaterusage_form.bucketnumber }}
+        </div>
+</div>
+
+<div class="form-group" id='bucketvolume'> 
+    {{ otherwaterusage_form.bucketvolume.errors }}
+    <label for="bucketvolume" class="col-md-4 control-label">Volume of the bucket:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+        {{ otherwaterusage_form.bucketvolume }}<span class="input-group-addon">L</span>
+          </div>
+        </div>
+</div>
+
+<div class="form-group" id='totalvolume'> 
+    {{ otherwaterusage_form.totalvolume.errors }}
+    <label for="totalvolume" class="col-md-4 control-label">Total volume:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+          {{ otherwaterusage_form.totalvolume }}<span class="input-group-addon">L</span>
+          </div>
+      </div>
+</div>
+
+<div class="form-group" id='usagepurpose'> 
+    {{ otherwaterusage_form.usagepurpose.errors }}
+    <label for="usagepurpose" class="col-md-4 control-label">Usage purpose:</label>
+        <div class="col-md-4 selectContainer">
+        {{ otherwaterusage_form.usagepurpose }}
+        </div>
+</div>
+
+</fieldset>
+
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group" id='submit'>
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+   <!-- </div>-- /.container -->
+    </div>
+</article>
+{% endblock %}
+
+{% block extended_javascripts_code %}
+	<script>
+    $(document).ready(function () {
+    $('#otherwaterusage_form').formValidation({
+        framework: 'bootstrap',
+        icon: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            date: {
+                validators: {
+                  date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: {
+                        message: 'Please choose date' }
+                        }
+                    },
+                    
+            farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select farm' }
+                        }
+                    },
+            start_time: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select start time'
+                        },
+                        callback: {
+                        message: 'The start time must be earlier then the end one',
+                        callback: function(value, validator, $field) {
+                            var endTime = validator.getFieldElements('end_time').val();
+                            if (endTime === '') {
+                                  return true;
+                                }
+                            var startHour    = parseInt(value.split(':')[0], 10),
+                                startMinutes = parseInt(value.split(':')[1], 10),
+                                endHour      = parseInt(endTime.split(':')[0], 10),
+                                endMinutes   = parseInt(endTime.split(':')[1], 10);
+
+                            if (startHour < endHour || (startHour == endHour && startMinutes < endMinutes)) {
+                                // The end time is also valid
+                                // So, we need to update its status
+                                validator.updateStatus('end_time', validator.STATUS_VALID, 'callback');
+                                return true;
+                                  }
+                            return false;
+                            }
+                        }
+                      }   
+                    },
+            end_time: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: {
+                      message: 'Please select end time'
+                      },
+                callback: {
+                        message: 'The end time must be later then the start one',
+                        callback: function(value, validator, $field) {
+                            var startTime = validator.getFieldElements('start_time').val();
+                            if (startTime == '') {
+                                  return true;
+                                }
+                            var startHour    = parseInt(startTime.split(':')[0], 10),
+                                startMinutes = parseInt(startTime.split(':')[1], 10),
+                                endHour      = parseInt(value.split(':')[0], 10),
+                                endMinutes   = parseInt(value.split(':')[1], 10);
+
+                            if (endHour > startHour || (endHour == startHour && endMinutes > startMinutes)) {
+                                // The start time is also valid
+                                // So, we need to update its status
+                                validator.updateStatus('start_time', validator.STATUS_VALID, 'callback');
+                                return true;
+                            }
+                            return false;
+                        }
+                    }
+                }
+            },
+            bucketnumber: {
+                validators: {
+                    integer: {
+                        message: 'The value is not an integer'
+                    },
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            bucketvolume: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            lifting_technology_yes_no: {
+                validators: {
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            usagepurpose: {
+                validators: {
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+        }
+    })
+});
+      //# sourceURL=pen.js
+
+    </script>
+    <script>
+            if (document.location.search.match(/type=embed/gi)) {
+                window.parent.postMessage("resize", "*");
+                }
+    </script>
+<script>
+    
+    $(window).load(function()
+                {
+                 $('#weeding_activity_hiddendiv').hide();   
+                });
+    
+    $('#weeding_activity').change(function()
+                        {
+        if ($('#weeding_activity option:selected').text()=='Other, please specify') {
+            $('#weeding_activity_hiddendiv').show();
+        }
+        else{
+            $('#weeding_activity_hiddendiv').hide();  
+        }
+        });
+    
+        //$("#weeding_activity_othertextbox").change(function()
+               // {
+                 //               $("#weeding_activity").val($("#weeding_activity_othertextbox").text());
+                //});
+</script>
+<script>
+$(document).ready(function() {
+  $("#id_farm").change(function() {
+    if ($(this).val() == '') {
+      $("#id_technology").attr('readonly',true);
+      }
+      else {
+        var url = "/technology/" + $(this).val() + "/technologys";
+        $.getJSON(url, function(technologies) {
+          $("#id_technology").val(technologies);
+          $("#id_technology").attr('readonly',true);
+        })
+    }
+  });
+});
+</script>
+<script>
+$(window).load(function() {
+  if ($('#id_labour').val() == '') {
+    $('#familydv,#hireddv').hide();
+  }
+  else if ($('#id_labour').val() == 'Family')  {
+      $('#familydv').show();
+      $('#hireddv').hide();
+      $("#id_hired_female_number").val();
+      $("#id_hired_male_number").val();                    
+  }
+  else if ($('#id_labour').val() == 'Hired')  {
+    $('#hireddv').show();
+    $('#familydv').hide();
+    $("#id_family_female_number").val();
+    $("#id_family_male_number").val();
+  }
+  else{
+      $('#familydv,#hireddv').show();
+  }
+  });
+</script>
+<script>
+  $(window).load(function() {
+  if ($('#id_residual_activities').val() == 'Other') {
+    $('#other').show();
+    $('#id_other').val();
+  }
+  else{
+    $('#other').hide();
+    $('#id_other').val();
+  }
+  });
+  
+    $(document).ready(function() {
+            $("#id_labour").change(function() {
+              value=0;
+                if ($(this).val() == '') {
+                    $('#familydv,#hireddv').hide();
+                }
+                else if ($(this).val() == 'Family')  {
+                    $('#familydv').show();
+                    $('#hireddv').hide();
+                    $("#id_hired_female_number").val(value);
+                    $("#id_hired_male_number").val(value);                    
+                }
+                else if ($(this).val() == 'Hired')  {
+                    $('#hireddv').show();
+                    $('#familydv').hide();
+                    $("#id_family_female_number").val(value);
+                    $("#id_family_male_number").val(value);
+                }
+                else{
+                    $('#familydv,#hireddv').show();
+                }
+            });
+            
+            $("#id_residual_activities").change(function() {
+                if ($(this).val() !='Other') {
+                    //alert('nan');
+                    $('#other').hide();
+                    $('#id_other').val('N///A');
+                }
+                else{
+                    $('#other').show();
+                    $('#id_other').val('');
+                }
+            });
+    });
+</script>
+<script>
+$(document).ready(function() {
+  $("#id_farm").change(function() {
+    if ($(this).val() == '') {
+      $("#id_plot").html("<option>Choose field..</option>");
+      $("#id_plot").attr('disabled', true);
+      }
+      else {
+        var url = "/plot/" + $(this).val() + "/plots";
+        $.getJSON(url, function(plots) {
+        var options = '<option value="">Choose plot..</option>';
+        for (var i = 0; i < plots.length; i++) {
+          options += '<option value="' + plots[i].pk + '">' + plots[i].fields['plotID']  + '</option>';
+        }
+        $("#id_plot").html(options);
+        $("#id_plot option:first").attr('selected', 'selected');
+        $("#id_plot").attr('disabled', false);
+      });
+    }
+  });
+});
+</script>
+<script>
+$(window).load(function(){
+  var url = "/get_farmer_name/" + $('#id_farm').val() + "/get_farmer_name";
+  $.getJSON(url, function(farmer_name) {
+    //alert(farmer_name);
+    var options = '<option value="' + farmer_name[0] + '">' + farmer_name[1] + ' ' + farmer_name[2] + ' ' + farmer_name[3] + '</option>';
+    $("#id_farm").html(options);
+    $("#id_farm option:selected").attr('selected', 'selected');
+  })
+});
+
+$(window).load(function(){
+  var url = "/get_plot_name/" + $('#id_plotID').val() + "/get_plot_name";
+  $.getJSON(url, function(plot_name) {
+    var options = '<option value="' + plot_name[0] + '">' + plot_name[1] + '</option>';
+    $("#id_plotID").html(options);
+    $("#id_plotID option:selected").attr('selected', 'selected');
+  })
+});
+</script>
+
+<script>
+$(window).load(function() {
+  if ($('#id_lifting_technology_yes_no').val() == 'Yes') {
+        $('#bucketnumber,#bucketvolume').show();
+        $('#id_bucketnumber,#id_bucketvolume').val();
+        //$('#message').hide();
+      }
+    else{
+      $('#bucketnumber,#bucketvolume').hide();
+      $('#id_bucketnumber,#id_bucketvolume').val();
+    }
+});
+      
+$(document).ready(function() {//totalvolume
+  $("#id_lifting_technology_yes_no").change(function() {
+    if ($(this).val() == 'Yes') {
+        //$('#message').hide();
+        $('#submit').show(); 
+        $('#bucketnumber,#bucketvolume').show();
+        $('#id_bucketnumber,#id_bucketvolume').val('');
+        $('#id_bucketnumber,#id_bucketvolume').on('mouseenter click keyup mouseleave', function () {
+        setTimeout(function () {
+         var totalvolume = $('#id_bucketnumber').val() * $('#id_bucketvolume').val();
+         $("#id_totalvolume").val(totalvolume);
+      },0);
+    })
+      }
+    else{
+      $('#bucketnumber,#bucketvolume,#message').hide();
+      $('#id_bucketnumber,#id_bucketvolume').val(0);
+      //alert('first');
+      var url = "/water_application/" + $('#id_plot').val() +'/'+ $('#id_farm').val() +"/water_applications";
+      //alert('second');
+      $.getJSON(url, function(plotlist) {
+        //alert('mim');
+        var average_discharge = plotlist[2]
+        if (average_discharge=='NONE') {
+         alert('Fill water calibration for this plot first');
+         $('#submit').hide(); 
+        }
+        else{
+          alert(average_discharge);
+          var totalvolume = $('#id_total_time').val() * 60 * average_discharge;
+            $("#id_totalvolume").val(totalvolume.toFixed(2));
+            //alert(average_discharge);
+            //alert(totalvolume);
+        }
+        
+      })
+    }
+  })
+});
+</script>
+<script>
+ $(document).ready(function () {
+     $('#id_start_time,#id_end_time').on('mouseenter click keyup mouseleave', function () {
+      setTimeout(function () {
+         var time_started = $("#id_start_time").val().split(':')
+         var time_ended = $("#id_end_time").val().split(':');
+         var hours1 = parseInt(time_started[0], 10), 
+             hours2 = parseInt(time_ended[0], 10),
+             mins1 = parseInt(time_started[1], 10),
+             mins2 = parseInt(time_ended[1], 10);
+         var hours = hours2 - hours1, mins = 0;
+         if(hours < 0) hours = 24 + hours;
+         if(mins2 >= mins1) {
+             mins = mins2 - mins1;
+         }
+         else {
+             mins = (mins2 + 60) - mins1;
+             hours--;
+         }
+         //mins = mins / 60; // take percentage in 60
+         totaltime = (hours*60)+mins;
+         //hours += mins;
+         //alert(hours)
+         //hours = hours.toFixed(2);
+         $("#id_total_time").val(totaltime);
+      },0);
+    })
+ });
+</script>
+
+{% endblock %}
+      
+
+
+
+                          

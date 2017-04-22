@@ -1,0 +1,1442 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block title %}
+    <title>Farm Irrigation</title>
+{% endblock %}
+
+{% block main_section %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!--<link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet">-->
+  <script>
+  $(function() {
+    $( "#id_date" ).datepicker();
+  });
+  $(document).ready(function(){
+                  $('.timepicker').timepicker({
+                      timeFormat: 'HH:mm',
+                      //timeFormat: 'H:mm p',
+                      interval: 60,
+                      minTime: '0',
+                      //maxTime: '6:00pm',
+                      //defaultTime: '11',
+                      //startTime: '10:00',
+                      dynamic: false,
+                      dropdown: true,
+                      scrollbar: true
+                  });
+      });
+
+  </script>
+        
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+<!-- Form -->
+<form class="well form-horizontal" action=" " method="post"  id="farmirrigation_form">{% csrf_token %} 
+
+<fieldset>
+<legend>Farm Irrigation</legend>
+
+{% if user_village %}
+<input type="hidden" id="uservillage" name="uservillage" value="{{user_village}}" readonly='readonly' />
+{% elif researcher %}
+<input type="hidden" id="researcher" name="researcher" value="{{researcher}}" readonly='readonly' />
+{% elif user_country %}
+
+{% endif %}
+<label class="warning" for="message" id="message" style="color: red"><small><i>{{message}}</i></small></label>
+
+
+{{ farmirrigationform.water_management }}
+
+<div class="form-group"> 
+    {{ farmirrigationform.date.errors }}
+    <label for="date" class="col-md-4 control-label">Date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmirrigationform.climate.errors }}
+    <label for="climate" class="col-md-4 control-label">Climate:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.climate }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmirrigationform.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farm:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.farm }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ farmirrigationform.plot.errors }}
+    <label for="plot" class="col-md-4 control-label">Field/Plot:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.plot }}
+        </div>
+</div>
+
+
+<div id='discharge_message'>
+  <label for="message" id="dischargemessage" style="color: green"><small><i>Make sure water calibration tab is filled for this plot/field, because we cant retrieve it application rate</i></small></label>
+</div>
+
+
+<div class="form-group" id='furrow_irr_time'> 
+    {{ farmirrigationform.furrow_irr_time.errors }}
+    <label for="furrow_irr_time" class="col-md-4 control-label">Time to irrigate one furrow:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farmirrigationform.furrow_irr_time }}<span class="input-group-addon">min(s)</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='furrow_irr_time'> 
+    {{ farmirrigationform.nfurrorws_irrigated_once.errors }}
+    <label for="nfurrorws_irrigated_once" class="col-md-4 control-label">Number of furrow(s) irrigated at once:</label>
+        <div class="col-md-4 selectContainer">
+            {{ farmirrigationform.nfurrorws_irrigated_once }}
+        </div>
+</div>
+
+<div class="form-group" id='water_application'> 
+    {{ farmirrigationforms.water_application.errors }}
+    <label for="water_application" class="col-md-4 control-label">Water application:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.water_application }}
+        </div>
+</div>
+<!---------->
+
+<div class="form-group" id='buttonfurrowwidth'> 
+    {{ farmirrigationform.buttonfurrowwidth.errors }}
+    <label for="buttonfurrowwidth" class="col-md-4 control-label">Buttom furrow width:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ farmirrigationform.buttonfurrowwidth }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='topfurrowwidth'> 
+    {{ farmirrigationform.topfurrowwidth.errors }}
+    <label for="topfurrowwidth" class="col-md-4 control-label">Top furrow width:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ farmirrigationform.topfurrowwidth }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='waterheight'> 
+    {{ farmirrigationform.waterheight.errors }}
+    <label for="waterheight" class="col-md-4 control-label">Water height:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ farmirrigationform.waterheight }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='irrigate_whole_or_per_plant'> 
+    {{ farmirrigationform.irrigate_whole_or_per_plant.errors }}
+    <label for="irrigate_whole_or_per_plant" class="col-md-4 control-label">Overhead application method:</label>
+        <div class="col-md-4 selectContainer">
+           {{ farmirrigationform.irrigate_whole_or_per_plant }}
+        </div>
+</div>
+
+<div class="form-group" id='bucketvolume'> 
+    {{ farmirrigationform.bucketvolume.errors }}
+    <label for="bucketvolume" class="col-md-4 control-label">Bucket volume:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ farmirrigationform.bucketvolume }}<span class="input-group-addon">L</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='bucketnumbers'> 
+    {{ farmirrigationform.bucketnumbers.errors }}
+    <label for="bucketnumbers" class="col-md-4 control-label">Number of bucket(s):</label>
+        <div class="col-md-4 selectContainer">
+           {{ farmirrigationform.bucketnumbers }}
+        </div>
+</div>
+
+<div class="form-group" id='wetteddiameteraroundplant'> 
+    {{ farmirrigationform.wetteddiameteraroundplant.errors }}
+    <label for="wetteddiameteraroundplant" class="col-md-4 control-label">Wetted diameter around plant:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ farmirrigationform.wetteddiameteraroundplant }}<span class="input-group-addon">cm</span>
+           </div>
+        </div>
+</div>
+
+<div class="form-group" id='start_time'> 
+    {{ farmirrigationform.start_time.errors }}
+    <label for="start_time" class="col-md-4 control-label">Start time:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.start_time }}
+        </div>
+</div>
+<div class="form-group" id='end_time'> 
+    {{ farmirrigationform.end_time.errors }}
+    <label for="end_time" class="col-md-4 control-label">End time:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.end_time }}
+        </div>
+</div>
+
+<div class="form-group" id='total_time'> 
+    {{ farmirrigationform.total_time.errors }}
+    <label for="total_time" class="col-md-4 control-label">Total time:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farmirrigationform.total_time }}<span class="input-group-addon">min(s)</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='tanknumber'> 
+    {{ farmirrigationform.tanknumber.errors }}
+    <label for="tanknumber" class="col-md-4 control-label">Number of Tank:</label>
+        <div class="col-md-4 selectContainer">
+            {{ farmirrigationform.tanknumber }}
+        </div>
+</div>
+
+<div id='dripdiv'>
+<div class="form-group" id='dripline_length'> 
+    {{ farmirrigationform.dripline_length.errors }}
+    <label for="dripline_length" class="col-md-4 control-label">Drip line length:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ farmirrigationform.dripline_length }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='dripline_spacing'> 
+    {{ farmirrigationform.dripline_spacing.errors }}
+    <label for="dripline_spacing" class="col-md-4 control-label">Drip line spacing:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ farmirrigationform.dripline_spacing }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='emitter_spacing'> 
+    {{ farmirrigationform.emitter_spacing.errors }}
+    <label for="emitter_spacing" class="col-md-4 control-label">Emitter spacing:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ farmirrigationform.emitter_spacing }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='emitter_wetted_diameter'> 
+    {{ farmirrigationform.emitter_wetted_diameter.errors }}
+    <label for="emitter_wetted_diameter" class="col-md-4 control-label">Emitter wetted diameter:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ farmirrigationform.emitter_wetted_diameter }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='driptank_volume'> 
+    {{ farmirrigationform.driptank_volume.errors }}
+    <label for="driptank_volume" class="col-md-4 control-label">Drip tank volume:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ farmirrigationform.driptank_volume }}<span class="input-group-addon">L</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='calibrationcup_volume'> 
+    {{ farmirrigationform.calibrationcup_volume.errors }}
+    <label for="calibrationcup_volume" class="col-md-4 control-label">Volume of calibration cup:</label>
+        <div class="col-md-4 selectContainer">
+           <div class="input-group">
+           {{ farmirrigationform.calibrationcup_volume }}<span class="input-group-addon">L</span>
+            </div>
+        </div>
+</div>
+  
+</div>
+
+
+<div class="form-group" id='quantity_of_units'> 
+    {{ farmirrigationform.quantity_of_units.errors }}
+    <label for="quantity_of_units" class="col-md-4 control-label">Quantity of units:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.quantity_of_units }}
+        </div>
+</div>
+
+
+<div class="form-group" id='yellow_WFD_before_irrigation'> 
+    {{ farmirrigationform.yellow_WFD_before_irrigation.errors }}
+    <label for="yellow_WFD_before_irrigation" class="col-md-4 control-label">Flag of yellow detector up before irrigation:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.yellow_WFD_before_irrigation }}
+        </div>
+</div>
+
+<div class="form-group" id='red_WFD_before_irrigation'> 
+    {{ farmirrigationform.red_WFD_before_irrigation.errors }}
+    <label for="red_WFD_before_irrigation" class="col-md-4 control-label">Flag of red detector up before irrigation:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.red_WFD_before_irrigation }}
+        </div>
+</div>
+
+<div class="form-group" id='yellow_WFD_time_after_irrigation'> 
+    {{ farmirrigationform.yellow_WFD_time_after_irrigation.errors }}
+    <label for="yellow_WFD_time_after_irrigation" class="col-md-4 control-label">Time for the yellow flag to pop up after irrigation</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farmirrigationform.yellow_WFD_time_after_irrigation }}<span class="input-group-addon">min(s)</span>
+            </div>
+        </div>
+</div>
+<div class="form-group" id='red_WFD_time_after_irrigation'> 
+    {{ farmirrigationform.red_WFD_time_after_irrigation.errors }}
+    <label for="red_WFD_time_after_irrigation" class="col-md-4 control-label">Time for the red flag to pop up after irrigation:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farmirrigationform.red_WFD_time_after_irrigation }}<span class="input-group-addon">min(s)</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='conveyance_efficiency'> 
+    {{ farmirrigationform.conveyance_efficiency.errors }}
+    <label for="conveyance_efficiency" class="col-md-4 control-label">Conveyance efficiency(%):</label>
+        <div class="col-md-4 selectContainer">
+           {{ farmirrigationform.conveyance_efficiency }}
+        </div>
+</div>
+
+<div class="form-group" id='field_efficiency'> 
+    {{ farmirrigationform.field_efficiency.errors }}
+    <label for="field_efficiency" class="col-md-4 control-label">Field efficiency(%):</label>
+        <div class="col-md-4 selectContainer">
+           {{ farmirrigationform.field_efficiency }}
+        </div>
+</div>
+
+<div class="form-group" id='discharge'> 
+    {{ farmirrigationform.discharge.errors }}
+    <label for="discharge" class="col-md-4 control-label">Application rate:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farmirrigationform.discharge }}<span class="input-group-addon">mm<sup></sup>/hr</span>
+<!--this recalls the application rate calibrated for that specific field, which means it's an average of all calibrated application rates -->
+            </div>
+          
+        </div>
+</div>
+
+<div class="form-group" id='irrigation_depth'> 
+    {{ farmirrigationform.irrigation_depth.errors }}
+    <label for="irrigation_depth" class="col-md-4 control-label">Irrigation depth:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farmirrigationform.irrigation_depth }}<span class="input-group-addon">mm</span>
+            </div>
+        </div>
+</div>
+
+
+</fieldset>
+
+<div id='fuelconsumption'>
+
+<fieldset>
+<legend>Fuel consumption</legend>
+
+<div class="form-group"> 
+    {{ farmirrigationform.fuel.errors }}
+    <label for="fuel" class="col-md-4 control-label">Fuel:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.fuel }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmirrigationform.amount_used.errors }}
+    <label for="amount_used" class="col-md-4 control-label">Amount consumed:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.amount_used }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmirrigationform.refilled_amount.errors }}
+    <label for="refilled_amount" class="col-md-4 control-label">Refilled amount:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmirrigationform.refilled_amount }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmirrigationform.fuelcost.errors }}
+    <label for="fuelcost" class="col-md-4 control-label">Cost:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ farmirrigationform.fuelcost}}<span class="input-group-addon">{{ farmirrigationform.currency }}</span>
+            </div>            
+        </div>
+</div>
+
+</fieldset>
+  
+</div>
+
+
+
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group" id='submit'>
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+    
+{% endblock %}
+{% block extended_javascripts_code %}
+    
+	<script>
+    $(document).ready(function () {
+    $('#farmirrigation_form').bootstrapValidator({
+        feedbackIcons: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            date: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill the date' }
+                        }
+                    },
+            farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose farm' }
+                        }
+                    },
+            plot: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose plot' }
+                        }
+                    },
+            furrow_irr_time: {
+                validators: {
+                    notEmpty: {
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        message: 'Please fill time to irrigate one furrow' }
+                        }
+                    },
+            irrigate_whole_or_per_plant: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose Overhead application method' }
+                        }
+                    },
+            nfurrorws_irrigated_once: {
+                validators: {
+                    notEmpty: {
+                      message: 'Please enter number of furrow irrigated at once' }
+                      }
+                },
+            total_time: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: {
+                      message: 'Please fill total time taken' }
+                }
+              },
+            quantification_method: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose quantification method' }
+                }
+            },
+            flume_location: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose flume location' }
+                }
+            },
+            tanknumber: {
+                validators: {
+                    integer: {
+                          message: 'invalid, must be an integer'
+                        },
+                    notEmpty: { message: 'This field is required' }
+                }
+            },
+            waterlevel1: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill water level' }
+                }
+            },
+            waterlevel2: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill water level ' }
+                }
+            },
+            plot: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose plot' }
+                }
+              },
+            furrow_irr_time: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill the time to irrigate furrow' }
+                }
+            },
+            nfurrorws_irrigated_once: {
+                validators: {
+                    integer: {
+                          message: 'invalid, must be an integer'
+                        },
+                    notEmpty: { message: 'Please fill the number of furrow irrigated at once' }
+                }
+            },
+            discharge: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill the discharge' }
+                }
+            },
+            standardvolume: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill standard volume' }
+                }
+            },
+            quantity_of_units: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill quantity of units' }
+                }
+            },
+            yellow_WFD_before_irrigation: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill yellow WFD before irrigation' }
+                }
+            },
+            red_WFD_before_irrigation: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill red WFD before irrigation' }
+                }
+              },
+            yellow_WFD_time_after_irrigation: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill yellow WFD time after irrigation' }
+                }
+            },
+            red_WFD_time_after_irrigation: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill red WFD time after irrigation' }
+                }
+            },
+            climate: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose climate' }
+                }
+            },
+            fuel: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose used fuel type' }
+                }
+            },
+            amount_used: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill amount used' }
+                }
+            },
+            refilled_amount: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill refilled amount' }
+                }
+              },
+            buttonfurrowwidth: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill botton furrow width' }
+                }
+            },
+            topfurrowwidth: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill top furrow width' }
+                }
+            },
+            waterheight: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill water height' }
+                }
+            },
+            bucketvolume: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill bucket volume' }
+                }
+            },
+            bucketnumbers: {
+                validators: {
+                    integer: {
+                          message: 'invalid, must be an integer'
+                        },
+                    notEmpty: { message: 'Please fill number of buckets' }
+                }
+            },
+            wetteddiameteraroundplant: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill wetted diameter round plant' }
+                }
+            },
+            
+            field_efficiency: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose field efficiency' }
+                }
+            },
+            conveyance_efficiency: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose conveyance efficiency' }
+                }
+            },
+            dripline_length: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill drip line length' }
+                }
+            },
+            dripline_spacing: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill drip line spacing' }
+                }
+            },
+            emitter_spacing: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill emitter spacing' }
+                }
+            },
+            driptank_volume: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill drip tank volume' }
+                }
+            },
+            calibrationcup_volume: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill calibrationcup volume' }
+                }
+              },
+            emitter_wetted_diameter: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill emitter wetted diameter' }
+                }
+            },
+            start_time: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select start time'
+                        },
+                        callback: {
+                        message: 'The start time must be earlier then the end one',
+                        callback: function(value, validator, $field) {
+                            var endTime = validator.getFieldElements('end_time').val();
+                            if (endTime === '') {
+                                  return true;
+                                }
+                            var startHour    = parseInt(value.split(':')[0], 10),
+                                startMinutes = parseInt(value.split(':')[1], 10),
+                                endHour      = parseInt(endTime.split(':')[0], 10),
+                                endMinutes   = parseInt(endTime.split(':')[1], 10);
+
+                            if (startHour < endHour || (startHour == endHour && startMinutes < endMinutes)) {
+                                // The end time is also valid
+                                // So, we need to update its status
+                                validator.updateStatus('end_time', validator.STATUS_VALID, 'callback');
+                                return true;
+                                  }
+                            return false;
+                            }
+                        }
+                      }   
+                    },
+            end_time: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: {
+                      message: 'Please select end time'
+                      },
+                callback: {
+                        message: 'The end time must be later then the start one',
+                        callback: function(value, validator, $field) {
+                            var startTime = validator.getFieldElements('start_time').val();
+                            if (startTime == '') {
+                                  return true;
+                                }
+                            var startHour    = parseInt(startTime.split(':')[0], 10),
+                                startMinutes = parseInt(startTime.split(':')[1], 10),
+                                endHour      = parseInt(value.split(':')[0], 10),
+                                endMinutes   = parseInt(value.split(':')[1], 10);
+
+                            if (endHour > startHour || (endHour == startHour && endMinutes > startMinutes)) {
+                                // The start time is also valid
+                                // So, we need to update its status
+                                validator.updateStatus('start_time', validator.STATUS_VALID, 'callback');
+                                return true;
+                            }
+                            return false;
+                        }
+                    }
+                }
+            },
+        }
+    });
+});
+      //# sourceURL=pen.js
+
+    </script>
+    <script>
+            if (document.location.search.match(/type=embed/gi)) {
+                window.parent.postMessage("resize", "*");
+                }
+    </script>
+
+
+<script>
+    $(document).ready(function() {
+            $("#id_form").change(function() {
+                if ($(this).val() == '') {
+                    $("#id_quantity_kg").attr('disabled', true);
+                    //option_lt='<input class="form-control" id="id_quantity_lt" name="quantity_lt" placeholder="#Quantity in Litre" readonly="True" type="text" /><span class="input-group-addon">litre</span>'
+                    //option_kg='<input class="form-control" id="id_quantity_kg" name="quantity_kg" placeholder="#Quantity in Kg" readonly="True" type="text" /><span class="input-group-addon">kg</span>'
+                    //$("#id_quantity_kg").html(option_kg);
+                    $("#id_quantity_lt").attr('disabled', true);
+                    //$("#id_quantity_lt").html(option_lt);
+                }
+                else if ($(this).val() == 'Liquid')  {
+                  $("#id_quantity_kg").attr('disabled', true);
+                  $("#id_quantity_lt").attr('disabled', false);
+                }
+                else{
+                  $("#id_quantity_lt").attr('disabled', true);
+                  $("#id_quantity_kg").attr('disabled',false);
+                }
+            });
+    });
+</script>
+<script>
+$(document).ready(function() {
+  $("#id_farm").change(function() {
+    if ($(this).val() == '') {
+      $("#id_plot").html("<option>Choose field..</option>");
+      $("#id_plot").attr('disabled', true);
+      }
+      else {
+        var url = "/plot/" + $(this).val() + "/plots";
+        $.getJSON(url, function(plots) {
+        var options = '<option value="">Choose plot..</option>';
+        for (var i = 0; i < plots.length; i++) {
+          options += '<option value="' + plots[i].pk + '">' + plots[i].fields['plotID']  + '</option>';
+        }
+        $("#id_plot").html(options);
+        $("#id_plot option:first").attr('selected', 'selected');
+        $("#id_plot").attr('disabled', false);
+      });
+    }
+  });
+});
+</script>
+
+<script>
+$(window).load(function() {
+  if (typeof $('#uservillage').val() === "undefined"){
+    var url = "/select_all/";
+    $.getJSON(url, function(farmers) {
+    var options = '<option value="">Choose Field..</option>';
+      for (var i = 0; i < farmers.length; i++) {
+        options += '<option value="' + farmers[i].pk + '">' + farmers[i].fields['firstname'] + ' ' + farmers[i].fields['middlename'] + ' ' + farmers[i].fields['lastname'] + '</option>';
+          }
+          $("#id_farm").html(options);
+          $("#id_farm option:selected").attr('selected', 'selected');
+      });
+    }
+    else if (typeof $('#researcher').val() === "undefined"){
+    var village = $('#uservillage').val();
+    var url = "/farmer/" + village + "/farmers";
+    $.getJSON(url, function(farmers) {
+    var options = '<option value="">Choose Field..</option>';
+      for (var i = 0; i < farmers.length; i++) {
+        options += '<option value="' + farmers[i].pk + '">' + farmers[i].fields['firstname'] + ' ' + farmers[i].fields['middlename'] + ' ' + farmers[i].fields['lastname'] + '</option>';
+          }
+          $("#id_farm").html(options);
+          $("#id_farm option:selected").attr('selected', 'selected');
+      });
+    }
+});
+</script>
+
+<script>
+$(window).load(function() {
+  if ($("#id_farm").val() == '') {
+    $("#fuelconsumption").hide();
+  }
+  else if ($("#id_farm").val() == 'petrol motorized pump' || $("#id_farm").val() == 'tractor mounted pump')  {
+      $("#fuelconsumption").show();
+      $('#id_amount_used,#id_fuel,#id_refilled_amount,#id_fuelcost').val()
+  }
+  else{
+      $("#fuelconsumption").hide();
+      $('#id_amount_used,#id_fuel,#id_refilled_amount,#id_fuelcost').val()
+  }
+});
+</script>
+<script>
+$(document).ready(function() {
+  $("#id_farm").change(function() {
+    if ($(this).val() == '') {
+      $("#fuelconsumption").hide();
+      $('select[name=fuel] option:eq(1)').attr('selected', 'selected');
+      $('#id_amount_used,#id_refilled_amount,#id_fuelcost').val(0)
+      }
+      else {
+        var url = "/technology/" + $(this).val() + "/technologys";
+        $.getJSON(url, function(technology) {
+          if (technology=='Petrol motorized pump' || technology=='Tractor mounted pump') {
+              $("#fuelconsumption").show();
+              $('#id_fuel').prop('selectedIndex',0);
+              $('#id_amount_used,#id_refilled_amount,#id_fuelcost').val('')
+          }
+          else{
+            $("#fuelconsumption").hide();
+            $('select[name=fuel] option:eq(1)').attr('selected', 'selected');
+            $('#id_amount_used,#id_refilled_amount,#id_fuelcost').val(0)
+          }
+
+      });
+    }
+  });
+});
+</script>
+<script>
+  
+ $(document).ready(function () {
+     $('#id_start_time,#id_end_time').on('mouseenter click keyup mouseleave', function () {
+      setTimeout(function () {
+         var time_started = $("#id_start_time").val().split(':')
+         var time_ended = $("#id_end_time").val().split(':');
+         var hours1 = parseInt(time_started[0], 10), 
+             hours2 = parseInt(time_ended[0], 10),
+             mins1 = parseInt(time_started[1], 10),
+             mins2 = parseInt(time_ended[1], 10);
+         var hours = hours2 - hours1, mins = 0;
+         if(hours < 0) hours = 24 + hours;
+         if(mins2 >= mins1) {
+             mins = mins2 - mins1;
+         }
+         else {
+             mins = (mins2 + 60) - mins1;
+             hours--;
+         }
+         //mins = mins / 60; // take percentage in 60
+         totaltime = (hours*60)+mins;
+         //hours += mins;
+         //alert(hours)
+         //hours = hours.toFixed(2);
+         $("#id_total_time").val(totaltime);
+      },0);
+    })
+ });
+</script>
+<script>
+  $(window).load(function() {
+    
+    if ($('#id_plot').val() == ''){
+        $('#quantity_of_units,#yellow_WFD_before_irrigation,#red_WFD_before_irrigation,#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation,#discharge_message').hide();
+        $('#waterheight,#buttonfurrowwidth,#topfurrowwidth,#conveyance_efficiency,#field_efficiency,#emitter_wetted_diameter,#discharge,#irrigation_depth,#submit').hide();
+        $('#bucketvolume,#bucketnumbers,#wetteddiameteraroundplant,#start_time,#end_time,#total_time,#tanknumber,#irrigate_whole_or_per_plant').hide();
+        $("#dripline_length,#dripline_spacing,#emitter_spacing,#driptank_volume,#calibrationcup_volume,#water_application,#calibrationmessage,#furrow_irr_time").hide();
+      
+    }
+    else {
+      
+    if ($("#id_water_application").val() == 'Sprinkler')  {
+      $('#start_time,#end_time,#total_time,#bucketvolume,#bucketnumbers,#discharge,#submit').show();
+      $('#buttonfurrowwidth,#topfurrowwidth,#waterheight,#irrigate_whole_or_per_plant,#wetteddiameteraroundplant,#conveyance_efficiency,#field_efficiency,#calibrationmessage').hide();
+      $("#dripline_length,#dripline_spacing,#emitter_spacing,#driptank_volume,#calibrationcup_volume,#emitter_wetted_diameter,#discharge_message,#tanknumber").hide();
+      $('#id_buttonfurrowwidth,#id_irrigate_whole_or_per_plant,#id_topfurrowwidth,#id_waterheight,#id_wetteddiameteraroundplant,#id_emitter_wetted_diameter,#id_discharge').val();
+      $("#id_dripline_length,#id_conveyance_efficiency,#id_tanknumber,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume,#id_calibrationcup_volume,#id_field_efficiency,").val();
+    }
+  
+    else if ($("#id_water_application").val() == 'Furrow/bed' ) {
+      if ($("#id_water_management").val() == 'WFD'){
+          $('#yellow_WFD_before_irrigation,#red_WFD_before_irrigation,#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation,#submit').show();
+          $('#id_yellow_WFD_before_irrigation,#id_red_WFD_before_irrigation,#id_yellow_WFD_time_after_irrigation,#id_red_WFD_time_after_irrigation').val();
+          $('#waterheight,#buttonfurrowwidth,#topfurrowwidth,#conveyance_efficiency,#field_efficiency,#discharge').show();
+          $('#bucketvolume,#bucketnumbers,#emitter_wetted_diameter,#wetteddiameteraroundplant,#start_time,#end_time,#total_time,#irrigate_whole_or_per_plant').hide();
+          $('#id_bucketvolume,#id_bucketnumbers,#id_wetteddiameteraroundplant,#id_start_time,#id_end_time,#id_total_time,#id_discharge').val();
+          $("#dripline_length,#dripline_spacing,#emitter_spacing,#driptank_volume,#quantity_of_units,#tanknumber,#calibrationcup_volume,#discharge_message").hide();
+          $("#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_tanknumber,#id_emitter_wetted_diameter,#id_driptank_volume,#id_quantity_of_units,#id_calibrationcup_volume").val();
+          $('#id_irrigate_whole_or_per_plant,#id_conveyance_efficiency,#id_field_efficiency').val(); 
+      }
+      else{
+        $('#quantity_of_units,#yellow_WFD_before_irrigation,#red_WFD_before_irrigation,#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation').hide();
+        $('#id_quantity_of_units,#id_yellow_WFD_before_irrigation,#id_red_WFD_before_irrigation,#id_yellow_WFD_time_after_irrigation,#id_red_WFD_time_after_irrigation').val();
+        $('#waterheight,#buttonfurrowwidth,#topfurrowwidth,#conveyance_efficiency,#field_efficiency,#discharge,#submit').show();
+        $('#bucketvolume,#bucketnumbers,#emitter_wetted_diameter,#wetteddiameteraroundplant,#start_time,#end_time,#total_time,#irrigate_whole_or_per_plant').hide();
+        $('#id_bucketvolume,#id_bucketnumbers,#id_wetteddiameteraroundplant,#id_start_time,#id_end_time,#id_total_time,#id_discharge').val();
+        $("#dripline_length,#dripline_spacing,#emitter_spacing,#driptank_volume,#calibrationcup_volume,#tanknumber,#discharge_message").hide();
+        $("#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_emitter_wetted_diameter,#id_driptank_volume,#id_calibrationcup_volume").val();
+        $('#id_irrigate_whole_or_per_plant,#id_conveyance_efficiency,#id_tanknumber,#id_field_efficiency').val();
+      }
+    }
+    else if ($("#id_water_application").val() == 'Tank and hose' )  {
+        if ($("#id_water_management").val() == 'WFD'){
+          $('#start_time,#end_time,#total_time,#tanknumber,#irrigation_depth').show();
+          $('#yellow_WFD_before_irrigation,#red_WFD_before_irrigation,#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation,#submit').show();
+          $("#dripline_length,#dripline_spacing,#emitter_spacing,#emitter_wetted_diameter,#driptank_volume,#calibrationcup_volume,#discharge,#submit").hide();
+          $("#id_start_time,#id_end_time,#id_total_time,#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume,#id_calibrationcup_volume,#id_discharge,#id_irrigation_depth").val();
+          $('#id_buttonfurrowwidth,#id_topfurrowwidth,#id_waterheight,#id_tanknumber,#id_bucketnumbers').val();
+          $('#id_bucketvolume,#id_irrigate_whole_or_per_plant,#id_wetteddiameteraroundplant,#id_furrow_irr_time').val();
+          $('#buttonfurrowwidth,#topfurrowwidth,#waterheight,#bucketnumbers,#conveyance_efficiency,#field_efficiency').hide();
+          $('#bucketvolume,#irrigate_whole_or_per_plant,#wetteddiameteraroundplant,#discharge_message').hide();
+          $("#quantity_of_units,#water_application,#tanknumber,#furrow_irr_time").hide();
+      }
+      else{
+        $('#start_time,#end_time,#total_time,#irrigation_depth,#tanknumber,#submit').show();
+        $("#dripline_length,#dripline_spacing,#emitter_spacing,#emitter_wetted_diameter,#driptank_volume,#calibrationcup_volume,#discharge").hide();
+        $("#id_start_time,#id_end_time,#id_total_time,#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume,#id_calibrationcup_volume,#id_discharge,#id_irrigation_depth").val();
+        $('#buttonfurrowwidth,#topfurrowwidth,#waterheight,#bucketnumbers,#conveyance_efficiency,#field_efficiency').hide();
+        $('#bucketvolume,#irrigate_whole_or_per_plant,#tanknumber,#wetteddiameteraroundplant').hide();
+        $('#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation,#discharge_message').hide();
+        $('#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation').hide();
+        $("#quantity_of_units,#water_application,#furrow_irr_time").hide();
+        $('#id_buttonfurrowwidth,#id_topfurrowwidth,#id_waterheight,#id_tanknumber,#id_bucketnumbers').val();
+        $('#id_bucketvolume,#id_irrigate_whole_or_per_plant,#id_wetteddiameteraroundplant').val();
+        $("#id_quantity_of_units,#id_water_application,#id_furrow_irr_time").val();
+      }
+    }
+    else if ($("#id_water_application").val() == 'Drip' )  {
+      if ($("#id_water_management").val() == 'WFD'){
+        $("#start_time,#end_time,#total_time,#dripline_length,#dripline_spacing,#emitter_spacing,#emitter_wetted_diameter,#driptank_volume,#calibrationcup_volume,#discharge,#irrigation_depth,#submit").show();
+        $('#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation').show();
+        $('#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation').show();
+        $("#id_start_time,#id_end_time,#id_total_time,#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume,#id_calibrationcup_volume,#id_discharge,#id_irrigation_depth").val();
+        $('#id_buttonfurrowwidth,#id_topfurrowwidth,#id_waterheight,#id_tanknumber,#id_bucketnumbers').val();
+        $('#id_bucketvolume,#id_irrigate_whole_or_per_plant,#id_wetteddiameteraroundplant,#id_furrow_irr_time').val();
+        $('#buttonfurrowwidth,#topfurrowwidth,#waterheight,#bucketnumbers,#conveyance_efficiency,#field_efficiency').hide();
+        $('#bucketvolume,#irrigate_whole_or_per_plant,#wetteddiameteraroundplant,#discharge_message').hide();
+        $("#quantity_of_units,#water_application,#tanknumber,#furrow_irr_time").hide();
+      }
+      else{
+        $("#start_time,#end_time,#total_time,#dripline_length,#dripline_spacing,#emitter_spacing,#emitter_wetted_diameter,#driptank_volume,#calibrationcup_volume,#discharge,#irrigation_depth,#submit").show();
+        $("#id_start_time,#id_end_time,#id_total_time,#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume,#id_calibrationcup_volume,#id_discharge,#id_irrigation_depth").val();
+        $('#buttonfurrowwidth,#topfurrowwidth,#waterheight,#bucketnumbers,#conveyance_efficiency,#field_efficiency').hide();
+        $('#bucketvolume,#irrigate_whole_or_per_plant,#tanknumber,#wetteddiameteraroundplant').hide();
+        $('#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation,#discharge_message').hide();
+        $('#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation').hide();
+        $("#quantity_of_units,#water_application,#furrow_irr_time").hide();
+        $('#id_buttonfurrowwidth,#id_topfurrowwidth,#id_waterheight,#id_tanknumber,#id_bucketnumbers').val();
+        $('#id_bucketvolume,#id_irrigate_whole_or_per_plant,#id_wetteddiameteraroundplant').val();
+        $("#id_quantity_of_units,#id_water_application,#id_furrow_irr_time").val();
+      }   
+    }
+    else if ($("#id_water_application").val() == 'Watering Can' || $("#id_water_application").val() == 'Bucket' ) {
+      if ($("#id_water_management").val() == 'WFD'){
+        $("#bucketnumbers,#bucketvolume,#wetteddiameteraroundplant,#irrigate_whole_or_per_plant,#discharge,#irrigation_depth,#submit").show();
+        $('#yellow_WFD_before_irrigation,#red_WFD_before_irrigation,#yellow_WFD_time_after_irrigation,#furrow_irr_time').show();
+        $('#waterheight,#buttonfurrowwidth,#start_time,#end_time,#total_time,#topfurrowwidth,#nfurrorws_irrigated_once,#discharge,#discharge_message').hide();
+        $("#dripline_length,#dripline_spacing,#emitter_spacing,#driptank_volume,#tanknumber,#calibrationcup_volume,#quantity_of_units").hide();
+        $('#emitter_wetted_diameter,#red_WFD_time_after_irrigation').hide();
+        $("#conveyance_efficiency,#field_efficiency").hide();
+
+        $('#id_quantity_of_units,#id_yellow_WFD_before_irrigation,#id_red_WFD_before_irrigation,#id_yellow_WFD_time_after_irrigation,#id_furrow_irr_time').val();
+        $("#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume,#id_calibrationcup_volume").val();
+        $('#id_conveyance_efficiency,#id_field_efficiency,#id_red_WFD_before_irrigation,#id_yellow_WFD_before_irrigation').val(); 
+        $('#id_waterheight,#id_buttonfurrowwidth,#id_topfurrowwidth,#id_nfurrorws_irrigated_once').val();
+        $('#id_emitter_wetted_diameter,#id_red_WFD_time_after_irrigation,#id_tanknumber,#id_discharge').val();
+        $("#id_start_time,#id_end_time,#id_total_time").val(); 
+        }
+      else {
+        $("#bucketnumbers,#bucketvolume,#wetteddiameteraroundplant,#irrigate_whole_or_per_plant,#discharge,#irrigation_depth,#submit").show();
+        $('#quantity_of_units,#yellow_WFD_before_irrigation,#red_WFD_before_irrigation,#yellow_WFD_time_after_irrigation,#tanknumber,#furrow_irr_time').hide();
+        $('#waterheight,#buttonfurrowwidth,#start_time,#end_time,#total_time,#topfurrowwidth,#nfurrorws_irrigated_once,#discharge').hide();
+        $("#dripline_length,#dripline_spacing,#emitter_spacing,#driptank_volume,#calibrationcup_volume").hide();
+        $('#emitter_wetted_diameter,#red_WFD_time_after_irrigation,#discharge_message').hide();
+        $("#conveyance_efficiency,#field_efficiency").hide();
+
+        $('#id_quantity_of_units,#id_yellow_WFD_before_irrigation,#id_red_WFD_before_irrigation,#id_yellow_WFD_time_after_irrigation,#id_furrow_irr_time').val();
+        $("#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume,#id_calibrationcup_volume").val();
+        $('#id_conveyance_efficiency,#id_field_efficiency,#id_red_WFD_before_irrigation,#id_yellow_WFD_before_irrigation').val(); 
+        $('#id_waterheight,#id_buttonfurrowwidth,#id_topfurrowwidth,#id_nfurrorws_irrigated_once').val();
+        $('#id_emitter_wetted_diameter,#id_red_WFD_time_after_irrigation,#id_tanknumber,#id_discharge').val();
+        $("#id_start_time,#id_end_time,#id_total_time").val();      
+      }
+    }
+    else{
+      $('#waterheight,#buttonfurrowwidth,#topfurrowwidth,#conveyance_efficiency,#field_efficiency,#bucketvolume,#bucketnumbers,#wetteddiameteraroundplant,#start_time,#end_time,#total_time,#irrigate_whole_or_per_plant,#discharge,#calibrationmessage').hide();
+    $("#dripline_length,#dripline_spacing,#emitter_spacing,#emitter_wetted_diameter,#driptank_volume,#tanknumber,#calibrationcup_volume").hide()}
+      
+      
+    }
+    
+    
+  });
+</script>
+<script> 
+  $(document).ready(function() {
+    $("#id_plot").change(function() {
+      if ($(this).val() == '') {
+        $("#id_water_application").attr('readonly', true);
+        //$('#submit').show();
+        $('#quantity_of_units,#yellow_WFD_before_irrigation,#red_WFD_before_irrigation,#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation,#irrigation_depth').hide();
+        $('#waterheight,#buttonfurrowwidth,#topfurrowwidth,#conveyance_efficiency,#field_efficiency,#emitter_wetted_diameter,#discharge,#furrow_irr_time').hide();
+        $('#bucketvolume,#bucketnumbers,#wetteddiameteraroundplant,#start_time,#end_time,#total_time,#irrigate_whole_or_per_plant').hide();
+        $("#dripline_length,#dripline_spacing,#tanknumber,#emitter_spacing,#driptank_volume,#calibrationcup_volume,#water_application,#discharge_message").hide();
+      }
+      else {
+        var url = "/id_water_application_and_water_management/" + $(this).val() + "/" + $('#id_farm').val() + "/water_application_and_water_managements";
+        $.getJSON(url, function(water_application_and_water_management) {
+        var water_application = water_application_and_water_management[0];
+        var water_management = water_application_and_water_management[1];
+        var average_discharge = water_application_and_water_management[2];
+        var fieldsize = water_application_and_water_management[3];
+        var application_rate = water_application_and_water_management[4];
+        $("#id_water_application").val(water_application);
+        $("#id_water_management").val(water_management);
+        $("#id_water_application").attr('readonly', true);
+        if (average_discharge == 'NONE') {
+         // alert('Dont exist')
+         //$('#submit,#waterheight,#buttonfurrowwidth,#topfurrowwidth,#conveyance_efficiency,#field_efficiency,#bucketvolume,#bucketnumbers,#bucketdiameter,#wetteddiameteraroundplant,#start_time,#end_time,#total_time,#irrigate_whole_or_per_plant,#discharge,#calibrationmessage').hide();
+          
+        }
+        if (water_application =='Bucket' || water_application =='Watering Can') {
+          if (water_management == 'WFD'){
+          $("#bucketnumbers,#bucketvolume,#wetteddiameteraroundplant,#irrigate_whole_or_per_plant,#discharge,#irrigation_depth,#submit").show();
+            $('#yellow_WFD_before_irrigation,#red_WFD_before_irrigation,#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation').show();
+            $('#id_quantity_of_units,#id_furrow_irr_time').val(0);
+            $('#waterheight,#buttonfurrowwidth,#start_time,#end_time,#total_time,#topfurrowwidth,#nfurrorws_irrigated_once,#quantity_of_units,#discharge,#furrow_irr_time,#tanknumber,#discharge_message').hide();
+            $("#id_start_time").val("00:00");
+            $("#id_end_time").val("01:00");
+            $("#id_total_time").val(60);
+            $('#id_waterheight,#id_buttonfurrowwidth,#id_topfurrowwidth,#id_tanknumber,#id_nfurrorws_irrigated_once').val(0);
+            $('#emitter_wetted_diameter').hide();
+            $('#id_emitter_wetted_diameter,#id_discharge').val(0);
+            $("#dripline_length,#dripline_spacing,#emitter_spacing,#driptank_volume,#calibrationcup_volume").hide();
+            $("#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume,#id_calibrationcup_volume").val(0);
+            $("#conveyance_efficiency,#field_efficiency").hide();
+            $('select[name=conveyance_efficiency] option:eq(1)').attr('selected', 'selected');
+            $('select[name=field_efficiency] option:eq(1)').attr('selected', 'selected');
+            $('#id_yellow_WFD_before_irrigation').prop('selectedIndex',0);
+            $('#id_red_WFD_before_irrigation').prop('selectedIndex',0);
+            
+            $('#id_irrigate_whole_or_per_plant,#id_bucketnumbers,#id_bucketvolume,#id_start_time,#id_end_time,#id_total_time').on('propertychange change click keyup input paste', function () {
+              
+              setTimeout(function () {
+                if ($("#id_irrigate_whole_or_per_plant").val() =='Perplant') {
+                var irrigated_depth =($('#id_bucketnumbers').val() * $('#id_bucketvolume').val())/(fieldsize);
+                
+                $('#id_irrigation_depth').val(irrigated_depth.toFixed(2));
+                }
+                else if ($("#id_irrigate_whole_or_per_plant").val() =='Wholefield') {
+                var irrigated_depth =($('#id_bucketnumbers').val() * $('#id_bucketvolume').val())/(fieldsize);
+                $('#id_irrigation_depth').val(irrigated_depth.toFixed(2));
+                }
+              },0); 
+            }) 
+          }
+          else {
+            $("#bucketnumbers,#bucketvolume,#wetteddiameteraroundplant,#irrigate_whole_or_per_plant,#discharge,#irrigation_depth,#submit").show();
+            $('#quantity_of_units,#yellow_WFD_before_irrigation,#red_WFD_before_irrigation,#yellow_WFD_time_after_irrigation,#furrow_irr_time,#discharge_message').hide();
+            $('#id_quantity_of_units,#id_yellow_WFD_before_irrigation,#id_red_WFD_before_irrigation,#id_yellow_WFD_time_after_irrigation,#id_furrow_irr_time').val(0);
+            $('#waterheight,#buttonfurrowwidth,#start_time,#end_time,#total_time,#topfurrowwidth,#nfurrorws_irrigated_once,#tanknumber,#discharge').hide();
+            $("#id_start_time").val("00:00");
+            $("#id_end_time").val("01:00");
+            $("#id_total_time").val(60);
+            $('#id_waterheight,#id_buttonfurrowwidth,#id_topfurrowwidth,#id_tanknumber,#id_nfurrorws_irrigated_once').val(0);
+            $('#emitter_wetted_diameter,#red_WFD_time_after_irrigation').hide();
+            $('#id_emitter_wetted_diameter,#id_red_WFD_time_after_irrigation,#id_discharge').val(0);
+            $("#dripline_length,#dripline_spacing,#emitter_spacing,#driptank_volume,#calibrationcup_volume").hide();
+            $("#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume,#id_calibrationcup_volume").val(0);
+            $("#conveyance_efficiency,#field_efficiency").hide();
+            $('select[name=conveyance_efficiency] option:eq(1)').attr('selected', 'selected');
+            $('select[name=field_efficiency] option:eq(1)').attr('selected', 'selected');
+            $('select[name=red_WFD_before_irrigation] option:eq(1)').attr('selected', 'selected');
+            $('select[name=yellow_WFD_before_irrigation] option:eq(1)').attr('selected', 'selected');
+            
+            $('#id_irrigate_whole_or_per_plant,#id_bucketnumbers,#id_bucketvolume,#id_start_time,#id_end_time,#id_total_time').on('propertychange change click keyup input paste', function () {
+              
+              setTimeout(function () {
+                if ($("#id_irrigate_whole_or_per_plant").val() =='Perplant') {
+                var irrigated_depth =($('#id_bucketnumbers').val() * $('#id_bucketvolume').val())/(fieldsize);
+                $('#id_irrigation_depth').val(irrigated_depth.toFixed(3));
+                }
+                else if ($("#id_irrigate_whole_or_per_plant").val() =='Wholefield') {
+                var irrigated_depth =($('#id_bucketnumbers').val() * $('#id_bucketvolume').val())/(fieldsize);
+                $('#id_irrigation_depth').val(irrigated_depth.toFixed(5));
+                }
+              },0); 
+            })    
+          }
+        }
+        else if (water_application == 'Furrow/bed') {
+          if (average_discharge=='NONE') {
+            $('#quantity_of_units,#yellow_WFD_before_irrigation,#red_WFD_before_irrigation,#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation,#irrigation_depth').hide();
+            $('#waterheight,#buttonfurrowwidth,#topfurrowwidth,#conveyance_efficiency,#field_efficiency,#emitter_wetted_diameter,#discharge,#furrow_irr_time').hide();
+            $('#bucketvolume,#bucketnumbers,#wetteddiameteraroundplant,#start_time,#end_time,#total_time,#irrigate_whole_or_per_plant').hide();
+            $("#dripline_length,#dripline_spacing,#emitter_spacing,#driptank_volume,#calibrationcup_volume,#tanknumber,#water_application,#submit").hide();
+            $('#discharge_message').show();
+          }
+          else {
+          if (water_management == 'WFD'){
+            $('#yellow_WFD_before_irrigation,#red_WFD_before_irrigation,#submit').show();
+            $('#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation').show();
+            $('#id_yellow_WFD_time_after_irrigation,#id_red_WFD_time_after_irrigation').val('');
+            $('#bucketvolume,#bucketnumbers,#wetteddiameteraroundplant,#quantity_of_units,#emitter_wetted_diameter,#discharge_message').hide();
+            $("#dripline_length,#dripline_spacing,#emitter_spacing,#driptank_volume,#calibrationcup_volume,#water_application,#irrigate_whole_or_per_plant").hide();
+            //$("#id_yellow_WFD_time_after_irrigation,#id_red_WFD_time_after_irrigation").val(0);
+            $('#id_quantity_of_units,#id_tanknumber,#id_calibrationcup_volume').val(0);
+            $("#start_time,#end_time,#total_time").hide();
+            $("#id_start_time").val("00:00");
+            $("#id_end_time").val("01:00");
+            $("#id_total_time").val(60);
+            $('#id_emitter_wetted_diameter').val(0); 
+            $('#id_bucketvolume,#id_bucketnumbers,#id_wetteddiameteraroundplant').val(0);
+            $("#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume").val(0);
+            $('select[name=irrigate_whole_or_per_plant] option:eq(1)').attr('selected', 'selected');
+            //$('select[name=yellow_WFD_before_irrigation] option:eq(1)').attr('selected', 'selected');
+            //$('select[name=red_WFD_before_irrigation] option:eq(1)').attr('selected', 'selected');
+            $('#id_yellow_WFD_before_irrigation').prop('selectedIndex',0);
+            $('#id_red_WFD_before_irrigation').prop('selectedIndex',0);
+          }
+          else { 
+            $('#quantity_of_units,#yellow_WFD_before_irrigation,#red_WFD_before_irrigation,#tanknumber,#irrigate_whole_or_per_plant').hide();
+            $('#emitter_wetted_diameter,#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation').hide();
+            $('#bucketvolume,#bucketnumbers,#wetteddiameteraroundplant,#discharge_message').hide();
+            $("#dripline_length,#dripline_spacing,#emitter_spacing,#driptank_volume,#calibrationcup_volume,#water_application").hide();
+            $("#id_yellow_WFD_time_after_irrigation,#id_tanknumber,#id_red_WFD_time_after_irrigation").val(0);
+            $('#id_quantity_of_units,#id_calibrationcup_volume').val(0);
+            $("#start_time,#end_time,#total_time").hide();
+            $("#id_start_time").val("00:00");
+            $("#id_end_time").val("01:00");
+            $("#id_total_time").val(60);
+            $('#id_emitter_wetted_diameter').val(0);
+            $('#id_bucketvolume,#id_bucketnumbers,#id_wetteddiameteraroundplant').val(0);
+            $("#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume").val(0);
+            $('select[name=irrigate_whole_or_per_plant] option:eq(1)').attr('selected', 'selected');
+            $('select[name=yellow_WFD_before_irrigation] option:eq(1)').attr('selected', 'selected');
+            $('select[name=red_WFD_before_irrigation] option:eq(1)').attr('selected', 'selected');
+          }
+          
+          $('#waterheight,#buttonfurrowwidth,#topfurrowwidth,#conveyance_efficiency,#field_efficiency,#discharge,#irrigation_depth,#furrow_irr_time,#nfurrorws_irrigated_once,#submit').show();
+          $('#id_waterheight,#id_buttonfurrowwidth,#id_topfurrowwidth,#id_conveyance_efficiency,#id_furrow_irr_time,#id_nfurrorws_irrigated_once').val('');
+            $('#id_field_efficiency').prop('selectedIndex',0);
+            $('#id_conveyance_efficiency').prop('selectedIndex',0);
+            $('select[name=irrigate_whole_or_per_plant] option:eq(1)').attr('selected', 'selected');
+              
+            $('#id_waterheight,#id_buttonfurrowwidth,#id_topfurrowwidth,#id_conveyance_efficiency,#id_field_efficiency').on('propertychange change click keyup input paste', function () {
+              setTimeout(function () {
+      
+                var furrow_area = ($('#id_waterheight').val()/2) * ($('#id_buttonfurrowwidth').val() + $('#id_topfurrowwidth').val()) * 0.01; //into mm2
+                var application_rate = (($('#id_conveyance_efficiency').val() * $('#id_field_efficiency').val() * 0.01 * 0.01 * 1000000* average_discharge)/(furrow_area))/3600;
+                var irrigation_depth =application_rate * ($("#id_furrow_irr_time").val()/60);
+                    $('#id_discharge').val(application_rate.toFixed(3));
+                    $('#id_irrigation_depth').val(irrigation_depth.toFixed(3));
+              },0); 
+              })
+          }
+        }
+        else if (water_application == 'Tank and hose') {
+         if (water_management == 'WFD'){
+            $('#start_time,#end_time,#total_time,#tanknumber,#irrigation_depth').show();
+            $('#id_start_time,#id_end_time,#id_total_time,#id_tanknumber,#id_irrigation_depth').val('');
+            $('#yellow_WFD_before_irrigation,#red_WFD_before_irrigation,#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation,#submit').show();
+            $('#id_yellow_WFD_time_after_irrigation,#id_red_WFD_time_after_irrigation').val('');
+            $("#dripline_length,#dripline_spacing,#emitter_spacing,#driptank_volume,#quantity_of_units,#calibrationcup_volume,#water_application,#discharge_message").hide();
+            $("#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume,#id_quantity_of_units,#id_calibrationcup_volume,#id_water_application").val(0);
+            $('#emitter_wetted_diameter,#bucketvolume,#bucketnumbers,#wetteddiameteraroundplant,#discharge,#furrow_irr_time,#irrigate_whole_or_per_plant').hide();
+            $('#id_emitter_wetted_diameter,#id_bucketvolume,#id_bucketnumbers,#id_wetteddiameteraroundplant,#id_discharge,#id_furrow_irr_time').val(0);
+            $('select[name=irrigate_whole_or_per_plant] option:eq(1)').attr('selected', 'selected');
+            $('#id_red_WFD_before_irrigation').prop('selectedIndex',0);
+            $('#id_yellow_WFD_before_irrigation').prop('selectedIndex',0);
+            $('#buttonfurrowwidth,#topfurrowwidth,#waterheight,#conveyance_efficiency,#field_efficiency').hide();
+            $('#id_buttonfurrowwidth,#id_topfurrowwidth,#id_waterheight').val();
+            $('select[name=conveyance_efficiency] option:eq(1)').attr('selected', 'selected');
+            $('select[name=field_efficiency] option:eq(1)').attr('selected', 'selected');
+
+           
+         }
+         else {
+            $('#start_time,#end_time,#total_time,#tanknumber,#irrigation_depth').show();
+            $('#id_start_time,#id_end_time,#id_total_time,#id_tanknumber,#id_irrigation_depth').val('');
+            $('#yellow_WFD_before_irrigation,#red_WFD_before_irrigation,#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation,#submit').hide();
+            $('#id_yellow_WFD_time_after_irrigation,#id_red_WFD_time_after_irrigation').val(0);
+            $("#dripline_length,#dripline_spacing,#emitter_spacing,#driptank_volume,#quantity_of_units,#calibrationcup_volume,#water_application,#discharge_message").hide();
+            $("#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume,#id_quantity_of_units,#id_calibrationcup_volume,#id_water_application").val(0);
+            $('#emitter_wetted_diameter,#bucketvolume,#bucketnumbers,#wetteddiameteraroundplant,#discharge,#furrow_irr_time,#irrigate_whole_or_per_plant').hide();
+            $('#id_emitter_wetted_diameter,#id_bucketvolume,#id_bucketnumbers,#id_wetteddiameteraroundplant,#id_discharge,#id_furrow_irr_time').val(0);
+            $('select[name=irrigate_whole_or_per_plant] option:eq(1)').attr('selected', 'selected');
+            $('select[name=red_WFD_before_irrigation] option:eq(1)').attr('selected', 'selected');
+            $('select[name=yellow_WFD_before_irrigation] option:eq(1)').attr('selected', 'selected'); 
+            $('#buttonfurrowwidth,#topfurrowwidth,#waterheight,#conveyance_efficiency,#field_efficiency').hide();
+            $('#id_buttonfurrowwidth,#id_topfurrowwidth,#id_waterheight').val();
+            $('select[name=conveyance_efficiency] option:eq(1)').attr('selected', 'selected');
+            $('select[name=field_efficiency] option:eq(1)').attr('selected', 'selected'); 
+         }
+          $('#id_start_time,#id_end_time,#id_tanknumber,#id_total_time').on('propertychange change click keyup input paste', function () {
+              setTimeout(function () {
+                var irrigation_depth = $('#id_total_time').val() * $('#id_tanknumber').val()  * application_rate;
+                $('#id_irrigation_depth').val(irrigation_depth.toFixed(2));
+              },0); 
+              })
+        }
+        else if (water_application == 'Drip') {
+          if ($("#id_water_management").val() == 'WFD'){
+            $("#start_time,#end_time,#total_time,#dripline_length,#dripline_spacing,#emitter_spacing,#emitter_wetted_diameter,#driptank_volume,#calibrationcup_volume,#discharge,#irrigation_depth,#submit").show();
+            $("#id_start_time,#id_end_time,#id_total_time,#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume,#id_calibrationcup_volume,#id_discharge,#id_irrigation_depth").val('');
+        
+            $('#bucketvolume,#irrigate_whole_or_per_plant,#wetteddiameteraroundplant,#tanknumber,#discharge_message').hide();
+            $('#id_bucketvolume,#id_irrigate_whole_or_per_plant,#id_tanknumber,#id_wetteddiameteraroundplant').val(0);
+            $('select[name=irrigate_whole_or_per_plant] option:eq(1)').attr('selected', 'selected');
+            $('select[name=field_efficiency] option:eq(1)').attr('selected', 'selected');
+            $('select[name=conveyance_efficiency] option:eq(1)').attr('selected', 'selected');
+            $('#buttonfurrowwidth,#topfurrowwidth,#waterheight,#bucketnumbers,#conveyance_efficiency,#field_efficiency').hide();
+
+            $('#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation').show();
+            $('#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation').show();
+            $("#quantity_of_units,#water_application,#furrow_irr_time").hide();
+            $('select[name=irrigate_whole_or_per_plant] option:eq(1)').attr('selected', 'selected');
+           
+            $('#id_buttonfurrowwidth,#id_topfurrowwidth,#id_waterheight,#id_bucketnumbers').val(0);
+            
+            $("#id_start_time,#id_end_time,#id_emitter_wetted_diameter,#id_calibrationcup_volume").on('propertychange change click keyup input paste', function () {
+            if ($("#id_total_time").val()=='') {
+                $("#id_discharge").val(0); 
+              }
+            else{
+              setTimeout(function () {
+              var area = Math.PI * Math.pow(($("#id_emitter_wetted_diameter").val() * 10 * 0.5),2);// into mm2
+              // value 10 convert cm to mm
+              var dicharge = ($('#id_calibrationcup_volume').val() * 1000000) / ($('#id_total_time').val() / 60); // in to mm3/hr
+              // 1000000 convert L to cubic mm
+              //60 convert minute to hr
+              var application_rate = dicharge/  area; // into mm/hr
+              var irrigation_depth =application_rate * ($("#id_total_time").val()/60);
+                  $('#id_discharge').val(application_rate.toFixed(3));
+                  $('#id_irrigation_depth').val(irrigation_depth.toFixed(3));
+              
+              },0); 
+            }
+           })
+          }
+          else{
+            $("#start_time,#end_time,#total_time,#dripline_length,#dripline_spacing,#emitter_spacing,#emitter_wetted_diameter,#driptank_volume,#calibrationcup_volume,#discharge,#irrigation_depth,#submit").show();
+            $("#id_start_time,#id_end_time,#id_total_time,#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume,#id_calibrationcup_volume,#id_discharge,#id_irrigation_depth").val('');
+            $('#bucketvolume,#irrigate_whole_or_per_plant,#wetteddiameteraroundplant,#nfurrorws_irrigated_once,#tanknumber,#discharge_message').hide();
+            $('#id_bucketvolume,#id_irrigate_whole_or_per_plant,#id_wetteddiameteraroundplant,#id_tanknumber,#id_nfurrorws_irrigated_once').val(0);
+            $('select[name=irrigate_whole_or_per_plant] option:eq(1)').attr('selected', 'selected');
+            $('select[name=field_efficiency] option:eq(1)').attr('selected', 'selected');
+            $('select[name=conveyance_efficiency] option:eq(1)').attr('selected', 'selected');
+            $('#buttonfurrowwidth,#topfurrowwidth,#waterheight,#bucketnumbers,#bucketdiameter,#conveyance_efficiency,#field_efficiency').hide();
+
+            $('#yellow_WFD_before_irrigation,#red_WFD_before_irrigation').hide();
+            $('select[name=yellow_WFD_before_irrigation] option:eq(1)').attr('selected', 'selected');
+            $('select[name=red_WFD_before_irrigation] option:eq(1)').attr('selected', 'selected');
+            $('#yellow_WFD_time_after_irrigation,#red_WFD_time_after_irrigation').hide();
+            $('#id_yellow_WFD_time_after_irrigation,#id_red_WFD_time_after_irrigation').val(0);
+            $("#quantity_of_units,#water_application,#furrow_irr_time").hide();
+            $("#id_quantity_of_units,#id_furrow_irr_time").val(0);
+            $('select[name=irrigate_whole_or_per_plant] option:eq(1)').attr('selected', 'selected');
+           
+            $('#id_buttonfurrowwidth,#id_topfurrowwidth,#id_waterheight,#id_bucketnumbers').val(0);
+            
+            $("#id_start_time,#id_end_time,#id_emitter_wetted_diameter,#id_calibrationcup_volume").on('propertychange change click keyup input paste', function () {
+            if ($("#id_total_time").val()=='') {
+                $("#id_discharge").val(0); 
+              }
+            else{
+              setTimeout(function () {
+              var area = Math.PI * Math.pow(($("#id_emitter_wetted_diameter").val() * 10 * 0.5),2);// into mm2
+              // value 10 convert cm to mm
+              var dicharge = ($('#id_calibrationcup_volume').val() * 1000000) / ($('#id_total_time').val() / 60); // in to mm3/hr
+              // 1000000 convert L to cubic mm
+              //60 convert minute to hr
+              var application_rate = dicharge/  area; // into mm/hr
+              var irrigation_depth =application_rate * ($("#id_total_time").val()/60);
+                  $('#id_discharge').val(application_rate.toFixed(3));
+                  $('#id_irrigation_depth').val(irrigation_depth.toFixed(3));
+              
+              },0); 
+            }
+          })
+          }
+        }
+        else if (water_application == 'Sprinkler') {
+          $('#start_time,#end_time,#total_time,#bucketvolume,#bucketnumbers,#discharge,#submit').show();
+          $('#buttonfurrowwidth,#topfurrowwidth,#waterheight,#irrigate_whole_or_per_plant,#wetteddiameteraroundplant,#conveyance_efficiency,#field_efficiency,#calibrationmessage').hide();
+          $("#dripline_length,#dripline_spacing,#emitter_spacing,#driptank_volume,#emitter_wetted_diameter,#calibrationcup_volume,#tanknumber,#discharge_message").hide();
+          $('#id_buttonfurrowwidth,#id_topfurrowwidth,#id_waterheight,#id_wetteddiameteraroundplant,#id_tanknumber,#id_discharge').val(0);
+          $("#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_emitter_wetted_diameter,#id_driptank_volume,#id_calibrationcup_volume").val(0);
+              $('select[name=field_efficiency] option:eq(1)').attr('selected', 'selected');
+              $('select[name=conveyance_efficiency] option:eq(1)').attr('selected', 'selected');
+              $('select[name=irrigate_whole_or_per_plant] option:eq(1)').attr('selected', 'selected');
+          $('#id_start_time,#id_end_time,#id_bucketvolume,#id_bucketnumbers').on('propertychange change click keyup input paste', function () {
+            if ($("#id_total_time").val()=='') {
+                  $("#id_discharge").val(0);
+                }
+            else{
+                setTimeout(function () {
+                //var application_rate = (($('#id_bucketvolume').val() * 1000000 )/ (Math.PI * Math.pow(($('#id_bucketdiameter').val() * 10), 2) * 0.25 )) / ($('#id_total_time').val()/60); // in mm/hr
+                   // $('#id_discharge').val(application_rate.toFixed(3));
+                  },0);  
+                }
+                })
+        }
+        });
+      }
+    });
+});
+</script>
+{% endblock %}
+
+
+

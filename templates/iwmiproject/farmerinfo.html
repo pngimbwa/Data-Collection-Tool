@@ -1,0 +1,1949 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>Add Farmer</title>
+{% endblock %}
+
+{% block main_section %}
+  <script>
+  $(function() {
+    $( "#id_date" ).datepicker({
+      onSelect: function() {
+        $('#farmerinfo_form').formValidation('revalidateField', 'date');
+    }
+    });
+  });
+  
+  $(document).ready(function(){
+    $("#id_seasonstart").datepicker({
+      onSelect: function() {
+        $('#farmerinfo_form').formValidation('revalidateField', 'seasonstart');
+    }
+    });
+});
+  </script>
+  <style>
+    .ui-datepicker { position: relative; z-index: 10000 !important; }
+  </style>
+<style>
+/* HOVER STYLES */
+div#error999_pop-up {
+      display: none;
+      position: absolute;
+      width: 280px;
+      padding: 10px;
+      background: #eeeeee;
+      color: #000000;
+      border: 1px solid #1a1a1a;
+      font-size: 90%;
+  }
+</style>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
+    
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<form class="well form-horizontal" action=" " method="post"  id="farmerinfo_form">{% csrf_token %} 
+<!-- Form Name -->
+
+<legend>Field Info</legend>
+{% if user_village %}
+<input type="hidden" id="uservillage" name="uservillage" value="{{user_village}}" readonly='readonly' />
+{% elif researcher %}
+<input type="hidden" id="researcher" name="researcher" value="{{researcher}}" readonly='readonly' />
+{% elif user_country %}
+
+{% endif %}
+<div class="form-group"> 
+    {{ farminfoform.farmer.errors }}
+    <label for="farmer" class="col-md-4 control-label">Farmer:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.farmer }}
+        </div>
+</div>
+
+<div class="form-group" id='farm_ownership_status'> 
+    {{ farminfoform.farm_ownership_status.errors }}
+    <label for="farm_ownership_status" class="col-md-4 control-label">Farm ownership status:</label> 
+        <div class="col-md-4 inputGroupContainer">
+        {{ farminfoform.farm_ownership_status }}
+        </div>
+</div>
+
+{{ farminfoform.errors }}
+<div class="form-group"> 
+    {{ farminfoform.plotID.errors }}
+    <label for="plotID" class="col-md-4 control-label">Field ID:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.plotID }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ farminfoform.fieldtype.errors }}
+    <label for="fieldtype" class="col-md-4 control-label">Field type:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.fieldtype }}
+        </div>
+</div>
+
+<label class="warning" for="message" id="message" style="color: red">{{message}}</label>
+
+<div class="form-group" id='landownership'> 
+    {{ farminfoform.landownership.errors }}
+    <label for="landownership" class="col-md-4 control-label">Landownership</label> 
+        <div class="col-md-4 inputGroupContainer">
+        {{ farminfoform.landownership }}
+        </div>
+</div>
+
+<div class="form-group" id='lease_duration'> 
+    {{ farminfoform.lease_duration.errors }}
+    <label for="lease_duration" class="col-md-4 control-label">Lease duration</label> 
+        <div class="col-md-4 inputGroupContainer">
+          <div class="input-group">
+            {{ farminfoform.lease_duration }}<span class="input-group-addon">month(s)</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='payment_option'> 
+    {{ farminfoform.payment_option.errors }}
+    <label for="payment_option" class="col-md-4 control-label">Payment option:</label> 
+        <div class="col-md-4 inputGroupContainer">
+        {{ farminfoform.payment_option }}
+        </div>
+</div>
+
+<div class="form-group" id='payement_other'> 
+    {{ farminfoform.payement_other.errors }}
+    <label for="payement_other" class="col-md-4 control-label">Other payment method:</label> 
+        <div class="col-md-4 inputGroupContainer">
+        {{ farminfoform.payement_other }}
+        </div>
+</div>
+
+<div class="form-group" id='payment_monetary'> 
+    {{ farminfoform.payment_monetary.errors }}
+    <label for="payment_monetary" class="col-md-4 control-label">Payment amount</label> 
+        <div class="col-md-4 inputGroupContainer">
+          <div class="input-group">
+            {{ farminfoform.payment_monetary }}<span class="input-group-addon">{{ currency }}</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farminfoform.fieldsize.errors }}
+    <label for="farmsize" class="col-md-4 control-label">Field size</label> 
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ farminfoform.fieldsize }}<span class="input-group-addon">m<sup>2</sup></span>
+            </div>
+        </div>
+</div>
+
+<!--
+<div class="form-group"> 
+    {{ farminfoform.number_of_plots.errors }}
+    <label for="number_of_plots" class="col-md-4 control-label">Number of plots:</label> 
+        <div class="col-md-4 selectContainer">
+            {{ farminfoform.number_of_plots }}
+        </div>
+</div>-->
+
+<div class="form-group"> 
+    {{ farminfoform.field_latitude_degree.errors }}
+    <label for="field_latitude" class="col-md-4 control-label">Field latitude:</label>
+        <div class="col-md-1 selectContainer">
+        {{ farminfoform.field_latitude_degree }}
+        </div>
+        {{ farminfoform.field_latitude_minute.errors }}
+        <div class="col-md-1 selectContainer">
+        {{ farminfoform.field_latitude_minute }}
+        </div>
+        {{ farminfoform.field_latitude_second.errors }}
+        <div class="col-md-1 selectContainer">
+        {{ farminfoform.field_latitude_second }}
+        </div>
+        {{ farminfoform.field_latitude_direction.errors }}
+        <div class="col-md-1 selectContainer">
+        {{ farminfoform.field_latitude_direction }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farminfoform.field_longitude_degree.errors }}
+    <label for="field_longitude" class="col-md-4 control-label">Field longitude:</label>
+        <div class="col-md-1 selectContainer">
+        {{ farminfoform.field_longitude_degree }}
+        </div>
+        {{ farminfoform.field_longitude_minute.errors }}
+        <div class="col-md-1 selectContainer">
+        {{ farminfoform.field_longitude_minute }}
+        </div>
+        {{ farminfoform.field_longitude_second.errors }}
+        <div class="col-md-1 selectContainer">
+        {{ farminfoform.field_longitude_second }}
+        </div>
+        {{ farminfoform.field_longitude_direction.errors }}
+        <div class="col-md-1 selectContainer">
+        {{ farminfoform.field_longitude_direction }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ farminfoform.elevation.errors }}
+    <label for="elevation" class="col-md-4 control-label">Field elevation:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farminfoform.elevation }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group" id='bed_length'> 
+    {{ farminfoform.bed_length.errors }}
+    <label for="bed_length" class="col-md-4 control-label">Bed length:</label>
+        <div class="col-md-4 selectContainer">
+        <div class="input-group">
+            {{ farminfoform.bed_length }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='bed_width'> 
+    {{ farminfoform.bed_width.errors }}
+    <label for="bed_width" class="col-md-4 control-label">Bed width:</label>
+        <div class="col-md-4 selectContainer">
+        <div class="input-group">
+            {{ farminfoform.bed_width }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='bednumber'> 
+    {{ farminfoform.bednumber.errors }}
+    <label for="bednumber" class="col-md-4 control-label">Number of beds:</label>
+        <div class="col-md-4 selectContainer">
+              {{ farminfoform.bednumber }}
+        </div>
+</div>
+
+<div class="form-group" id='furrow_length'> 
+    {{ farminfoform.furrow_length.errors }}
+    <label for="furrow_length" class="col-md-4 control-label">Furrow length:</label>
+        <div class="col-md-4 selectContainer">
+        <div class="input-group">
+            {{ farminfoform.furrow_length }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+<!--
+<!--HIDDEN/POP-UP DIV>
+<div id="furrow_length-up">
+  <p>
+    <small><i>Please add -999 in case number is no data</i></small>
+  </p>
+</div>
+-->
+<div class="form-group" id='furrow_width'> 
+    {{ farminfoform.furrow_width.errors }}
+    <label for="furrow_width" class="col-md-4 control-label">Furrow width:</label>
+        <div class="col-md-4 selectContainer">
+        <div class="input-group">
+            {{ farminfoform.furrow_width }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='nfurrow'> 
+    {{ farminfoform.nfurrow.errors }}
+    <label for="nfurrow" class="col-md-4 control-label">Number of furrows:</label>
+        <div class="col-md-4 selectContainer">
+            {{ farminfoform.nfurrow }}
+        </div>
+</div>
+</fieldset>
+
+<fieldset>
+<legend>Crop system info</legend>
+<div class="form-group"> 
+    {{ farminfoform.seasonstart.errors }}
+    <label for="seasonstart" class="col-md-4 control-label">Season start:</label>
+        <div class="col-md-4 selectContainer">
+          {{ farminfoform.seasonstart }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farminfoform.cropping_system.errors }}
+    <label for="cropping_system" class="col-md-4 control-label">Cropping system used</label>
+        <div class="col-md-4 selectContainer">
+            {{ farminfoform.cropping_system }}
+        </div>
+</div>
+
+<div class="form-group" id='crop1'> 
+    {{ farminfoform.crop1.errors }}
+    <label for="crop1" class="col-md-4 control-label">Crop 1:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.crop1 }}
+        </div>
+</div>
+
+<div class="form-group" id='crop_variety1'> 
+    {{ farminfoform.crop_variety1.errors }}
+    <label for="crop_variety1" class="col-md-4 control-label">Seed variety:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.crop_variety1 }}
+        </div>
+</div>
+
+<div class="form-group" id='variety_type1'> 
+    {{ farminfoform.variety_type1.errors }}
+    <label for="variety_type1" class="col-md-4 control-label">Variety type:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.variety_type1 }}
+        </div>
+</div>
+
+<div class="form-group" id='crop1_planting_method'> 
+    {{ farminfoform.crop1_planting_method.errors }}
+    <label for="crop1_planting_method" class="col-md-4 control-label">Planting Method:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.crop1_planting_method }}
+        </div>
+</div>
+
+<div class="form-group" id='crop1_rootdepth'> 
+    {{ farminfoform.crop1_rootdepth.errors }}
+    <label for="crop1_rootdepth" class="col-md-4 control-label">Rootzone depth assumed:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farminfoform.crop1_rootdepth }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='crop1_management_practice'> 
+    {{ farminfoform.crop1_management_practice.errors }}
+    <label for="crop1_management_practice" class="col-md-4 control-label">Mulching practice:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.crop1_management_practice }}
+        </div>
+</div>
+
+<div class="form-group" id='crop1_mulching_type'> 
+    {{ farminfoform.crop1_mulching_type.errors }}
+    <label for="crop1_mulching_type" class="col-md-4 control-label">Mulching type:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.crop1_mulching_type }}
+        </div>
+</div>
+
+<div class="form-group" id='crop1_mulching_quantity'> 
+    {{ farminfoform.crop1_mulching_quantity.errors }}
+    <label for="crop1_mulching_quantity" class="col-md-4 control-label">Mulching quantity:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farminfoform.crop1_mulching_quantity }}<span class="input-group-addon">kg</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group" id='crop2'> 
+    {{ farminfoform.crop2.errors }}
+    <label for="crop2" class="col-md-4 control-label">Crop 2:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.crop2 }}
+        </div>
+</div>
+
+<div class="form-group" id='crop_variety2'> 
+    {{ farminfoform.crop_variety2.errors }}
+    <label for="crop_variety2" class="col-md-4 control-label">Seed variety:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.crop_variety2 }}
+        </div>
+</div>
+
+<div class="form-group" id='variety_type2'> 
+    {{ farminfoform.variety_type2.errors }}
+    <label for="variety_type2" class="col-md-4 control-label">Crop variety type:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.variety_type2 }}
+        </div>
+</div>
+
+<div class="form-group" id='crop2_planting_method'> 
+    {{ farminfoform.crop2_planting_method.errors }}
+    <label for="crop2_planting_method" class="col-md-4 control-label">Planting Method:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.crop2_planting_method }}
+        </div>
+</div>
+
+<div class="form-group" id='crop2_rootdepth'> 
+    {{ farminfoform.crop2_rootdepth.errors }}
+    <label for="crop2_rootdepth" class="col-md-4 control-label">Rootzone depth assumed:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farminfoform.crop2_rootdepth }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='crop2_management_practice'> 
+    {{ farminfoform.crop2_management_practice.errors }}
+    <label for="crop2_management_practice" class="col-md-4 control-label">Mulching practice:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.crop2_management_practice }}
+        </div>
+</div>
+
+<div class="form-group" id='crop2_mulching_type'> 
+    {{ farminfoform.crop2_mulching_type.errors }}
+    <label for="crop2_mulching_type" class="col-md-4 control-label">Mulching type:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.crop2_mulching_type }}
+        </div>
+</div>
+
+<div class="form-group" id='crop2_mulching_quantity'> 
+    {{ farminfoform.crop2_mulching_quantity.errors }}
+    <label for="crop2_mulching_quantity" class="col-md-4 control-label">Mulching quantity:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farminfoform.crop2_mulching_quantity }}<span class="input-group-addon">kg</span>
+            </div>
+        </div>
+</div>
+
+</fieldset>
+
+<fieldset>
+<legend>Irrigation application and management</legend>
+<!--
+<div class="form-group"> 
+    {{ farminfoform.management_practice.errors }}
+    <label for="management_practice" class="col-md-4 control-label">Management practice:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.management_practice }}
+        </div>
+</div>
+
+<div class="form-group" id='mulching_type'> 
+    {{ farminfoform.mulching_type.errors }}
+    <label for="mulching_type" class="col-md-4 control-label">Mulching type:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.mulching_type }}
+        </div>
+</div>
+
+<div class="form-group" id='mulching_quantity'> 
+    {{ farminfoform.mulching_quantity.errors }}
+    <label for="mulching_quantity" class="col-md-4 control-label">Mulching quantity:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farminfoform.mulching_quantity }}<span class="input-group-addon">kg</span>
+            </div>
+        </div>
+</div>
+-->
+
+<div class="form-group"> 
+    {{ farminfoform.water_application.errors }}
+    <label for="water_application" class="col-md-4 control-label">Water application:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.water_application }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farminfoform.water_management_method.errors }}
+    <label for="water_management_method" class="col-md-4 control-label">Water management method:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.water_management_method }}
+        </div>
+</div>
+
+<div class="form-group" id='TDR_length'> 
+    {{ farminfoform.TDR_length.errors }}
+    <label for="TDR_length" class="col-md-4 control-label">Length of the measurement rods:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ farminfoform.TDR_length }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='WFD_yellow_depth'> 
+    {{ farminfoform.WFD_yellow_depth.errors }}
+    <label for="WFD_yellow_depth" class="col-md-4 control-label">Depth the yellow detector is installed:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ farminfoform.WFD_yellow_depth }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='WFD_red_depth'> 
+    {{ farminfoform.WFD_red_depth.errors }}
+    <label for="WFD_red_depth" class="col-md-4 control-label">Depth the red detector is installed:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ farminfoform.WFD_red_depth }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+</fieldset>
+
+<label for="message" style="color:#636363"><small>Note: If data is not available please enter -999 and not 0”</small></label>
+ 
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" id='mysubmit' class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+ 
+</div><!-- /.container -->
+{% endblock %}
+ 
+{% block extended_javascripts_code %} 
+<script>
+    $(document).ready(function () {
+    $('#farmerinfo_form').formValidation({
+        framework: 'bootstrap',
+        icon: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {         
+            farmer: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose farmer' }
+                        }
+                    },
+            fieldtype: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose field type' }
+                        }
+                    },
+            landownership: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose landownership' }
+                        }
+                    },
+            plotID: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter field ID' }
+                        }
+                    },
+            field_latitude_degree: {
+                validators: {
+                    notEmpty: {
+                        message: "Please provide field latitude's degree "},
+                    between: {
+                        min: 0,
+                        max: 90,
+                        message: 'The latitude must be between 0 and 90.0'
+                    }
+                }
+            },
+            field_latitude_minute: {
+                validators: {
+                    notEmpty: {
+                        message: "Please provide field latitude's minute" },
+                    between: {
+                        min: 0,
+                        max: 60,
+                        message: 'The latitude minute must be between 0 and 60'
+                    },
+                }
+            },
+            field_latitude_second: {
+                validators: {
+                    notEmpty: {
+                        message: "Please provide field latitude's second" },
+                    between: {
+                        min: 0,
+                        max: 60,
+                        message: 'The latitude second must be between 0 and 60'
+                    },
+                }
+            },
+            field_latitude_direction: {
+                validators: {
+                    notEmpty: {
+                        message: "Please choose field latitude's direction"},
+                   
+                }
+            },
+            field_longitude_degree:{
+                validators: {
+                    notEmpty: {
+                        message: "Please provide field Longitude's degree " },
+                    between: {
+                        min: 0,
+                        max: 180,
+                        message: 'The Longitude must be between 0 and 180.0'
+                    }
+                }
+            },
+            field_longitude_minute:{
+                validators: {
+                    notEmpty: {
+                        message: "Please provide field Longitude's minute"},
+                    between: {
+                        min: 0,
+                        max: 60,
+                        message: 'The longitude minute must be between 0 and 60'
+                    },
+                }
+            },
+            field_longitude_second:{
+                validators: {
+                    notEmpty: {
+                        message: "Please provide field Longitude's second "},
+                    between: {
+                        min: 0,
+                        max: 60,
+                        message: 'The longitude second must be between 0 and 60'
+                    },
+                }
+            },
+            field_longitude_direction:{
+                validators: {
+                    notEmpty: {
+                        message: "Please choose field Longitude's direction "},
+
+                }
+            },
+            elevation: {
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+                        },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill in field elevation' }
+                        }
+                    },
+            cropping_system: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose cropping system' }
+                        }
+                    },
+            crop1: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose crop(s)' }
+                        }
+                    },
+            crop1_rootdepth: {
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value cant be less than zero'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill number of beds' }
+                        }
+                    },
+            crop1_management_practice: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose managament practice' }
+                        }
+                    },
+            crop1_mulching_type: {
+                validators: {
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            crop1_mulching_quantity: {
+                validators: {
+                    notEmpty: {
+                        message: 'This field is required' }
+                        },
+                      numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    },
+            crop2_rootdepth: {
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value cant be less than zero'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill number of beds' }
+                        }
+                    },
+            crop2_management_practice: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose managament practice' }
+                        }
+                    },
+            crop2_mulching_type: {
+                validators: {
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            crop2_mulching_quantity: {
+                validators: {
+                    notEmpty: {
+                        message: 'This field is required' }
+                        },
+                      numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    },
+                    
+                    
+            crop2: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose crop(s)' }
+                        }
+                    },
+            crop_variety1: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill crop variety' }
+                        }
+                    },
+            crop_variety2: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill crop variety' }
+                        }
+                    },
+            variety_type1: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose variety type' }
+                        }
+                    },
+            variety_type2: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose variety type' }
+                        }
+                    },
+            planting_date: {
+                validators: {
+                    date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: { message: 'Please fill in the planting date' }
+                }
+            },
+            number_of_plants_per_row: {
+                validators: {
+                    greaterThan: {
+                        value:1,
+                        message: 'The value must be greater than or equal to one'
+                        },
+                    integer: {
+                          message: 'must be an integer'
+                        },
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose nurseryID' }
+                }
+            },
+            nurseryID: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose nurseryID' }
+                }
+            },
+            plantsnumber_per_row: {
+                validators: {
+                    greaterThan: {
+                        value:1,
+                        message: 'The value must be greater than or equal to one'
+                        },
+                    integer: {
+                          message: 'must be an integer'
+                        },
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill in plants number per row' }
+                }
+            },
+            seed_date: {
+                validators: {
+                    date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: { message: 'Please fill seeding date' }
+                }
+            },
+            
+            seed_rate: {
+                validators: {
+                    greaterThan: {
+                        value:1,
+                        message: 'The value must be greater than or equal to one'
+                        },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please seed rate' }
+                }
+            },
+            fieldsize: {
+                    validators: {
+                        greaterThan: {
+                        value:1,
+                        message: 'The value must be greater than or equal to one'
+                        },
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty: { message: 'Please fill field size' }
+                    }
+                },
+            water_source: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please select water source' }
+                }
+            },
+            water_application: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose water application' }
+                }
+            },
+            water_management_method: {
+                validators: {
+                   // stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose water management method' }
+                }
+            },
+            
+            number_of_plants_per_row: {
+                validators: {
+                    greaterThan: {
+                        value:1,
+                        message: 'The value must be greater than or equal to one'
+                    },
+                    integer: {
+                          message: 'must be an integer'
+                        },
+                    notEmpty: { message: 'Please fill number of plants per row' },
+                 
+                }
+            },
+            date: {
+                validators: {
+                    date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: {
+                        message: 'Please fill date' }
+                        }
+                    },
+            lease_duration: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please indicate the duration of the lease' }
+                        }
+                    },
+            payment_option: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select payment option'}
+                        }
+                    }, 
+            payement_other: {
+                validators: {
+                    notEmpty: {
+                        message: 'This field is required'}
+                        }
+                    }, 
+            payment_monetary: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            pumping_source: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select the pumping source' }
+                        }
+                    },
+            well_latitude: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill in the well latitude' }
+                        }
+                    },
+            well_longitude: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill in the well longitude' }
+                        }
+                    },
+            well_depth: {
+                validators: {
+                  greaterThan: {
+                        value:1,
+                        message: 'The value must be greater than or equal to one'
+                    },
+                  numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill in depth of well' }
+                        }
+                    },
+            well_diameter: {
+                validators: {
+                    greaterThan: {
+                        value:1,
+                        message: 'The value must be greater than or equal to one'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill the diameter of the well' }
+                        }
+                    },
+            bed_length: {
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill the bed length' }
+                        }
+                    },
+            bed_width: {
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill in the bed width' }
+                        }
+                    },
+            bednumber: {
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill number of beds' }
+                        }
+                    },
+
+            furrow_length: {
+                enabled: true,
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill the furrow length' }
+                        }
+                    },
+            furrow_width: {
+                enabled: true,
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill furrow width' }
+                        }
+                    },
+            nfurrow: {
+                enabled: true,
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill number of furrows' }
+                        }
+                    },
+            field_type: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill number of rows' }
+                        }
+                    },
+            crop2_planting_method: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select planting method' }
+                        }
+                    },
+            crop1_planting_method: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select planting method' }
+                        }
+                    },
+            seasonend: {
+                validators: {
+                    date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: {
+                        message: 'Please fill when season ends' }
+                        }
+                    },
+            seasonstart: {
+                validators: {
+                    date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: {
+                        message: 'Please fill when season starts' }
+                        }
+                    },
+            
+            number_of_plots: {
+                validators: {
+                    greaterThan: {
+                        value:1,
+                        message: 'The value must be greater than or equal to one'
+                    },
+                    integer: {
+                          message: 'must be an integer'
+                        },
+                    notEmpty: {
+                        message: 'Please fill number of rows' }
+                        }
+                    },
+            spacing_within_a_row: {
+                validators: {
+                    greaterThan: {
+                        value:1,
+                        message: 'The value must be greater than or equal to one'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill spacing within a srow' }
+                        }
+                    },
+            WFD_yellow_depth: {
+                validators: {
+                    greaterThan: {
+                        value:1,
+                        message: 'The value must be greater than or equal to one'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill WFD yellow depth' }
+                        }
+                    },
+            TDR_length: {
+                validators: {
+                    greaterThan: {
+                        value:1,
+                        message: 'The value must be greater than or equal to one'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill TDR length' }
+                        }
+                    },
+            WFD_red_depth: {
+                validators: {
+                    greaterThan: {
+                        value:1,
+                        message: 'The value must be greater than or equal to one'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill WFD red depth' }
+                        }
+                    },
+            spacing_btn_a_row: {
+                validators: {
+                    greaterThan: {
+                        value:1,
+                        message: 'The value must be greater than or equal to one'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill spacing btn a row' }
+                        }
+                    },
+            labour: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose labour' }
+                        }
+                    },
+            hired_female_number: {
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+                    },
+                    integer: {
+                        message: 'The value is not an integer'
+                    },
+                    notEmpty: {
+                        message: 'Please enter number of hired female' }
+                        }
+                    },
+            hired_male_number: {
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+                    },
+                    integer: {
+                        message: 'The value is not an integer'
+                    },
+                    notEmpty: {
+                        message: 'Please enter number of hired male' }
+                        }
+                    },
+            family_female_number: {
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+                    },
+                    integer: {
+                        message: 'The value is not an integer'
+                    },
+                    notEmpty: {
+                        message: 'Please enter number of female' }
+                        }
+                    },
+            family_male_number: {
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+                    },
+                    integer: {
+                        message: 'The value is not an integer'
+                    },
+                    notEmpty: {
+                        message: 'Please enter number of male' }
+                        }
+                    },
+            labour_time_taken: {
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please enter time taken' }
+                        }
+                    },
+            mulching_quantity: {
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than zero'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please enter time taken' }
+                        }
+                    },
+            wage: {
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please enter wage' }
+                        }
+                    },
+        }
+    }).on('click keyup input change','[name="nfurrow"],[name="furrow_width"],[name="furrow_length"]',function(e){
+        var  furrow_width  = $('#farmerinfo_form').find('[name="furrow_width"]').val(),
+             furrow_length  = $('#farmerinfo_form').find('[name="furrow_length"]').val(),
+             nfurrow  = $('#farmerinfo_form').find('[name="nfurrow"]').val();
+            switch ($(this).attr('name')) {
+                case 'furrow_width':
+                  if (furrow_width == -999) {
+                   $('#farmerinfo_form').formValidation('enableFieldValidators','furrow_width',false);
+                  }
+                  else{
+                    $('#farmerinfo_form').formValidation('enableFieldValidators','furrow_width',true);
+                  }
+                case 'furrow_length':
+                  if (furrow_length == -999) {
+                   $('#farmerinfo_form').formValidation('enableFieldValidators','furrow_length',false);
+                  }
+                  else{
+                    $('#farmerinfo_form').formValidation('enableFieldValidators','furrow_length',true);
+                  }
+                case 'nfurrow':
+                  if (nfurrow == -999) {
+                   $('#farmerinfo_form').formValidation('enableFieldValidators','nfurrow',false);
+                  }
+                  else{
+                    $('#farmerinfo_form').formValidation('enableFieldValidators','nfurrow',true);
+                  }
+            } 
+      });
+});
+</script>
+<script>
+$("#mysubmit" ).click(function() {
+$('#submit_message').show();
+});
+</script>
+<script>
+$(window).load(function() {
+  if ($('#id_labour').val() == '') {
+    $('#familydv,#hireddv').hide();
+  }
+  else if ($('#id_labour').val() == 'Family')  {
+      $('#familydv').show();
+      $('#hireddv').hide();
+      $("#id_hired_female_number").val();
+      $("#id_hired_male_number").val();                    
+  }
+  else if ($('#id_labour').val() == 'Hired')  {
+    $('#hireddv').show();
+    $('#familydv').hide();
+    $("#id_family_female_number").val();
+    $("#id_family_male_number").val();
+  }
+  else{
+      $('#familydv,#hireddv').show();
+  }
+  });
+</script>
+<script>
+    $(document).ready(function() {
+            $("#id_labour").change(function() {
+              value=0;
+                if ($(this).val() == '') {
+                    $('#familydv,#hireddv').hide();
+                }
+                else if ($(this).val() == 'Family')  {
+                    $('#familydv').show();
+                    $('#hireddv').hide();
+                    $("#id_hired_female_number").val(value);
+                    $("#id_hired_male_number").val(value);                    
+                }
+                else if ($(this).val() == 'Hired')  {
+                    $('#hireddv').show();
+                    $('#familydv').hide();
+                    $("#id_family_female_number").val(value);
+                    $("#id_family_male_number").val(value);
+                }
+                else{
+                    $('#familydv,#hireddv').show();
+                }
+            });
+    });
+</script>
+
+<script>
+$(document).ready(function() {
+  $("#id_farmer").change(function() {
+    if ($(this).val() == '') {
+      $("#id_nurseryID").html("<option>Choose NurseryID</option>");
+      $("#id_nurseryID").attr('disabled', true);
+      }
+      else {
+        var url = "/nursery/" + $(this).val() + "/nurseries";
+        $.getJSON(url, function(nurseries) {
+        var options = '<option value="">Choose NurseryID</option>';
+        for (var i = 0; i < nurseries.length; i++) {
+          options += '<option value="' + nurseries[i].pk + '">' + nurseries[i].pk + '</option>';
+        }
+        $("#id_nurseryID").html(options);
+        $("#id_nurseryID option:first").attr('selected', 'selected');
+        $("#id_nurseryID").attr('disabled', false);
+      });
+    }
+  });
+});
+</script>
+<script>
+  
+    $(window).load(function(){
+        if ($('#id_planting_method option:selected').text()=='Direct seeding') {
+            $("#seedingdv").show();
+            $("#transplantingdv").show();
+             $("#id_nurseryID,#id_number_of_plants_per_row").val();
+            $("#id_seed_rate").val();
+        }
+        else if ($('#id_planting_method option:selected').text()=='Transplanting'){
+            $("#transplantingdv").show();
+            $("#id_nurseryID,#id_number_of_plants_per_row").val();
+            $("#seedingdv").hide();
+            $("#id_seed_rate").val();
+        }
+        else{
+            $("#seedingdv,#transplantingdv").hide();
+        }
+    });
+    
+  $(document).ready(function() {
+    $('#id_planting_method').change(function(){
+        value = 0;
+        value_date ='11/23/2000';
+        if ($('#id_planting_method option:selected').text()=='Direct seeding') {
+            $("#seedingdv").show();
+            $("#transplantingdv").hide();
+            //$("#id_planting_date").datepicker('setDate',new Date());
+            $("#id_number_of_plants_per_row").val(value);
+            $('#id_nurseryID').append($('<option>', {
+                value: 'AA',
+                text: 'AA',
+              }));
+            $('select[name=nurseryID] option:eq(1)').attr('selected', 'selected');
+            $("#id_seed_rate").val();
+        }
+        else if ($('#id_planting_method option:selected').text()=='Transplanting'){
+            $("#transplantingdv").show();
+            $("#seedingdv").hide();
+            $('#id_nurseryID').prop('selectedIndex',0);
+            //$("#id_seed_date").datepicker('setDate', new Date());
+            $("#id_number_of_plants_per_row").val();
+             $("#id_seed_rate").val(value);
+        }
+        else{
+            $("#transplantingdv,#seedingdv").hide();
+        }
+    });
+  });
+</script>
+
+<script>
+$(window).load(function(){
+        if ($('#id_water_management_method option:selected').text()=='WFD' || $('#id_water_management_method:selected').text()=='WFD WUA'){
+            $("#WFD_red_depth,#WFD_yellow_depth").show();
+            $("#id_WFD_red_depth,#id_WFD_yellow_depth").val();
+            $('#TDR_length').hide();
+        }
+        else if ($('#id_water_management_method option:selected').text() == 'TDR(soil moisture)') {
+          $('#TDR_length').show();
+          $("#WFD_red_depth,#WFD_yellow_depth").hide();
+          $("#id_WFD_red_depth,#id_WFD_yellow_depth").val();
+        }
+        else{
+            //value='';
+            $("#WFD_red_depth,#WFD_yellow_depth,#TDR_length").hide();
+            
+            $("#id_WFD_red_depth,#id_WFD_yellow_depth,#id_TDR_length").val();
+        }
+    });
+
+$(document).ready(function() {
+            $("#id_water_management_method").change(function() {
+                if ($(this).val() == 'WFD' || $(this).val() == 'WFD WUA') {
+                  //thisvalue ='';
+                  $("#WFD_red_depth,#WFD_yellow_depth").show();
+                  $("#id_WFD_red_depth,#id_WFD_yellow_depth").val();
+                  $("#TDR_length").hide();
+                  $("#id_TDR_length").val(0);
+                }
+                else if ($(this).val()== 'TDR(soil moisture)'){
+                   //thisvalue ='';
+                 $("#TDR_length").show();
+                 $("#id_TDR_length").val();
+                 $("#WFD_red_depth,#WFD_yellow_depth").hide();
+                 $("#id_WFD_red_depth,#id_WFD_yellow_depth").val(0);
+                }
+                else{
+                  $("#WFD_red_depth,#WFD_yellow_depth,#TDR_length").hide();
+                  $("#id_WFD_red_depth,#id_WFD_yellow_depth,#id_TDR_length").val(0);
+                }
+            });
+    });
+  
+</script>
+
+<script>
+$(window).load(function() {
+  if (typeof $('#uservillage').val() === "undefined"){
+    var url = "/select_all/";
+    $.getJSON(url, function(farmers) {
+    var options = '<option value="">Choose Field..</option>';
+      for (var i = 0; i < farmers.length; i++) {
+        options += '<option value="' + farmers[i].pk + '">' + farmers[i].fields['firstname'] + ' ' + farmers[i].fields['middlename'] + ' ' + farmers[i].fields['lastname'] + '</option>';
+          }
+          $("#id_farmer").html(options);
+          $("#id_farmer option:selected").attr('selected', 'selected');
+      });
+    }
+    else if (typeof $('#researcher').val() === "undefined"){
+    var village = $('#uservillage').val();
+    var url = "/farmer/" + village + "/farmers";
+    $.getJSON(url, function(farmers) {
+    var options = '<option value="">Choose Field..</option>';
+      for (var i = 0; i < farmers.length; i++) {
+        options += '<option value="' + farmers[i].pk + '">' + farmers[i].fields['firstname'] + ' ' + farmers[i].fields['middlename'] + ' ' + farmers[i].fields['lastname'] + '</option>';
+          }
+          $("#id_farmer").html(options);
+          $("#id_farmer option:selected").attr('selected', 'selected');
+      });
+    }
+});
+</script>
+<script>
+$( function() {
+  $('#id_crop1,#id_crop2').autocomplete({
+      //minLength:3,
+      source: "/crop_select/"
+    });
+});
+
+$( function() {
+  $('#id_crop_variety1').autocomplete({
+      source: "/crop1_variety/"
+    });
+});
+
+$( function() {
+  $('#id_crop_variety2').autocomplete({
+      source: "/crop2_variety/"
+    });
+});
+
+
+</script>
+<script>
+$(window).load(function() {
+  if ($("#id_cropping_system").val()=='') {
+    $('#crop2,#crop_variety2,#variety_type2,#crop2_planting_method').hide();
+  }
+  else if ($("#id_cropping_system").val() == 'Monocropping') {
+    $('#crop2,#crop_variety2,#variety_type2,#crop2_planting_method').hide();
+    $('#id_crop2,#id_crop_variety2,#id_variety_type2,#id_crop2_planting_method').val();
+    $('#crop2_rootdepth,#crop2_management_practice,#crop2_mulching_type,#crop2_mulching_quantity').hide();
+    $('#id_crop2_rootdepth,#id_crop2_mulching_quantity').val();
+    $('#id_crop2_mulching_type,#id_crop2_management_practice').val();
+  }
+  else if ($("#id_cropping_system").val()== 'Intercropping') {
+    $('#crop2,#crop_variety2,#variety_type2,#crop2_planting_method').show();
+    $('#id_crop2,#id_crop_variety2,#id_variety_type2,#id_crop2_planting_method').val();
+    $('#crop2_rootdepth,#crop2_management_practice,#crop2_mulching_type,#crop2_mulching_quantity').show();
+    $('#id_crop2_rootdepth,#id_crop2_mulching_quantity').val();
+    $('#id_crop2_mulching_type,#id_crop2_management_practice').val();
+  }
+});
+
+$(document).ready(function() {
+  $("#id_cropping_system").change(function() {
+    if ($(this).val() == '') {
+      $('#crop2,#crop_variety2,#variety_type2').hide();
+    }
+    else if ($(this).val() == 'Monocropping') {
+      $('#crop2,#crop_variety2,#variety_type2,#crop2_planting_method').hide();
+      $('#id_crop2,#id_crop_variety2').val('None');
+      $('select[name=variety_type2] option:eq(1)').attr('selected', 'selected');
+      $('select[name=crop2_planting_method] option:eq(1)').attr('selected', 'selected');
+      $('#crop2_rootdepth,#crop2_management_practice,#crop2_mulching_type,#crop2_mulching_quantity').hide();
+      $('#id_crop2_rootdepth,#id_crop2_mulching_quantity').val(0);
+      $('select[name=crop2_management_practice] option:eq(1)').attr('selected', 'selected');
+      $('#id_crop2_mulching_type').val('None');
+    }
+    else if ($(this).val() == 'Intercropping') {
+      $('#crop2,#crop_variety2,#variety_type2,#crop2_planting_method').show();
+      $('#id_crop2,#id_crop_variety2').val('');
+      $('#id_variety_type2').prop('selectedIndex',0);
+      $('#id_crop2_planting_method').prop('selectedIndex',0);
+      $('#crop2_rootdepth,#crop2_management_practice').show();
+      $('#crop2_mulching_type,#crop2_mulching_quantity').hide();
+      $('#id_crop2_rootdepth').val('');
+      $('#id_crop2_management_practice').prop('selectedIndex',0);
+      //$('#id_crop2_mulching_type').val('');
+      //$('#id_crop2_mulching_quantity').val('');
+    }
+  })
+}); 
+</script>
+
+<script>
+$(window).load(function() {
+  if ($("#id_crop1_management_practice").val()=='') {
+    $('#crop1_mulching_type').hide();
+    $('#crop1_mulching_quantity').hide();
+    $('#id_crop1_mulching_type').val();
+    $('#id_crop1_mulching_quantity').val();
+  }
+  else if ($("#id_crop1_management_practice").val()=='Mulching') {
+    $('#crop1_mulching_type').show();
+    $('#crop1_mulching_quantity').show();
+    $('#id_crop1_mulching_type').val();
+    $('#id_mulching_quantity').val();
+  }
+  else if ($("#id_crop1_management_practice").val()=='No mulching') {
+    $('#crop1_mulching_type').hide();
+    $('#crop1_mulching_quantity').hide();
+    $('#id_crop1_mulching_type').val();
+    $('#id_crop1_mulching_quantity').val();
+  }
+});
+$(document).ready(function() {
+  $("#id_crop1_management_practice").change(function() { 
+    if ($(this).val() == '') {
+        $('#crop1_mulching_type').hide();
+        $('#crop1_mulching_quantity').hide();
+        $('#id_crop1_mulching_type').val('dd');
+        $('#id_crop1_mulching_quantity').val(0);
+    }
+    else if ($(this).val() == 'Mulching') {
+        $('#crop1_mulching_type').show();
+        $('#crop1_mulching_quantity').show();
+        $('#id_crop1_mulching_type').val('');
+        $('#id_crop1_mulching_quantity').val('');
+    }
+    else if ($(this).val() == 'No mulching'){
+        $('#crop1_mulching_type').hide();
+        $('#crop1_mulching_quantity').hide();
+        $('#id_crop1_mulching_type').val('dd');
+        $('#id_crop1_mulching_quantity').val(0);
+    }
+  })
+});
+</script>
+
+
+<script>
+$(window).load(function() {
+  if ($("#id_crop2_management_practice").val()=='') {
+    $('#crop2_mulching_type').hide();
+    $('#crop2_mulching_quantity').hide();
+    $('#id_crop2_mulching_type').val();
+    $('#id_crop2_mulching_quantity').val();
+  }
+  else if ($("#id_crop2_management_practice").val()=='Mulching') {
+    $('#crop2_mulching_type').show();
+    $('#crop2_mulching_quantity').show();
+    $('#id_crop2_mulching_type').val();
+    $('#id_crop2_mulching_quantity').val();
+  }
+  else if ($("#id_crop2_management_practice").val()=='No mulching') {
+    $('#crop2_mulching_type').hide();
+    $('#crop2_mulching_quantity').hide();
+    $('#id_crop2_mulching_type').val();
+    $('#id_crop2_mulching_quantity').val();
+  }
+});
+$(document).ready(function() {
+  $("#id_crop2_management_practice").change(function() { 
+    if ($(this).val() == '') {
+        $('#crop2_mulching_type').hide();
+        $('#crop2_mulching_quantity').hide();
+        $('#id_crop2_mulching_type').val('dd');
+        $('#id_crop2_mulching_quantity').val(0);
+    }
+    else if ($(this).val() == 'Mulching') {
+        $('#crop2_mulching_type').show();
+        $('#crop2_mulching_quantity').show();
+        $('#id_crop2_mulching_type').val('');
+        $('#id_crop2_mulching_quantity').val('');
+    }
+    else if ($(this).val() == 'No mulching'){
+        $('#crop2_mulching_type').hide();
+        $('#crop2_mulching_quantity').hide();
+        $('#id_crop2_mulching_type').val('dd');
+        $('#id_crop2_mulching_quantity').val(0);
+    }
+  })
+});
+</script>
+
+<script>
+  /*
+$(function() {
+   $("#mysubmit").click(function(){
+      if (confirm("Click OK to continue?")){
+         $('form#farmerinfo_form').submit();
+      }
+      else{
+        
+      }
+   });
+});
+*/
+</script>
+
+<script>
+$(window).load(function(){
+  if ($('#id_farm_ownership_status').val() == '') {
+    $('#landownership').hide();
+    $('#payement_other').hide();
+    $('#payment_monetary').hide();
+  }
+  else if ($('#id_farm_ownership_status').val() == 'All owned') {
+    $('#landownership').hide();
+    $('#id_landownership').val();
+    $('#lease_duration').hide();
+    $('#id_lease_duration').val();
+    $('#payement_other').hide();
+    $('#id_payement_other').val();
+    $('#payment_monetary').hide();
+    $('#id_payment_monetary').val();
+    $('#payment_option').hide();
+    $('#id_payment_option').val();
+  }
+  else if ($('#id_farm_ownership_status').val() == 'Partly owned') {
+    $('#landownership').show();
+    $('#id_landownership').val();
+  }
+  else if ($('#id_farm_ownership_status').val() == 'All rented') {
+    $('#landownership').hide();
+    $('#id_landownership').val();
+    $('#lease_duration').show();
+    $('#id_lease_duration').val();
+    $('#payment_option').show();
+    $('#id_payment_option').val();
+  }
+});
+
+$(document).ready(function() {
+  $("#id_farmer").change(function() {
+    if ($(this).val() == '') {
+     $('#landownership').hide();
+      }
+    else{
+      var url = "/farm_ownership/" + $(this).val() + "/farm_ownership";
+      $.getJSON(url, function(farm_ownership) {
+        $('#id_farm_ownership_status').val(farm_ownership[0]);
+         if (farm_ownership[0] == 'All owned' ) {
+            $('#landownership').hide();
+            $('select[name=landownership] option:eq(1)').attr('selected', 'selected');
+            $('#lease_duration').hide();
+            $('#id_lease_duration').val(0);
+            $('#payement_other').hide();
+            $('#id_payement_other').val('N/A');
+            $('#payment_monetary').hide();
+            $('#id_payment_monetary').val(0);
+            $('#payment_option').hide();
+            $('select[name=payment_option] option:eq(1)').attr('selected', 'selected');
+         }
+         else if (farm_ownership[0] == 'Partly owned') {
+            $('#landownership').show();
+            $('#id_landownership').prop('selectedIndex',0);
+         }
+         else if (farm_ownership[0] == 'All rented') {
+            $('#landownership').hide();
+            $('select[name=landownership] option:eq(2)').attr('selected', 'selected');
+            $('#lease_duration').show();
+            $('#id_lease_duration').val('');
+            $('#payment_option').show();
+            $('#id_payment_option').prop('selectedIndex',0);
+         }
+      });
+    }
+  })
+});
+</script>
+<script>
+$(window).load(function() {
+  if ($("#id_landownership").val()=='') {
+    $('#lease_duration').hide();
+    $('#payment_option').hide();
+    $('#id_lease_duration').val();
+    $('#id_payment_option').val();
+  }
+  else if ($("#id_landownership").val()=='Owned') {
+      $('#lease_duration').hide();
+      $('#payment_option').hide();
+      $('#id_lease_duration').val();
+      $('#id_payment_option').val();
+      $('#payement_other').hide();
+      $('#payment_monetary').hide();
+      $('#id_payement_other').val();
+      $('#id_payment_monetary').val();
+  }
+  else if ($(this).val() == 'Rented') {
+      $('#lease_duration').show();
+      $('#payment_option').show();
+      $('#id_lease_duration').val();
+      $('#id_payment_option').val();
+  }
+});
+
+$(document).ready(function() {
+  $("#id_landownership").change(function() {
+    if ($(this).val() == '') {
+      $('#lease_duration').hide();
+      $('#payment_option').hide();
+      $('#id_lease_duration').val(0);
+      $('select[name=payment_option] option:eq(1)').attr('selected', 'selected');
+    }
+    else if ($(this).val() == 'Owned') {
+      $('#lease_duration').hide();
+      $('#payment_option').hide();
+      $('#id_lease_duration').val(0);
+      $('select[name=payment_option] option:eq(1)').attr('selected', 'selected');
+      $('#payement_other').hide();
+      $('#payment_monetary').hide();
+      $('#id_payement_other').val('N/A');
+      $('#id_payment_monetary').val(0);
+    }
+    else if ($(this).val() == 'Rented') {
+      $('#lease_duration').show();
+      $('#payment_option').show();
+      $('#id_lease_duration').val('');
+      $('#id_payment_option').prop('selectedIndex',0);
+    }
+  })
+});
+</script>
+
+<script>
+$(window).load(function() {
+    if ($('#id_payment_option').val() == '') {
+      $('#payement_other').hide();
+      $('#payment_monetary').hide();
+    }
+    else if ($('#id_payment_option').val()== 'Monetary') {
+        $('#payement_other').hide();
+        $('#id_payement_other').val();
+        $('#payment_monetary').show();
+        $('#id_payment_monetary').val();
+    }
+    else if ($('#id_payment_option').val() == 'Other') {
+        $('#payement_other').show();
+        $('id_#payement_other').val();
+        $('#payment_monetary').hide();
+        $('#id_payment_monetary').val();
+    }
+});
+
+$(document).ready(function() {
+  $("#id_payment_option").change(function() {
+    if ($(this).val() == '') {
+      $('#payement_other').hide();
+      $('#payment_monetary').hide();
+    }
+    else if ($(this).val() == 'Monetary') {
+        $('#payement_other').hide();
+        $('#id_payement_other').val('N/A');
+        $('#payment_monetary').show();
+        $('#id_payment_monetary').val('');
+    }
+    else if ($(this).val() == 'Other') {
+        $('#payement_other').show();
+        $('#id_payement_other').val('');
+        $('#payment_monetary').hide();
+        $('#id_payment_monetary').val(0);
+    }
+  })
+});
+</script>
+<script>
+$(window).load(function() {
+    if ($('#id_fieldtype').val() == '') {
+      $('#bed_length,#bed_width,#bednumber,#furrow_length,#furrow_width,#nfurrow').show();
+    }
+    else if ($('#id_fieldtype').val()== 'Pocket garden') { 
+        $('#bed_length,#bed_width,#bednumber,#furrow_length,#furrow_width,#nfurrow').hide();
+        $('#id_bed_length,#id_bed_width,#id_bednumber,#id_furrow_length,#id_furrow_width,#id_nfurrow').val();
+    }
+    else if ($('#id_fieldtype').val() == 'Conventional plot' || $('#id_fieldtype').val() == 'Farm') {
+        $('#bed_length,#bed_width,#bednumber,#furrow_length,#furrow_width,#nfurrow').show();
+        $('#id_bed_length,#id_bed_width,#id_bednumber,#id_furrow_length,#id_furrow_width,#id_nfurrow').val();
+    }
+});
+  
+$(document).ready(function() {
+  $("#id_fieldtype").change(function() {
+    if ($(this).val() == '') {
+      $('#bed_length,#bed_width,#bednumber,#furrow_length,#furrow_width,#nfurrow').show();
+    }
+    else if ($(this).val() == 'Pocket garden') {
+        $('#bed_length,#bed_width,#bednumber,#furrow_length,#furrow_width,#nfurrow').hide();
+        $('#id_bed_length,#id_bed_width,#id_bednumber,#id_furrow_length,#id_furrow_width,#id_nfurrow').val(0);
+    }
+    else if ($(this).val() == 'Conventional plot' || $(this).val() == 'Farm') {
+        $('#bed_length,#bed_width,#bednumber,#furrow_length,#furrow_width,#nfurrow').show();
+        $('#id_bed_length,#id_bed_width,#id_bednumber,#id_furrow_length,#id_furrow_width,#id_nfurrow').val('');
+    }
+  })
+});
+</script>
+
+<script>
+    /*
+  $(function() {
+    $( "#id_date" ).datepicker();
+  });
+  
+  $(document).ready(function(){
+    $("#id_seasonstart").datepicker({
+        //format: 'dd/mm/yyyy',
+        //changeMonth: true,
+        //changeYear: true,
+        //showButtonPanel: true,
+        //dateFormat: 'MM yy',
+        //onClose: function(dateText, inst) { 
+            //$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+        //},
+        onSelect: function(selected) {
+          $("#id_seasonend").datepicker("option","minDate", selected)
+        }
+    });
+    $("#id_seasonend").datepicker({
+        //format: 'dd/mm/yyyy',
+        //changeMonth: true,
+        //changeYear: true,
+        //showButtonPanel: true,
+        //dateFormat: 'MM yy',
+        //onClose: function(dateText, inst) { 
+            //$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+       // },
+        onSelect: function(selected) {
+           $("#id_seasonstart").datepicker("option","maxDate", selected)
+        }
+    });  
+});
+  */
+  </script>
+{% endblock %}
+

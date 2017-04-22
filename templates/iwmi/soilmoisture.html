@@ -1,0 +1,337 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    <title>Soil moisture</title>
+{% endblock %}
+
+{% block main_section %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script>
+  $(function() {
+    $( "#id_date" ).datepicker({
+        format: 'mm/dd/yyyy'
+        }).on('changeDate', function(e) {
+            // Revalidate the date field
+            $('#soilmoisture_form').formValidation('revalidateField','date');
+        });
+  });
+    
+  </script>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+
+    <form class="well form-horizontal" action=" " method="post"  id="soilmoisture_form">{% csrf_token %} 
+
+<!-- Form Name -->
+<fieldset>
+<legend>Soil moisture....</legend>
+
+<div class="form-group"> 
+    {{ soilmoisturemeasurementform.date.errors }}
+    <label for="date" class="col-md-4 control-label">Date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ soilmoisturemeasurementform.date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilmoisturemeasurementform.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farm:</label>
+        <div class="col-md-4 selectContainer">
+        {{ soilmoisturemeasurementform.farm }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilmoisturemeasurementform.measurement_option.errors }}
+    <label for="measurement_option" class="col-md-4 control-label">Measurement used:</label>
+        <div class="col-md-4 selectContainer">
+        {{ soilmoisturemeasurementform.measurement_option }}
+        </div>
+</div>
+
+<div id='gravimetricdv'>
+<fieldset>
+<legend>Gravimetric measurement...</legend>
+
+<div class="form-group"> 
+    {{ soilmoisturemeasurementform.time.errors }}
+    <label for="time" class="col-md-4 control-label">Time:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+             {{ soilmoisturemeasurementform.time }}<span class="input-group-addon">mins</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilmoisturemeasurementform.depth_sample.errors }}
+    <label for="depth_sample" class="col-md-4 control-label">Depth sample:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+             {{ soilmoisturemeasurementform.depth_sample }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilmoisturemeasurementform.volume_core_used.errors }}
+    <label for="volume_core_used" class="col-md-4 control-label">Volume core used:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+             {{ soilmoisturemeasurementform.volume_core_used }}<span class="input-group-addon">cm<sup>3</sup></span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilmoisturemeasurementform.weight_core_used.errors }}
+    <label for="weight_core_used" class="col-md-4 control-label">Weight core used:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilmoisturemeasurementform.weight_core_used }}<span class="input-group-addon">g</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilmoisturemeasurementform.wet_weight.errors }}
+    <label for="wet_weight" class="col-md-4 control-label">Wet weight:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilmoisturemeasurementform.wet_weight }}<span class="input-group-addon">g</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilmoisturemeasurementform.dry_weight.errors }}
+    <label for="dry_weight" class="col-md-4 control-label">Dry weight:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilmoisturemeasurementform.dry_weight }}<span class="input-group-addon">g</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilmoisturemeasurementform.bulk_density.errors }}
+    <label for="bulk_density" class="col-md-4 control-label">Bulk density:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilmoisturemeasurementform.bulk_density }}<span class="input-group-addon">gm<sup>-3</sup></span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilmoisturemeasurementform.gravimetric_moisture_content.errors }}
+    <label for="gravimetric_moisture_content" class="col-md-4 control-label">Gravimetric moisture content:</label>
+        <div class="col-md-4 selectContainer">
+        {{ soilmoisturemeasurementform.gravimetric_moisture_content }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilmoisturemeasurementform.volumetric_moisture_content.errors }}
+    <label for="volumetric_moisture_content" class="col-md-4 control-label">Volumetric moisture content:</label>
+        <div class="col-md-4 selectContainer">
+        {{ soilmoisturemeasurementform.volumetric_moisture_content }}
+        </div>
+</div>
+
+</div>
+</fieldset>
+
+
+<div id='tdrdv'>
+<fieldset>
+<legend>TDR measurement...</legend>
+
+<div class="form-group"> 
+    {{ soilmoisturemeasurementform.measurement.errors }}
+    <label for="measurement" class="col-md-4 control-label">Measurement:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilmoisturemeasurementform.measurement }}<span class="input-group-addon">%</span>
+             </div>
+        </div>
+</div>
+
+</div>
+</fieldset>
+
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block extended_javascripts_code %}
+	<script>
+    $(document).ready(function () {
+    $('#soilmoisture_form').bootstrapValidator({
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            date: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select date' }
+                        },
+                        date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'
+                        }
+                    },
+                    
+            farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose farm' }
+                        }
+                    },
+            measurement_option: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose measurement option' }
+                        }
+                    },
+            time: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill time taken' }
+                        }
+                    },
+                    
+            depth_sample: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill depth sample' }
+                        }
+                    },
+            volume_core_used: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill volume core used' }
+                }
+            },
+            
+            weight_core_used: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill weight core used' }
+                }
+            },
+            
+            wet_weight: {
+                validators:{ 
+                        notEmpty:{
+                                message:'Please fill wet weight' }
+                }
+            },
+            dry_weight: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill dry weight' }
+                }
+            },
+            bulk_density: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill bulk density' }
+                }
+            },
+            gravimetric_moisture_content: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill gravimetric moisture content' }
+                }
+            },
+            volumetric_moisture_content: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill volumetric moisture content' }
+                }
+            },
+            measurement: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill TDR measurement' }
+                }
+            },
+        }
+    }).on('success.form.bv', function (e) {
+        $('#success_message').slideDown({ opacity: 'show' }, 'slow');
+        $('#fuelconsumption_form').data('bootstrapValidator').resetForm();
+        e.preventDefault();
+        var $form = $(e.target);
+        var bv = $form.data('bootstrapValidator');
+        $.post($form.attr('action'), $form.serialize(), function (result) {
+            console.log(result);
+        }, 'json');
+    });
+});
+      //# sourceURL=pen.js
+
+    </script>
+    <script>
+            if (document.location.search.match(/type=embed/gi)) {
+                window.parent.postMessage("resize", "*");
+                }
+    </script>
+
+<script>
+    $(window).load(function(){
+        if ($('#id_measurement_option option:selected').text()=='Gravimetric') {
+            $("#gravimetricdv").show();
+            $("#id_time,#id_depth_sample,#id_volume_core_used,#id_weight_core_used,#id_wet_weight,#id_dry_weight,#id_bulk_density,#id_gravimetric_moisture_content,#id_volumetric_moisture_content").val();
+            $("#tdrdv").hide();
+            $("#id_measurement").val();
+        }
+        else if ($('#id_measurement_option option:selected').text()=='TDR'){
+            $("#tdrdv").show();
+            $("#id_measurement").val();
+            $("#gravimetricdv").hide();
+            $("#id_time,#id_depth_sample,#id_volume_core_used,#id_weight_core_used,#id_wet_weight,#id_dry_weight,#id_bulk_density,#id_gravimetric_moisture_content,#id_volumetric_moisture_content").val();
+        }
+        else{
+            $("#tdrdv,#gravimetricdv").hide();
+        }
+    });
+    
+    $('#id_measurement_option').change(function(){
+        value = 0;
+        if ($('#id_measurement_option option:selected').text()=='Gravimetric') {
+            $("#gravimetricdv").show();
+            $("#tdrdv").hide();
+            $("#id_measurement").val(value);
+            $("#id_time,#id_depth_sample,#id_volume_core_used,#id_weight_core_used,#id_wet_weight,#id_dry_weight,#id_bulk_density,#id_gravimetric_moisture_content,#id_volumetric_moisture_content").val();
+        }
+        else if ($('#id_measurement_option option:selected').text()=='TDR'){
+            $("#tdrdv").show();
+            $("#id_measurement").val();
+            $("#gravimetricdv").hide();
+            $("#id_time,#id_depth_sample,#id_volume_core_used,#id_weight_core_used,#id_wet_weight,#id_dry_weight,#id_bulk_density,#id_gravimetric_moisture_content,#id_volumetric_moisture_content").val(value);
+        }
+        else{
+            $("#tdrdv,#gravimetricdv").hide();
+        }
+    });
+
+</script>
+
+
+{% endblock %}

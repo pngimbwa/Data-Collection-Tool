@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>Point of interest</title>
+{% endblock %}
+
+{% block main_section %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script>
+   $(function() {
+    $( "#id_seeding_date,#id_seeding_date2,#id_transplanting_date_one,#id_transplanting_date_two" ).datepicker();
+  });
+  </script>
+ 
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+
+    <form class="well form-horizontal" action=" " method="post"  id="nurseryirrigation_form">{% csrf_token %} 
+<!-- Form Name -->
+<fieldset>
+<legend>Planting method...</legend>
+
+{% if user_village %}
+<input type="hidden" id="uservillage" name="uservillage" value="{{user_village}}" readonly='readonly' />
+{% elif researcher %}
+<input type="hidden" id="researcher" name="researcher" value="{{researcher}}" readonly='readonly' />
+{% elif user_country %}
+
+{% endif %}
+<label class="warning" for="message" id="message" style="color: red"><small><i>{{message}}</i></small></label>
+
+<div class="form-group"> 
+    {{ pointofinterestform.name.errors }}
+    <label for="name" class="col-md-4 control-label">Name:</label>
+        <div class="col-md-4 selectContainer">
+        {{ pointofinterestform.name }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ pointofinterestform.position.errors }}
+    <label for="position" class="col-md-4 control-label">Position:</label>
+        <div class="col-md-4 selectContainer">
+        {{ pointofinterestform.position }}
+        </div>
+</div>
+
+<!-- Button -->
+<div class="form-group" id='submit'>
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+  
+{% endblock %}
+    
+{% block extended_javascripts_code %}
+
+{% endblock %}
+

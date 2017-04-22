@@ -1,0 +1,398 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    <title>Fertilizer Application</title>
+{% endblock %}
+
+{% block main_section %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!--<link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet">-->
+  <script>
+  $(function() {
+    $( "#id_date" ).datepicker();
+  });
+  </script>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+
+    <form class="well form-horizontal" action=" " method="post"  id="fuelconsumption_form">{% csrf_token %} 
+
+<!-- Form Name -->
+<fieldset>
+<legend>Fertilizer Application</legend>
+
+<div class="form-group"> 
+    {{ fertilizerapplicationform.date.errors }}
+    <label for="date" class="col-md-4 control-label">Date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ fertilizerapplicationform.date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ fertilizerapplicationform.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farm:</label>
+        <div class="col-md-4 selectContainer">
+        {{ fertilizerapplicationform.farm }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ fertilizerapplicationform.fertilizer.errors }}
+    <label for="fertilizer" class="col-md-4 control-label">Fertilizer:</label>
+        <div class="col-md-4 selectContainer">
+        {{ fertilizerapplicationform.fertilizer }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ fertilizerapplicationform.fertilizer_management.errors }}
+    <label for="fertilizer_management" class="col-md-4 control-label">Fertilizer management:</label>
+        <div class="col-md-4 selectContainer">
+        {{ fertilizerapplicationform.fertilizer_management }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ fertilizerapplicationform.nitrogen.errors }}
+    <label for="nitrogen" class="col-md-4 control-label">Nitrogen:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+        {{ fertilizerapplicationform.nitrogen }}<span class="input-group-addon">%</span>
+        </div>
+          </div>
+</div>
+
+<div class="form-group"> 
+    {{ fertilizerapplicationform.phosphorus.errors }}
+    <label for="phosphorus" class="col-md-4 control-label">Phosphorus:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ fertilizerapplicationform.phosphorus }}<span class="input-group-addon">%</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ fertilizerapplicationform.sulphur.errors }}
+    <label for="sulphur" class="col-md-4 control-label">Sulphur:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ fertilizerapplicationform.sulphur }}<span class="input-group-addon">%</span>
+            </div>
+        </div>
+</div>
+
+
+
+<div class="form-group"> 
+    {{ fertilizerapplicationform.potassium.errors }}
+    <label for="potassium" class="col-md-4 control-label">Potassium:</label>
+        <div class="col-md-4 selectContainer">
+         <div class="input-group">
+           {{ fertilizerapplicationform.potassium }}<span class="input-group-addon">%</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ fertilizerapplicationform.organic_matter.errors }}
+    <label for="organic_matter" class="col-md-4 control-label">Organic matter:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ fertilizerapplicationform.organic_matter }}<span class="input-group-addon">%</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ fertilizerapplicationform.quantity_kg.errors }}
+    <label for="quantity_kg" class="col-md-4 control-label">Quantity:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ fertilizerapplicationform.quantity_kg }}<span class="input-group-addon">kg</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ fertilizerapplicationform.crop_stage.errors }}
+    <label for="crop_stage" class="col-md-4 control-label">Crop stage:</label>
+        <div class="col-md-4 selectContainer">
+            {{ fertilizerapplicationform.crop_stage }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ fertilizerapplicationform.cost.errors }}
+    <label for="cost" class="col-md-4 control-label">Cost:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ fertilizerapplicationform.cost }}<span class="input-group-addon">{{ fertilizerapplicationform.currency }}</span>
+            </div>
+        </div>
+</div>
+
+</fieldset>
+
+<fieldset>
+<legend>Labour Info</legend>
+
+<div class="form-group"> 
+    {{ fertilizerapplicationform.labour.errors }}
+    <label for="labour" class="col-md-4 control-label">Labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ fertilizerapplicationform.labour }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ fertilizerapplicationform.hired_female_number.errors }}
+    <label for="hired_female_number" class="col-md-4 control-label">Number of hired female:</label>
+        <div class="col-md-4 selectContainer">
+            {{ fertilizerapplicationform.hired_female_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ fertilizerapplicationform.hired_male_number.errors }}
+    <label for="hired_male_number" class="col-md-4 control-label">Number of hired male:</label>
+        <div class="col-md-4 selectContainer">
+            {{ fertilizerapplicationform.hired_male_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ fertilizerapplicationform.family_female_number.errors }}
+    <label for="family_female_number" class="col-md-4 control-label">Number of female family  labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ fertilizerapplicationform.family_female_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ fertilizerapplicationform.family_male_number.errors }}
+    <label for="family_male_number" class="col-md-4 control-label">Number of male family labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ fertilizerapplicationform.family_male_number}}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ fertilizerapplicationform.wage.errors }}
+    <label for="wage" class="col-md-4 control-label">Daily wage:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ fertilizerapplicationform.wage}}<span class="input-group-addon">{{ fertilizerapplicationform.currency }}</span>
+            </div>            
+        </div>
+</div>
+
+</fieldset>
+
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block extended_javascripts_code %}
+	<script>
+    $(document).ready(function () {
+    $('#fuelconsumption_form').bootstrapValidator({
+        feedbackIcons: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            date: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill the date' }
+                        }
+                    },
+            farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose farm' }
+                        }
+                    },
+                    
+            fertilizer: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select fertlizer' }
+                        }
+                    },
+            
+            fertilizer_management: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose fertilizer management' }
+                        }
+                    },
+            
+            form: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose form type' }
+                        }
+                    },
+            
+            nitrogen: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill nitrogen percentage' }
+                }
+            },
+            phosphorus: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill phosphorus value in ppm' }
+                }
+            },
+            potassium: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill potassium value in ppm' }
+                }
+            },
+            sulphur: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill sulphur value in ppm' }
+                }
+            },
+            organic_matter: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill organic_matter percentage' }
+                }
+            },
+            quantity_lt: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill quantity in litre' }
+                }
+            },
+            quantity_kg: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill quantity in kg' }
+                }
+            },
+            crop_stage: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose crop stage' }
+                }
+            },
+            cost: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please supply the cost' }
+                }
+            },
+            labour: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose labour' }
+                }
+            },
+            hired_female_number: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill in number of hired female labour' }
+                }
+            },
+            hired_male_number: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill in number of hired male labour' }
+                }
+            },
+            family_female_number: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill in number of female family labour' }
+                }
+            },
+            family_male_number: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill in number of male family labour' }
+                }
+            },
+        }
+    }).on('success.form.bv', function (e) {
+        $('#success_message').slideDown({ opacity: 'show' }, 'slow');
+        $('#fuelconsumption_form').data('bootstrapValidator').resetForm();
+        e.preventDefault();
+        var $form = $(e.target);
+        var bv = $form.data('bootstrapValidator');
+        $.post($form.attr('action'), $form.serialize(), function (result) {
+            console.log(result);
+        }, 'json');
+    });
+});
+      //# sourceURL=pen.js
+
+    </script>
+    <script>
+            if (document.location.search.match(/type=embed/gi)) {
+                window.parent.postMessage("resize", "*");
+                }
+    </script>
+    
+<script>
+    $(document).ready(function() {
+            $("#id_labour").change(function() {
+              value=0;
+                if ($(this).val() == '') {
+                    $("#id_hired_female_number").attr('readonly', true);
+                    //$("#id_hired_female_number").val(value);
+                    $("#id_hired_male_number").attr('readonly', true);
+                    //$("#id_hired_male_number").val(value);
+                    $("#id_family_female_number").attr('readonly', true);
+                    //$("#id_family_female_number").val(value);
+                    $("#id_family_male_number").attr('readonly', true);
+                    //$("#id_family_male_number").val(value);
+                }
+                else if ($(this).val() == 'Family')  {
+                    $("#id_family_female_number").attr('readonly', false);
+                    $("#id_family_male_number").attr('readonly', false); 
+                    $("#id_hired_female_number").attr('readonly', true);
+                    $("#id_hired_female_number").val(value);
+                    $("#id_hired_male_number").attr('readonly', true);
+                    $("#id_hired_male_number").val(value);                    
+                }
+                else if ($(this).val() == 'Hired')  {
+                    $("#id_family_female_number").attr('readonly', true);
+                    $("#id_family_female_number").val(value);
+                    $("#id_family_male_number").attr('readonly', true);
+                    $("#id_family_male_number").val(value);
+                    $("#id_hired_female_number").attr('readonly', false);
+                    $("#id_hired_male_number").attr('readonly', false);
+                }
+                else{
+                    $("#id_family_female_number").attr('readonly', false);
+                    $("#id_family_male_number").attr('readonly', false); 
+                    $("#id_hired_female_number").attr('readonly', false);
+                    $("#id_hired_male_number").attr('readonly', false);
+                }
+            });
+    });
+</script>
+
+{% endblock %}

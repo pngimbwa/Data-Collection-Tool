@@ -1,0 +1,354 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    <title>Service and repaire</title>
+{% endblock %}
+
+{% block main_section %}
+
+  <script>
+  $(function() {
+    $( "#id_date" ).datepicker({
+    onSelect: function() {
+        $('#servicerepaire_form').formValidation('revalidateField', 'date');
+    }
+    });
+  });
+  </script>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+
+    <form class="well form-horizontal" action=" " method="post"  id="servicerepaire_form">{% csrf_token %} 
+
+<!-- Form Name -->
+<fieldset>
+<legend>Service and repair..</legend>
+ 
+{% if user_village %}
+<input type="hidden" id="uservillage" name="uservillage" value="{{user_village}}" readonly='readonly' />
+{% elif researcher %}
+<input type="hidden" id="researcher" name="researcher" value="{{researcher}}" readonly='readonly' />
+{% elif user_country %}
+
+{% endif %}
+<label class="warning" for="message" id="message" align='center' style="color: red"><small><i>{{message}}</i></small></label>
+
+<div class="form-group"> 
+    {{ servicerepaireform.date.errors }}
+    <label for="date" class="col-md-4 control-label">Date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ servicerepaireform.date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ servicerepaireform.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farm:</label>
+        <div class="col-md-4 selectContainer">
+        {{ servicerepaireform.farm }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ servicerepaireform.repaire_type.errors }}
+    <label for="repaire_type" class="col-md-4 control-label">Repair type:</label>
+        <div class="col-md-4 selectContainer">
+        {{ servicerepaireform.repaire_type }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ servicerepaireform.technology_broken.errors }}
+    <label for="technology_broken" class="col-md-4 control-label">Technology broken:</label>
+        <div class="col-md-4 selectContainer">
+        {{ servicerepaireform.technology_broken }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ servicerepaireform.spaire.errors }}
+    <label for="spaire" class="col-md-4 control-label">Spare part:</label>
+        <div class="col-md-4 selectContainer">
+        {{ servicerepaireform.spaire }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ servicerepaireform.maintenance_place.errors }}
+    <label for="maintenance_place" class="col-md-4 control-label">Maitenance place:</label>
+        <div class="col-md-4 selectContainer">
+        {{ servicerepaireform.maintenance_place }}
+        </div>
+</div>
+
+<div class="form-group" id='distance_to_shop'> 
+    {{ servicerepaireform.distance_to_shop.errors }}
+    <label for="distance_to_shop" class="col-md-4 control-label">Distance to shop:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+            {{ servicerepaireform.distance_to_shop }}<span class="input-group-addon">km</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id ='travel_cost'> 
+    {{ servicerepaireform.travel_cost.errors }}
+    <label for="travel_cost" class="col-md-4 control-label">Travel cost:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+            {{ servicerepaireform.travel_cost }}<span class="input-group-addon">{{ currency }}</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ servicerepaireform.repair_personel.errors }}
+    <label for="repair_personel" class="col-md-4 control-label">Who did the repair:</label>
+        <div class="col-md-4 selectContainer">
+            {{ servicerepaireform.repair_personel }}
+        </div>
+</div>
+
+<div class="form-group" id='price'> 
+    {{ servicerepaireform.price.errors }}
+    <label for="price" class="col-md-4 control-label">Price:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ servicerepaireform.price }}<span class="input-group-addon">{{ currency }}</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='time_taken'> 
+    {{ servicerepaireform.time_taken.errors }}
+    <label for="time_taken" class="col-md-4 control-label">How many hours taken:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+            {{ servicerepaireform.time_taken }}<span class="input-group-addon">hr(s)</span>
+            </div>
+        </div>
+</div>
+
+</fieldset>
+
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block extended_javascripts_code %}
+	<script>
+    $(document).ready(function () {
+    $('#servicerepaire_form').formValidation({
+        framework: 'bootstrap',
+        icon: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+        	farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            date: {
+                validators: {
+                  date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: {
+                        message: 'Please fill the date' }
+                        }
+                    },
+            group: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose group' }
+                        }
+                    },
+            repaire_type: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill repaire type' }
+                        }
+                    },
+			distance_to_shop: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please enter distance travelled' }
+                }
+            },
+			travel_cost: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please enter travel cost' }
+                }
+            },
+			repair_personel: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select repair personel' }
+                        }
+                    },
+            spaire: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose spaire' }
+                        }
+                    },
+            maintenance_place: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose maintenance place' }
+                        }
+                    },
+            technology_broken: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select broken technology' }
+                        }
+                    },
+			time_taken: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter total time taken' }
+                        }
+                    },
+            price: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please enter price' }
+                }
+            },
+        }
+    })
+});
+      //# sourceURL=pen.js
+
+    </script>
+    <script>
+            if (document.location.search.match(/type=embed/gi)) {
+                window.parent.postMessage("resize", "*");
+                }
+    </script>
+
+<script>
+$(window).load(function() {
+  if (typeof $('#uservillage').val() === "undefined"){
+    var url = "/select_all/";
+    $.getJSON(url, function(farmers) {
+    var options = '<option value="">Choose Field..</option>';
+      for (var i = 0; i < farmers.length; i++) {
+        options += '<option value="' + farmers[i].pk + '">' + farmers[i].fields['firstname'] + ' ' + farmers[i].fields['middlename'] + ' ' + farmers[i].fields['lastname'] + '</option>';
+          }
+          $("#id_farm").html(options);
+          $("#id_farm option:selected").attr('selected', 'selected');
+      });
+    }
+    else if (typeof $('#researcher').val() === "undefined"){
+    var village = $('#uservillage').val();
+    var url = "/farmer/" + village + "/farmers";
+    $.getJSON(url, function(farmers) {
+    var options = '<option value="">Choose Field..</option>';
+      for (var i = 0; i < farmers.length; i++) {
+        options += '<option value="' + farmers[i].pk + '">' + farmers[i].fields['firstname'] + ' ' + farmers[i].fields['middlename'] + ' ' + farmers[i].fields['lastname'] + '</option>';
+          }
+          $("#id_farm").html(options);
+          $("#id_farm option:selected").attr('selected', 'selected');
+      });
+    }
+});
+</script>
+
+<script>
+$(window).load(function() {
+  if ($('#id_maintenance_place').val() == '') {
+	  $('#distance_to_shop,#travel_cost').hide();
+  }
+  else if ($('#id_maintenance_place').val() == 'Farm/home')  {
+	  $('#distance_to_shop,#travel_cost').hide();
+	  $('#id_distance_to_shop,#id_travel_cost').val();                 
+  }
+  else if ($('#id_maintenance_place').val() == 'Repair shop')  {
+	  $('#distance_to_shop,#travel_cost').show();
+      $('#id_distance_to_shop,#id_travel_cost').val(); 
+  }
+  else{
+      $('#distance_to_shop,#travel_cost').hide();
+  }
+});
+
+$(window).load(function() {
+  if ($('#id_repair_personel').val() == '') {
+	  $('#price').hide();
+  }
+  else if ($('#id_repair_personel').val() == 'Technician')  {
+	  $('#price').show();
+	  $('#id_price').val();                
+  }
+  else{
+      $('#price').hide();
+	  $('#id_price').val();  
+  }
+});
+</script>
+<script>
+    $(document).ready(function() {
+            $("#id_maintenance_place").change(function() {
+                if ($(this).val() == '') {
+                    $('#distance_to_shop,#travel_cost').hide();
+                }
+                else if ($(this).val() == 'Farm/home')  {
+                    $('#distance_to_shop,#travel_cost').hide();
+					$('#id_distance_to_shop,#id_travel_cost').val(0);                  
+                }
+                else if ($(this).val() == 'Repair shop')  {
+                    $('#distance_to_shop,#travel_cost').show();
+                    $('#id_distance_to_shop,#id_travel_cost').val(''); 
+                }
+				else{
+					$('#distance_to_shop,#travel_cost').hide();
+				}
+            });
+			
+			$("#id_repair_personel").change(function() {
+                if ($(this).val() == '') {
+                    $('#price').hide();
+                }
+                else if ($(this).val() == 'Technician')  {
+                    $('#price').show();
+					$('#id_price').val('');                 
+                }
+				else{
+					$('#price').hide();
+					$('#id_price').val(0);  
+				}
+            });
+			
+    });
+</script>
+{% endblock %}

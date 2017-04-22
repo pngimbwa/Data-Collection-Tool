@@ -1,0 +1,419 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    <title>Water lifting calibration</title>
+{% endblock %}
+
+{% block main_section %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="{% static 'js/timepicker.min.js' %}"></script>
+<!--<link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet">-->
+  <script>
+  $(function() {
+    $( "#id_date" ).datepicker();
+  });
+     
+  </script>
+    <script>
+  $(function() {
+    $( "#id_date" ).datepicker();
+  });
+  $(document).ready(function(){
+                  $('.timepicker').timepicker({
+                      timeFormat: 'HH:mm',
+                      //timeFormat: 'H:mm p',
+                      interval: 60,
+                      minTime: '0',
+                      //maxTime: '6:00pm',
+                      //defaultTime: '11',
+                      //startTime: '10:00',
+                      dynamic: false,
+                      dropdown: true,
+                      scrollbar: true
+                  });
+      });
+
+  </script>
+ 
+    
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+<!-- Form -->
+<form class="well form-horizontal" action=" " method="post"  id="applicationcalibrationform">{% csrf_token %} 
+
+<fieldset>
+<legend>Application Calibration</legend>
+
+<div class="form-group"> 
+    {{ applicationcalibrationform.date.errors }}
+    <label for="date" class="col-md-4 control-label">Date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ applicationcalibrationform.date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ applicationcalibrationform.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farm:</label>
+        <div class="col-md-4 selectContainer">
+        {{ applicationcalibrationform.farm }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ applicationcalibrationform.water_application.errors }}
+    <label for="water_application" class="col-md-4 control-label">Water application:</label>
+        <div class="col-md-4 selectContainer">
+        {{ applicationcalibrationform.water_application }}
+        </div>
+</div>
+
+<div class="form-group" id='buttonfurrowwidth'> 
+    {{ applicationcalibrationform.buttonfurrowwidth.errors }}
+    <label for="buttonfurrowwidth" class="col-md-4 control-label">Buttom furrow width:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.buttonfurrowwidth }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='topfurrowwidth'> 
+    {{ applicationcalibrationform.topfurrowwidth.errors }}
+    <label for="topfurrowwidth" class="col-md-4 control-label">Top furrow width:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.topfurrowwidth }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='waterheight'> 
+    {{ applicationcalibrationform.waterheight.errors }}
+    <label for="waterheight" class="col-md-4 control-label">Water height:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.waterheight }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='bucketvolume'> 
+    {{ applicationcalibrationform.irrigate_whole_or_per_plant.errors }}
+    <label for="irrigate_whole_or_per_plant" class="col-md-4 control-label">Overhead application method:</label>
+        <div class="col-md-4 selectContainer">
+           {{ applicationcalibrationform.irrigate_whole_or_per_plant }}
+        </div>
+</div>
+
+<div class="form-group" id='bucketvolume'> 
+    {{ applicationcalibrationform.bucketvolume.errors }}
+    <label for="bucketvolume" class="col-md-4 control-label">Bucket volume:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.bucketvolume }}<span class="input-group-addon">L</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group" id='bucketnumbers'> 
+    {{ applicationcalibrationform.bucketnumbers.errors }}
+    <label for="bucketnumbers" class="col-md-4 control-label">Number of bucket(s):</label>
+        <div class="col-md-4 selectContainer">
+           {{ applicationcalibrationform.bucketnumbers }}
+        </div>
+</div>
+
+<div class="form-group" id='wetteddiameteraroundplant'> 
+    {{ wetteddiameteraroundplant.bucketnumbers.errors }}
+    <label for="wetteddiameteraroundplant" class="col-md-4 control-label">Wetted diameter around plant:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.wetteddiameteraroundplant }}<span class="input-group-addon">cm</span>
+           </div>
+        </div>
+</div>
+
+<div class="form-group" id='start_time'> 
+    {{ applicationcalibrationform.start_time.errors }}
+    <label for="start_time" class="col-md-4 control-label">Start time:</label>
+        <div class="col-md-4 selectContainer">
+        {{ applicationcalibrationform.start_time }}
+        </div>
+</div>
+
+<div class="form-group" id='end_time'> 
+    {{ applicationcalibrationform.end_time.errors }}
+    <label for="end_time" class="col-md-4 control-label">End time:</label>
+        <div class="col-md-4 selectContainer">
+           {{ applicationcalibrationform.end_time }}
+        </div>
+</div>
+
+<div class="form-group" id='total_time'> 
+    {{ applicationcalibrationform.total_time.errors }}
+    <label for="total_time" class="col-md-4 control-label">Total time:</label>
+        <div class="col-md-4 selectContainer">
+           {{ applicationcalibrationform.total_time }}
+        </div>
+</div>
+
+
+<div class="form-group" id='discharge'> 
+    {{ applicationcalibrationform.discharge.errors }}
+    <label for="discharge" class="col-md-4 control-label">Application rate:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.discharge }}<span class="input-group-addon">mm/hr</span>
+            </div>
+        </div>
+</div>
+
+</fieldset>
+
+
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block extended_javascripts_code %}
+	<script>
+    $(document).ready(function () {
+    $('#applicationcalibrationform').bootstrapValidator({
+        feedbackIcons: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            date: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill the date' }
+                        }
+                    },
+            farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose farm' }
+                        }
+                    },
+                    
+            water_application: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose water application' }
+                        }
+                    },
+            
+            bucketvolume: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter bucket volume' }
+                        }
+                    },
+            
+            start_time: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select start time'
+                        },
+                        callback: {
+                        message: 'The start time must be earlier then the end one',
+                        callback: function(value, validator, $field) {
+                            var endTime = validator.getFieldElements('end_time').val();
+                            if (endTime === '') {
+                                  return true;
+                                }
+                            var startHour    = parseInt(value.split(':')[0], 10),
+                                startMinutes = parseInt(value.split(':')[1], 10),
+                                endHour      = parseInt(endTime.split(':')[0], 10),
+                                endMinutes   = parseInt(endTime.split(':')[1], 10);
+
+                            if (startHour < endHour || (startHour == endHour && startMinutes < endMinutes)) {
+                                // The end time is also valid
+                                // So, we need to update its status
+                                validator.updateStatus('end_time', validator.STATUS_VALID, 'callback');
+                                return true;
+                                  }
+                            return false;
+                            }
+                        }
+                      }   
+                    },
+            end_time: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: {
+                      message: 'Please select end time'
+                      },
+                callback: {
+                        message: 'The end time must be later then the start one',
+                        callback: function(value, validator, $field) {
+                            var startTime = validator.getFieldElements('start_time').val();
+                            if (startTime == '') {
+                                  return true;
+                                }
+                            var startHour    = parseInt(startTime.split(':')[0], 10),
+                                startMinutes = parseInt(startTime.split(':')[1], 10),
+                                endHour      = parseInt(value.split(':')[0], 10),
+                                endMinutes   = parseInt(value.split(':')[1], 10);
+
+                            if (endHour > startHour || (endHour == startHour && endMinutes > startMinutes)) {
+                                // The start time is also valid
+                                // So, we need to update its status
+                                validator.updateStatus('start_time', validator.STATUS_VALID, 'callback');
+                                return true;
+                            }
+                            return false;
+                        }
+                    }
+                }
+            },
+            discharge: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill discharge' }
+                }
+            },
+        }
+    }).on('success.form.bv', function (e) {
+        $('#success_message').slideDown({ opacity: 'show' }, 'slow');
+        $('#fuelconsumption_form').data('bootstrapValidator').resetForm();
+        e.preventDefault();
+        var $form = $(e.target);
+        var bv = $form.data('bootstrapValidator');
+        $.post($form.attr('action'), $form.serialize(), function (result) {
+            console.log(result);
+        }, 'json');
+    });
+});
+      //# sourceURL=pen.js
+
+    </script>
+    <script>
+            if (document.location.search.match(/type=embed/gi)) {
+                window.parent.postMessage("resize", "*");
+                }
+    </script>
+    
+<script>
+    $(document).ready(function() {
+            $("#id_form").change(function() {
+                if ($(this).val() == '') {
+                    $("#id_quantity_kg").attr('disabled', true);
+                    //option_lt='<input class="form-control" id="id_quantity_lt" name="quantity_lt" placeholder="#Quantity in Litre" readonly="True" type="text" /><span class="input-group-addon">litre</span>'
+                    //option_kg='<input class="form-control" id="id_quantity_kg" name="quantity_kg" placeholder="#Quantity in Kg" readonly="True" type="text" /><span class="input-group-addon">kg</span>'
+                    //$("#id_quantity_kg").html(option_kg);
+                    $("#id_quantity_lt").attr('disabled', true);
+                    //$("#id_quantity_lt").html(option_lt);
+                }
+                else if ($(this).val() == 'Liquid')  {
+                  $("#id_quantity_kg").attr('disabled', true);
+                  $("#id_quantity_lt").attr('disabled', false);
+                }
+                else{
+                  $("#id_quantity_lt").attr('disabled', true);
+                  $("#id_quantity_kg").attr('disabled',false);
+                }
+            });
+    });
+</script>
+<script>
+      
+    $(document).ready(function() {
+            $("#id_farm").change(function() {
+                if ($(this).val() == '') {
+                    $("#id_water_application").html("<option>Choose pumping source</option>");
+                    $("#id_water_application").attr('disabled', true);
+                }
+                else {
+                    var url = "/id_water_application/" + $(this).val() + "/water_applications";
+              
+                    $.getJSON(url, function(water_applications) {
+                        var options = '<option value="">Choose pumping source..</option>';
+                        for (var i = 0; i < water_applications.length; i++) {
+                            
+                            options += '<option value="' + water_applications[i].pk + '">' + water_applications[i].pk + '</option>';
+                        }
+                        $("#id_pumping_source").html(options);
+                        $("#id_pumping_source option:first").attr('selected', 'selected');
+                        $("#id_pumping_source").attr('disabled', false);
+                    });
+                }
+            });
+    });
+
+</script>
+
+<script>
+    
+    $(document).ready(function() {
+            $("#id_water_application").change(function() {
+                if ($(this).val() == '') {
+                    $('#start_time').hide();
+                    $('#end_time').hide();
+                    $('#total_time').hide();
+                    $('#discharge').hide();
+                    $('#buttonfurrowwidth').hide();
+                    $('#topfurrowwidth').hide();
+                    $('#waterheight').hide();
+                    $('#wetteddiameteraroundplant').hide();
+                    $('#waterheight').hide();
+                    $('#wetteddiameteraroundplant').hide();
+                    $('#buttonfurrowwidth').hide();
+                    $('#topfurrowwidth').hide();
+                    $('#waterheight').hide();
+                    $('#bucketvolume').hide();
+                    $('#bucketnumbers').hide();
+                }
+                else if ($(this).val() == 'Bucket' || $(this).val() == 'Watering Can' ) {
+                    value = ''; 
+                    $('#start_time').hide();
+                    $('#bucketnumbers').show();
+                    $('#bucketvolume').shows();
+                    $('#id_start_time').val(value);
+                    $('#end_time').hide();
+                    $('#id_end_time').val(value);
+                    $('#total_time').hide();
+                    $('#id_total_time').val(value);
+                    $('#discharge').hide();
+                    $('#id_discharge').val(value);
+                    $('#buttonfurrowwidth').hide();
+                    $('#id_buttonfurrowwidth').val(value);
+                    $('#topfurrowwidth').hide();
+                    $('#id_topfurrowwidth').val(value);
+                    $('#waterheight').hide();
+                    $('#id_waterheight').val(value);
+                    //$('#wetteddiameteraroundplant').hide();
+                    //$('#id_wetteddiameteraroundplant').val(value);
+                }
+                else if ($(this).val() == 'Furrow/bed') {
+                    $('#start_time').show();
+                    $('#end_time').show();
+                    $('#total_time').show();
+                    $('#discharge').show();
+                    $('#buttonfurrowwidth').show();
+                    $('#topfurrowwidth').show();
+                    $('#waterheight').show();
+                    $('#bucketvolume').hide();
+                    $('#bucketnumbers').hide();
+
+                }
+            });
+    });
+</script>
+{% endblock %}

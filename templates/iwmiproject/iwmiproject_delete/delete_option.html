@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    <title>Editing</title>
+{% endblock %}
+{% block main_section %}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+<div id="main">  
+<div>
+    <a id="collapseAll" href="#">Close All</a>
+</div>
+
+<ul id="treeview" class="treeview-black" class="closed">
+	<li class="closed">
+		<span>Farm data</span>
+		<ul>
+            <li><a href="#" alt="edit plot(Field) info" >Plot(Field) info</a></li>
+            <li><a href="{% url 'iwmiproject:delete_remark_detail' plotID=plotID personID=personID %}" alt="delete plot remark info" >Crop and production stress</a></li>
+            <li><a href="{% url 'iwmiproject:delete_land_clearance_detail' plotID=plotID personID=personID %}" alt="delete plot land clearance info" >Land clearance</a></li>
+            <li><a href="{% url 'iwmiproject:delete_landpreparation_detail' plotID=plotID personID=personID %}" alt="delete plot land clearance info" >Land preparation</a></li>
+			<li class="closed">
+				<span>Nursery data</span>
+				<ul>
+                    <li><a href="">Nursery</a></li>
+					<li><a href="">Nursery irrigation</a></li>
+				</ul>
+			</li>
+            <li>Planting Method</li>
+            <li><a href="{% url 'iwmiproject:delete_fertilizermanagement_detail' plotID=plotID personID=personID %}" alt="delete plot land clearance info" >Fertilizer application</a></li>
+            <li><a href="{% url 'iwmiproject:delete_pesticidemanagement_detail' plotID=plotID personID=personID %}" alt="delete plot land clearance info" >Pesticide application</a></li>
+            <li>Irrigation</li>
+            <li><a href="{% url 'iwmiproject:delete_weeding_detail' plotID=plotID personID=personID %}" alt="delete weeding info" >Weeding</a></li>
+            <li>Farm yield level</li>
+            <li>Residue handling</li>
+            <li>Sales of harvested crop</li>
+            <li>Consumed crop</li>
+            <li>Other water usage</li>
+            <li>Technology failure</li>
+            <li>Service and repaire</li>
+		</ul>
+	</li>
+    <li class="closed">
+		<span>Technical Data</span>
+		<ul>
+			<li>Discharge Calibration</li>
+            <li>Application calibration</li>
+            <li>Soil properties</li>
+            <li>Soil Moisture</li>
+            <li>Crop monitoring</li>
+            <li>Yield plant level</li>
+            <li>Yield bed level</li>
+            <li>Plant nutrient analysis</li>
+			</li>
+		</ul>
+	</li>
+</ul>
+
+<div id="treecontrol">
+	<a href="#"></a><a href="#"></a><a href="#"></a>
+</div>
+
+</div>  
+
+</div><!-- /.container -->
+{% endblock %}
+

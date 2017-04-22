@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    <title>Editing</title>
+{% endblock %}  
+{% block sidebar %}
+
+<div id="main">  
+<div>
+    <a id="collapseAll" href="#">Close All</a>
+</div>
+
+<ul id="treeview" class="treeview-black" class="closed">
+	<li class="closed">
+		<span>Item 2</span>
+		<ul>
+			<li class="closed">
+				<span>Item 2.1</span>
+				<ul>
+                    <li><a href="www.google.com">Item 2.1.1</a></li>
+					<li>Item 2.1.2</li>
+				</ul>
+			</li>
+			<li>Item 2.2</li>
+			<li class="closed">
+				<span>Item 2.3 (closed at start)</span>
+				<ul>
+					<li>Item 2.3.1</li>
+					<li>Item 2.3.2</li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+    <li class="closed">
+		<span>Item 3</span>
+		<ul>
+			<li class="closed">
+				<span>Item 3.1</span>
+				<ul>
+                    <li><a href="www.google.com">Item 3.1.1</a></li>
+					<li>Item 3.1.2</li>
+				</ul>
+			</li>
+			<li>Item 3.2</li>
+			<li class="closed">
+				<span>Item 3.3 (closed at start)</span>
+				<ul>
+					<li>Item 3.3.1</li>
+					<li>Item 3.3.2</li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+</ul>
+
+<div id="treecontrol">
+	<a href="#"></a><a href="#"></a><a href="#"></a>
+</div>
+
+</div>  
+
+{% endblock%}
+    
+{% block main_section %}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+{% endblock%}
+

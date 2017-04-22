@@ -1,0 +1,412 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>Transplanting</title>
+{% endblock %}
+
+{% block main_section %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script>
+   $(function() {
+    $( "#id_trasplanting_date" ).datepicker();
+  });
+</script>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+
+    <form class="well form-horizontal" action=" " method="post"  id="nursery_form">{% csrf_token %} 
+<!-- Form Name -->
+<fieldset>
+<legend>Transplanting...</legend>
+
+{% if user_village %}
+<input type="hidden" id="uservillage" name="uservillage" value="{{user_village}}" readonly='readonly' />
+{% elif researcher %}
+<input type="hidden" id="researcher" name="researcher" value="{{researcher}}" readonly='readonly' />
+{% elif user_country %}
+
+{% endif %}
+<label class="warning" for="message" id="message" style="color: red"><small><i>{{message}}</i></small></label>
+
+<div class="form-group"> 
+    {{ transplantingform.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farm:</label>
+        <div class="col-md-4 selectContainer">
+        {{ transplantingform.farm }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ transplantingform.plot.errors }}
+    <label for="plot" class="col-md-4 control-label">Field ID:</label>
+        <div class="col-md-4 selectContainer">
+        {{ transplantingform.plot }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ transplantingform.nurseryID.errors }}
+    <label for="nurseryID" class="col-md-4 control-label">Nursery ID:</label>
+        <div class="col-md-4 selectContainer">
+        {{ transplantingform.nurseryID }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ transplantingform.trasplanting_date.errors }}
+    <label for="trasplanting_date" class="col-md-4 control-label">Trasplanting date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ transplantingform.trasplanting_date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ transplantingform.plants_transplanted.errors }}
+    <label for="plants_transplanted" class="col-md-4 control-label">Total number of plants transplanted:</label>
+        <div class="col-md-4 selectContainer">
+        {{ transplantingform.plants_transplanted }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ transplantingform.plant_spacing_btn_rows.errors }}
+    <label for="plant_spacing_btn_rows" class="col-md-4 control-label">Plant spacing between rows:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+             {{ transplantingform.plant_spacing_btn_rows }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ transplantingform.plant_spacing_btn_plants_within_rows.errors }}
+    <label for="plant_spacing_btn_plants_within_rows" class="col-md-4 control-label">Plant spacing between plants within rows:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+             {{ transplantingform.plant_spacing_btn_plants_within_rows }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ transplantingform.number_of_plants_per_row.errors }}
+    <label for="number_of_plants_per_row" class="col-md-4 control-label">Number of plants per row:</label>
+        <div class="col-md-4 selectContainer">
+        {{ transplantingform.number_of_plants_per_row }}
+        </div>
+</div>
+</fieldset>
+
+
+<fieldset>
+<legend>Labour Info</legend>
+
+<div class="form-group"> 
+    {{ transplantingform.labour.errors }}
+    <label for="labour" class="col-md-4 control-label">Labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ transplantingform.labour }}
+        </div>
+</div>
+
+<div id='hireddv'>
+<div class="form-group"> 
+    {{ transplantingform.hired_female_number.errors }}
+    <label for="hired_female_number" class="col-md-4 control-label">Number of hired female:</label>
+        <div class="col-md-4 selectContainer">
+            {{ transplantingform.hired_female_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ transplantingform.hired_male_number.errors }}
+    <label for="hired_male_number" class="col-md-4 control-label">Number of hired male:</label>
+        <div class="col-md-4 selectContainer">
+            {{ transplantingform.hired_male_number }}
+        </div>
+</div>
+</div>
+
+<div id='familydv'>
+<div class="form-group"> 
+    {{ transplantingform.family_female_number.errors }}
+    <label for="family_female_number" class="col-md-4 control-label">Number of female family  labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ transplantingform.family_female_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ transplantingform.family_male_number.errors }}
+    <label for="family_male_number" class="col-md-4 control-label">Number of male family labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ transplantingform.family_male_number}}
+        </div>
+</div>
+</div>
+
+<div class="form-group"> 
+    {{ transplantingform.wage.errors }}
+    <label for="wage" class="col-md-4 control-label">Daily wage:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+             {{ transplantingform.wage }}<span class="input-group-addon">{{ transplantingform.currency }}</span>
+            </div>
+        </div>
+</div>
+</fieldset>
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+    {% endblock %}
+    
+{% block extended_javascripts_code %}
+<script>
+        $(document).ready(function () {
+    $('#nursery_form').bootstrapValidator({
+        feedbackIcons: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            nurseryID: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill in nursery ID' }
+                        }
+                    },         
+            plot: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose field(plot)' }
+                        }
+                    },
+            
+            farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select the field' }
+                        }
+                    },
+            trasplanting_date: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please provide transplanting date' }
+                }
+            },
+            plants_transplanted: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter number of plants transplanted' }
+                        }
+                    },
+            
+            plant_spacing_btn_rows: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter plant spacing between rows' }
+                        }
+                    },
+            plant_spacing_btn_plants_within_rows: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter plant spacing between plants within rows' }
+                        }
+                    },
+                    
+            number_of_plants_per_row: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter number of plants per row' }
+                        }
+                    },
+                    
+            seed_per_bed: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter number of seed/bed' }
+                        }
+                    },
+            labour: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose labour' }
+                        }
+                    },
+            hired_female_number: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter number of hired female' }
+                        }
+                    },
+            hired_male_number: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter number of hired male' }
+                        }
+                    },
+            family_female_number: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter number of female' }
+                        }
+                    },
+            family_male_number: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter number of male' }
+                        }
+                    },
+            wage: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter wage' }
+                        }
+                    },
+                    
+        }
+    }).on('success.form.bv', function (e) {
+        $('#success_message').slideDown({ opacity: 'show' }, 'slow');
+        $('#addfarmer_form').data('bootstrapValidator').resetForm();
+        e.preventDefault();
+        var $form = $(e.target);
+        var bv = $form.data('bootstrapValidator');
+        $.post($form.attr('action'), $form.serialize(), function (result) {
+            console.log(result);
+        }, 'json');
+    });
+});
+</script>
+   
+<script>
+$(window).load(function() {
+  if ($('#id_labour').val() == '') {
+    $('#familydv,#hireddv').hide();
+  }
+  else if ($('#id_labour').val() == 'Family')  {
+      $('#familydv').show();
+      $('#hireddv').hide();
+      $("#id_hired_female_number").val();
+      $("#id_hired_male_number").val();                    
+  }
+  else if ($('#id_labour').val() == 'Hired')  {
+    $('#hireddv').show();
+    $('#familydv').hide();
+    $("#id_family_female_number").val();
+    $("#id_family_male_number").val();
+  }
+  else{
+      $('#familydv,#hireddv').show();
+  }
+  });
+</script>
+<script>
+    $(document).ready(function() {
+            $("#id_labour").change(function() {
+              value=0;
+                if ($(this).val() == '') {
+                    $('#familydv,#hireddv').hide();
+                }
+                else if ($(this).val() == 'Family')  {
+                    $('#familydv').show();
+                    $('#hireddv').hide();
+                    $("#id_hired_female_number").val(value);
+                    $("#id_hired_male_number").val(value);                    
+                }
+                else if ($(this).val() == 'Hired')  {
+                    $('#hireddv').show();
+                    $('#familydv').hide();
+                    $("#id_family_female_number").val(value);
+                    $("#id_family_male_number").val(value);
+                }
+                else{
+                    $('#familydv,#hireddv').show();
+                }
+            });
+    });
+</script>
+<script>
+$(window).load(function() {
+  if (typeof $('#uservillage').val() === "undefined"){
+    var url = "/select_all/";
+    $.getJSON(url, function(farmers) {
+    var options = '<option value="">Choose Field..</option>';
+      for (var i = 0; i < farmers.length; i++) {
+        options += '<option value="' + farmers[i].pk + '">' + farmers[i].fields['firstname'] + ' ' + farmers[i].fields['middlename'] + ' ' + farmers[i].fields['lastname'] + '</option>';
+          }
+          $("#id_farm").html(options);
+          $("#id_farm option:selected").attr('selected', 'selected');
+      });
+    }
+    else if (typeof $('#researcher').val() === "undefined"){
+    var village = $('#uservillage').val();
+    var url = "/farmer/" + village + "/farmers";
+    $.getJSON(url, function(farmers) {
+    var options = '<option value="">Choose Field..</option>';
+      for (var i = 0; i < farmers.length; i++) {
+        options += '<option value="' + farmers[i].pk + '">' + farmers[i].fields['firstname'] + ' ' + farmers[i].fields['middlename'] + ' ' + farmers[i].fields['lastname'] + '</option>';
+          }
+          $("#id_farm").html(options);
+          $("#id_farm option:selected").attr('selected', 'selected');
+      });
+    }
+});
+</script>
+<script>
+$(document).ready(function() {
+  $("#id_farm").change(function() {
+    if ($(this).val() == '') {
+      $("#id_plot").html("<option>Choose field..</option>");
+      $("#id_plot").attr('disabled', true);
+      }
+      else {
+        var url = "/plot/" + $(this).val() + "/plots";
+        $.getJSON(url, function(plots) {
+        var options = '<option value="">Choose plot..</option>';
+        for (var i = 0; i < plots.length; i++) {
+          options += '<option value="' + plots[i].pk+ '">' + plots[i].fields['plotID'] + '</option>';
+        }
+        $("#id_plot").html(options);
+        $("#id_plot option:first").attr('selected', 'selected');
+        $("#id_plot").attr('disabled', false);
+      });
+    }
+  });
+});
+</script>
+<script>
+$(document).ready(function() {
+  $("#id_farm").change(function() {
+    if ($(this).val() == '') {
+      $("#id_nurseryID").html("<option>Choose nursery..</option>");
+      $("#id_nurseryID").attr('disabled', true);
+      }
+      else {
+        var url = "/id_nurseryID/" + $(this).val() + "/nurseryIDs";
+        $.getJSON(url, function(nurseries) {
+        var options = '<option value="">Choose nursery..</option>';
+        for (var i = 0; i < nurseries.length; i++) {
+          options += '<option value="' + nurseries[i].pk + '">' + nurseries[i].pk + '</option>';
+        }
+        $("#id_nurseryID").html(options);
+        $("#id_nurseryID option:first").attr('selected', 'selected');
+        $("#id_nurseryID").attr('disabled', false);
+      });
+    }
+  });
+});
+</script>
+
+{% endblock %}
+

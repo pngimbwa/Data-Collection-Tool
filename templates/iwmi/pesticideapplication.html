@@ -1,0 +1,338 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    <title>Pesticide Application</title>
+{% endblock %}
+
+{% block main_section %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!--<link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet">-->
+  <script>
+  $(function() {
+    $( "#id_date" ).datepicker();
+  });
+  </script>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+
+    <form class="well form-horizontal" action=" " method="post"  id="fuelconsumption_form">{% csrf_token %} 
+
+<!-- Form Name -->
+<fieldset>
+<legend>Pesticide Application</legend>
+
+<div class="form-group"> 
+    {{ pesticideapplicationform.date.errors }}
+    <label for="date" class="col-md-4 control-label">Date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ pesticideapplicationform.date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ pesticideapplicationform.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farm:</label>
+        <div class="col-md-4 selectContainer">
+        {{ pesticideapplicationform.farm }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ pesticideapplicationform.fertilizer.errors }}
+    <label for="pesticide" class="col-md-4 control-label">Pesticide:</label>
+        <div class="col-md-4 selectContainer">
+        {{ pesticideapplicationform.pesticide }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ pesticideapplicationform.form.errors }}
+    <label for="form" class="col-md-4 control-label">Pesticide form:</label>
+        <div class="col-md-4 selectContainer">
+        {{ pesticideapplicationform.form }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ pesticideapplicationform.quantity_lt.errors }}
+    <label for="quantity_lt" class="col-md-4 control-label">Quantity:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ pesticideapplicationform.quantity_lt }}<span class="input-group-addon">litre</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ pesticideapplicationform.quantity_kg.errors }}
+    <label for="quantity_kg" class="col-md-4 control-label">Quantity:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ pesticideapplicationform.quantity_kg }}<span class="input-group-addon">kg</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ pesticideapplicationform.crop_stage.errors }}
+    <label for="crop_stage" class="col-md-4 control-label">Crop stage:</label>
+        <div class="col-md-4 selectContainer">
+            {{ pesticideapplicationform.crop_stage }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ pesticideapplicationform.cost.errors }}
+    <label for="cost" class="col-md-4 control-label">Cost:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ pesticideapplicationform.cost }}<span class="input-group-addon">{{ pesticideapplicationform.currency }}</span>
+            </div>
+        </div>
+</div>
+
+</fieldset>
+
+
+<fieldset>
+<legend>Labour Info</legend>
+
+<div class="form-group"> 
+    {{ pesticideapplicationform.labour.errors }}
+    <label for="labour" class="col-md-4 control-label">Labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ pesticideapplicationform.labour }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ pesticideapplicationform.hired_female_number.errors }}
+    <label for="hired_female_number" class="col-md-4 control-label">Number of hired female:</label>
+        <div class="col-md-4 selectContainer">
+            {{ pesticideapplicationform.hired_female_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ pesticideapplicationform.hired_male_number.errors }}
+    <label for="hired_male_number" class="col-md-4 control-label">Number of hired male:</label>
+        <div class="col-md-4 selectContainer">
+            {{ pesticideapplicationform.hired_male_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ pesticideapplicationform.family_female_number.errors }}
+    <label for="family_female_number" class="col-md-4 control-label">Number of female family  labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ pesticideapplicationform.family_female_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ pesticideapplicationform.family_male_number.errors }}
+    <label for="family_male_number" class="col-md-4 control-label">Number of male family labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ pesticideapplicationform.family_male_number}}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ pesticideapplicationform.wage.errors }}
+    <label for="wage" class="col-md-4 control-label">Daily wage:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ pesticideapplicationform.wage}}<span class="input-group-addon">{{ pesticideapplicationform.currency }}</span>
+            </div>            
+        </div>
+</div>
+
+</fieldset>
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block extended_javascripts_code %}
+	<script>
+    $(document).ready(function () {
+    $('#fuelconsumption_form').bootstrapValidator({
+        feedbackIcons: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            date: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill the date' }
+                        }
+                    },
+            farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose farm' }
+                        }
+                    },
+                    
+            pesticide: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select pesticide' }
+                        }
+                    },          
+            form: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose form type' }
+                        }
+                    },
+            quantity_lt: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill quantity in litre' }
+                }
+            },
+            quantity_kg: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill quantity in kg' }
+                }
+            },
+            crop_stage: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose crop stage' }
+                }
+            },
+            cost: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please supply the cost' }
+                }
+            },
+            labour: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose labour' }
+                }
+            },
+            hired_female_number: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill in number of hired female labour' }
+                }
+            },
+            hired_male_number: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill in number of hired male labour' }
+                }
+            },
+            family_female_number: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill in number of female family labour' }
+                }
+            },
+            family_male_number: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill in number of male family labour' }
+                }
+            },
+        }
+    }).on('success.form.bv', function (e) {
+        $('#success_message').slideDown({ opacity: 'show' }, 'slow');
+        $('#fuelconsumption_form').data('bootstrapValidator').resetForm();
+        e.preventDefault();
+        var $form = $(e.target);
+        var bv = $form.data('bootstrapValidator');
+        $.post($form.attr('action'), $form.serialize(), function (result) {
+            console.log(result);
+        }, 'json');
+    });
+});
+      //# sourceURL=pen.js
+
+    </script>
+    <script>
+            if (document.location.search.match(/type=embed/gi)) {
+                window.parent.postMessage("resize", "*");
+                }
+    </script>
+    
+<script>
+    $(document).ready(function() {
+            $("#id_form").change(function() {
+                if ($(this).val() == '') {
+                    $("#id_quantity_kg").attr('readonly', true);
+                    $("#id_quantity_kg").attr("placeholder","#Quantity in Kg");
+                    $("#id_quantity_lt").attr('readonly', true);
+                    $("#id_quantity_lt.placeholder").prop("placeholder","#Quantity in lt");
+                }
+                else if ($(this).val() == 'Liquid')  {
+                  $("#id_quantity_kg").attr('readonly', true);
+                  $("#id_quantity_kg").val(0);
+                  $("#id_quantity_lt").attr('readonly', false);
+                }
+                else{
+                  $("#id_quantity_lt").attr('readonly', true);
+                  $("#id_quantity_lt").val(0);
+                  $("#id_quantity_kg").attr('readonly',false);
+
+                }
+            });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+            $("#id_labour").change(function() {
+              value=0;
+                if ($(this).val() == '') {
+                    $("#id_hired_female_number").attr('readonly', true);
+                    $("#id_hired_female_number").val(value);
+                    $("#id_hired_male_number").attr('readonly', true);
+                    $("#id_hired_male_number").val(value);
+                    $("#id_family_female_number").attr('readonly', true);
+                    $("#id_family_female_number").vval(value);
+                    $("#id_family_male_number").attr('readonly', true);
+                    $("#id_family_male_number").val(value);
+                }
+                else if ($(this).val() == 'Family')  {
+                    $("#id_family_female_number").attr('readonly', false);
+                    $("#id_family_male_number").attr('readonly', false); 
+                    $("#id_hired_female_number").attr('readonly', true);
+                    $("#id_hired_female_number").val(value);
+                    $("#id_hired_male_number").attr('readonly', true);
+                    $("#id_hired_male_number").val(value);                    
+                }
+                else if ($(this).val() == 'Hired')  {
+                    $("#id_family_female_number").attr('readonly', true);
+                    $("#id_family_female_number").val(value);
+                    $("#id_family_male_number").attr('readonly', true);
+                    $("#id_family_male_number").val(value);
+                    $("#id_hired_female_number").attr('readonly', false);
+                    $("#id_hired_male_number").attr('readonly', false);
+                }
+                else{
+                    $("#id_family_female_number").attr('readonly', false);
+                    $("#id_family_male_number").attr('readonly', false); 
+                    $("#id_hired_female_number").attr('readonly', false);
+                    $("#id_hired_male_number").attr('readonly', false);
+                }
+            });
+    });
+</script>
+{% endblock %}

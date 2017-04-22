@@ -1,0 +1,1169 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    <title>Application calibration</title>
+{% endblock %}
+
+{% block main_section %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="{% static 'js/timepicker.min.js' %}"></script>
+<!--<link href="{% static 'css/jquery-ui.css' %}" rel="stylesheet">-->
+  <script>
+  $(function() {
+    $( "#id_date" ).datepicker({
+    onSelect: function() {
+        $('#applicationcalibrationform').formValidation('revalidateField', 'date');
+    }
+    });
+  });
+     
+ </script>
+ <script>
+  $(document).ready(function(){
+    $('.timepicker').timepicker({
+      timeFormat: 'HH:mm',
+      interval: 60,
+      minTime: '0',
+      dynamic: false,
+      dropdown: true,
+      scrollbar: true,
+      change: function() {
+            $('#applicationcalibrationform').formValidation('revalidateField', 'start_time');
+            $('#applicationcalibrationform').formValidation('revalidateField', 'end_time');
+            
+              setTimeout(function () {
+                var time_started = $("#id_start_time").val().split(':')
+                var time_ended = $("#id_end_time").val().split(':');
+                var hours1 = parseInt(time_started[0], 10), 
+                    hours2 = parseInt(time_ended[0], 10),
+                    mins1 = parseInt(time_started[1], 10),
+                    mins2 = parseInt(time_ended[1], 10);
+                    var hours = hours2 - hours1, mins = 0;
+                    if(hours < 0) hours = 24 + hours;
+                    if(mins2 >= mins1) {
+                      mins = mins2 - mins1;
+                    }
+                    else {
+                      mins = (mins2 + 60) - mins1;
+                      hours--;
+                    }
+                    totaltime = (hours*60)+mins;
+                    $("#id_total_time").val(totaltime);
+                    },0);
+        }
+    });
+  });
+  </script>
+    
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+<!-- Form -->
+<form class="well form-horizontal" action=" " method="post"  id="applicationcalibrationform">{% csrf_token %} 
+
+<fieldset>
+<legend>Application Calibration</legend>
+{{ applicationcalibrationform.errors }}
+
+{% if user_village %}
+<input type="hidden" id="uservillage" name="uservillage" value="{{user_village}}" readonly='readonly' />
+{% elif researcher %}
+<input type="hidden" id="researcher" name="researcher" value="{{researcher}}" readonly='readonly' />
+{% elif user_country %}
+
+{% endif %}
+<label class="warning" for="message" id="message" align='center' style="color: red"><small><i>{{message}}</i></small></label>
+
+
+<div class="form-group"> 
+    {{ applicationcalibrationform.date.errors }}
+    <label for="date" class="col-md-4 control-label">Date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ applicationcalibrationform.date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ applicationcalibrationform.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farm:</label>
+        <div class="col-md-4 selectContainer">
+        {{ applicationcalibrationform.farm }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ applicationcalibrationform.plot.errors }}
+    <label for="plot" class="col-md-4 control-label">Plot:</label>
+        <div class="col-md-4 selectContainer">
+        {{ applicationcalibrationform.plot }}
+        </div>
+</div>
+
+<input id="id_fieldsize" value="" hidden="hidden"  name="fieldsize" type="number">
+
+
+<div class="form-group"> 
+    {{ applicationcalibrationform.water_application.errors }}
+    <label for="water_application" class="col-md-4 control-label">Water application:</label>
+        <div class="col-md-4 selectContainer">
+        {{ applicationcalibrationform.water_application }}
+        </div>
+</div>
+
+<label for="message" id="calibrationmessage" style="color: green"><small><i>No calibration needed</i></small></label>
+<label for="message" id="average_discharge_message" style="color: green"><small><i>We cant find discharge from discharge calibration</i></small></label>
+<label for="message" id="number_of_plants_message" style="color: green"><small><i>Please register plot on planting method tab</i></small></label>
+
+<div class="form-group" id='buttonfurrowwidth'> 
+    {{ applicationcalibrationform.buttonfurrowwidth.errors }}
+    <label for="buttonfurrowwidth" class="col-md-4 control-label">Bottom furrow width:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.buttonfurrowwidth }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='topfurrowwidth'> 
+    {{ applicationcalibrationform.topfurrowwidth.errors }}
+    <label for="topfurrowwidth" class="col-md-4 control-label">Top furrow width:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.topfurrowwidth }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='waterheight'> 
+    {{ applicationcalibrationform.waterheight.errors }}
+    <label for="waterheight" class="col-md-4 control-label">Water height:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.waterheight }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='irrigate_whole_or_per_plant'> 
+    {{ applicationcalibrationform.irrigate_whole_or_per_plant.errors }}
+    <label for="irrigate_whole_or_per_plant" class="col-md-4 control-label">Overhead application method:</label>
+        <div class="col-md-4 selectContainer">
+           {{ applicationcalibrationform.irrigate_whole_or_per_plant }}
+        </div>
+</div>
+
+<div class="form-group" id='bucketdiameter'> 
+    {{ applicationcalibrationform.bucketdiameter.errors }}
+    <label for="bucketdiameter" class="col-md-4 control-label">Bucket diameter:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.bucketdiameter }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='bucketvolume'> 
+    {{ applicationcalibrationform.bucketvolume.errors }}
+    <label for="bucketvolume" class="col-md-4 control-label">Bucket volume:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.bucketvolume }}<span class="input-group-addon">L</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='tankvolume'> 
+    {{ applicationcalibrationform.tankvolume.errors }}
+    <label for="tankvolume" class="col-md-4 control-label">Tank volume:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.tankvolume }}<span class="input-group-addon">L</span>
+            </div>
+          <label for="message" style="color:#D7DBDD "><small><i>exclude the dead volume</i></small></label>
+        </div>
+</div>
+<!--
+<div class="form-group" id='tanknumber'> 
+    {{ applicationcalibrationform.tanknumber.errors }}
+    <label for="tanknumber" class="col-md-4 control-label">Number of tanks:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.tanknumber }}<span class="input-group-addon">L</span>
+            </div>
+        </div>
+</div>
+-->
+<div class="form-group" id='bucketnumbers'> 
+    {{ applicationcalibrationform.bucketnumbers.errors }}
+    <label for="bucketnumbers" class="col-md-4 control-label">Number of bucket(s):</label>
+        <div class="col-md-4 selectContainer">
+           {{ applicationcalibrationform.bucketnumbers }}
+        </div>
+</div>
+
+<div class="form-group" id='wetteddiameteraroundplant'> 
+    {{ wetteddiameteraroundplant.wetteddiameteraroundplant.errors }}
+    <label for="wetteddiameteraroundplant" class="col-md-4 control-label">Wetted diameter around plant:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.wetteddiameteraroundplant }}<span class="input-group-addon">cm</span>
+           </div>
+        </div>
+</div>
+
+<div class="form-group" id='calibration_method'> 
+    {{ applicationcalibrationform.calibration_method.errors }}
+    <label for="calibration_method" class="col-md-4 control-label">Calibration method:</label>
+        <div class="col-md-4 selectContainer">
+           {{ applicationcalibrationform.calibration_method }}
+        </div>
+</div>
+
+<div class="form-group" id='start_time'> 
+    {{ applicationcalibrationform.start_time.errors }}
+    <label for="start_time" class="col-md-4 control-label">Start time:</label>
+        <div class="col-md-4 selectContainer">
+        {{ applicationcalibrationform.start_time }}
+        </div>
+</div>
+
+<div class="form-group" id='end_time'> 
+    {{ applicationcalibrationform.end_time.errors }}
+    <label for="end_time" class="col-md-4 control-label">End time:</label>
+        <div class="col-md-4 selectContainer">
+           {{ applicationcalibrationform.end_time }}
+        </div>
+</div>
+
+<div class="form-group" id='total_time'> 
+    {{ applicationcalibrationform.total_time.errors }}
+    <label for="total_time" class="col-md-4 control-label">Total time:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.total_time }}<span class="input-group-addon">mins</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='calibration_cup_time'> 
+    {{ applicationcalibrationform.calibration_cup_time.errors }}
+    <label for="calibration_cup_time" class="col-md-4 control-label">Calibration cup time:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.calibration_cup_time }}<span class="input-group-addon">mins</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='driptank_volume'> 
+    {{ applicationcalibrationform.driptank_volume.errors }}
+    <label for="driptank_volume" class="col-md-4 control-label">Drip tank volume:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.driptank_volume }}<span class="input-group-addon">L</span>
+            </div>
+        </div>
+</div>
+
+<div id='dripdiv'>
+<div class="form-group" id='dripline_numbers'> 
+    {{ applicationcalibrationform.dripline_numbers.errors }}
+    <label for="dripline_numbers" class="col-md-4 control-label">Number of drip lines:</label>
+        <div class="col-md-4 selectContainer">
+           {{ applicationcalibrationform.dripline_numbers }}
+        </div>
+</div>
+  
+<div class="form-group" id='dripline_length'> 
+    {{ applicationcalibrationform.dripline_length.errors }}
+    <label for="dripline_length" class="col-md-4 control-label">Drip line length:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.dripline_length }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group" id='dripline_spacing'> 
+    {{ applicationcalibrationform.dripline_spacing.errors }}
+    <label for="dripline_spacing" class="col-md-4 control-label">Drip line spacing:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.dripline_spacing }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='emitter_spacing'> 
+    {{ applicationcalibrationform.emitter_spacing.errors }}
+    <label for="emitter_spacing" class="col-md-4 control-label">Emitter spacing:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.emitter_spacing }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='emitter_wetted_diameter'> 
+    {{ applicationcalibrationform.emitter_wetted_diameter.errors }}
+    <label for="emitter_wetted_diameter" class="col-md-4 control-label">Emitter wetted diameter:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.emitter_wetted_diameter }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='calibrationcup_volume'> 
+    {{ applicationcalibrationform.calibrationcup_volume.errors }}
+    <label for="calibrationcup_volume" class="col-md-4 control-label">Volume of calibration cup:</label>
+        <div class="col-md-4 selectContainer">
+           <div class="input-group">
+           {{ applicationcalibrationform.calibrationcup_volume }}<span class="input-group-addon">ml</span>
+            </div>
+        </div>
+</div>
+  
+</div>
+
+<div class="form-group" id='conveyance_efficiency'> 
+    {{ applicationcalibrationform.conveyance_efficiency.errors }}
+    <label for="conveyance_efficiency" class="col-md-4 control-label">Conveyance efficiency(%):</label>
+        <div class="col-md-4 selectContainer">
+           {{ applicationcalibrationform.conveyance_efficiency }}
+        </div>
+</div>
+
+<div class="form-group" id='field_efficiency'> 
+    {{ applicationcalibrationform.field_efficiency.errors }}
+    <label for="field_efficiency" class="col-md-4 control-label">Field efficiency(%):</label>
+        <div class="col-md-4 selectContainer">
+           {{ applicationcalibrationform.field_efficiency }}
+        </div>
+</div>
+
+<div class="form-group" id='discharge'> 
+    {{ applicationcalibrationform.discharge.errors }}
+    <label for="discharge" class="col-md-4 control-label">Application rate:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ applicationcalibrationform.discharge }}<span class="input-group-addon">mm/hr</span>
+            </div>
+        </div>
+</div>
+</fieldset>
+
+ <label for="message" style="color:#636363"><small>Note: If data is not available please enter -999 and not 0”</small></label>
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group" id='submit'>
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+
+</form>
+    
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block extended_javascripts_code %}
+	<script>
+    $(document).ready(function () {
+    $('#applicationcalibrationform').formValidation({
+       framework: 'bootstrap',
+        	icon: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            date: {
+                validators: {
+                  date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: {
+                        message: 'Please fill the date' }
+                        }
+                    },
+            farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose farm' }
+                        }
+                    },
+            calibration_method: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose calibration method' }
+                        }
+                    },
+            plot: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose plot' }
+                        }
+                    },
+            emitter_wetted_diameter: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please enter emitter wetted diameter' }
+                        }
+                    },
+            water_application: {
+            	enabled:false,
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose water application' }
+                        }
+                    },
+            tankvolume: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            tanknumber: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            tankdiameter: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            dripline_length: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill dripline length' }
+                        }
+                    },
+            dripline_spacing: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill dripline spacing' }
+                        }
+                    },
+            calibrationcup_volume: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill calibrationcup volume' }
+                        }
+                    },
+            emitter_spacing: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill emitter spacing' }
+                        }
+                    },
+            driptank_volume: {
+                validators: {
+                  numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill driptank volume' }
+                        }
+                    },
+            dripline_numbers: {
+                validators: {
+                  integer: {
+                          message: 'must be an integer'
+                        },
+                    notEmpty: {
+                        message: 'Please fill driptank volume' }
+                        }
+                    },
+            calibration_cup_time: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill calibration cup time' }
+                        }
+                    },
+            bucketvolume: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please enter bucket volume' }
+                        }
+                    },
+            
+            start_time: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select start time'
+                        },
+                        callback: {
+                        message: 'The start time must be earlier then the end one',
+                        callback: function(value, validator, $field) {
+                            var endTime = validator.getFieldElements('end_time').val();
+                            if (endTime === '') {
+                                  return true;
+                                }
+                            var startHour    = parseInt(value.split(':')[0], 10),
+                                startMinutes = parseInt(value.split(':')[1], 10),
+                                endHour      = parseInt(endTime.split(':')[0], 10),
+                                endMinutes   = parseInt(endTime.split(':')[1], 10);
+
+                            if (startHour < endHour || (startHour == endHour && startMinutes < endMinutes)) {
+                                // The end time is also valid
+                                // So, we need to update its status
+                                validator.updateStatus('end_time', validator.STATUS_VALID, 'callback');
+                                return true;
+                                  }
+                            return false;
+                            }
+                        }
+                      }   
+                    },
+            end_time: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: {
+                      message: 'Please select end time'
+                      },
+                callback: {
+                        message: 'The end time must be later then the start one',
+                        callback: function(value, validator, $field) {
+                            var startTime = validator.getFieldElements('start_time').val();
+                            if (startTime == '') {
+                                  return true;
+                                }
+                            var startHour    = parseInt(startTime.split(':')[0], 10),
+                                startMinutes = parseInt(startTime.split(':')[1], 10),
+                                endHour      = parseInt(value.split(':')[0], 10),
+                                endMinutes   = parseInt(value.split(':')[1], 10);
+
+                            if (endHour > startHour || (endHour == startHour && endMinutes > startMinutes)) {
+                                // The start time is also valid
+                                // So, we need to update its status
+                                validator.updateStatus('start_time', validator.STATUS_VALID, 'callback');
+                                return true;
+                            }
+                            return false;
+                        }
+                    }
+                }
+            },
+            wetteddiameteraroundplant: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill in wetted diameter around plant' }
+                }
+            },
+            irrigate_whole_or_per_plant: {
+                validators: {
+                    notEmpty: { message: 'Please choose whole or per_plant' }
+                }
+            },
+            bucketdiameter: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill in bucket diameter' }
+                }
+            },
+            bucketnumbers: {
+                validators: {
+                    integer: {
+                        message: 'The value is not an integer'
+                    },
+                    notEmpty: { message: 'Please fill in number of buckets used' }
+                }
+            },
+             buttonfurrowwidth: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill in button furrow width' }
+                }
+            },
+            topfurrowwidth: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill in top furrow width' }
+                }
+            },
+            waterheight: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill in water height' }
+                }
+            },
+            field_efficiency: {
+                validators: {
+                    notEmpty: { message: 'Please choose field efficiency' }
+                }
+            },
+            conveyance_efficiency: {
+                validators: {
+                    notEmpty: { message: 'Please choose conveyance efficiency' }
+                }
+            },
+        }
+    })
+});
+      //# sourceURL=pen.js
+
+    </script>
+    <script>
+            if (document.location.search.match(/type=embed/gi)) {
+                window.parent.postMessage("resize", "*");
+                }
+    </script>
+    
+<script>
+    $(document).ready(function() {
+            $("#id_form").change(function() {
+                if ($(this).val() == '') {
+                    $("#id_quantity_kg").attr('disabled', true);
+                    //option_lt='<input class="form-control" id="id_quantity_lt" name="quantity_lt" placeholder="#Quantity in Litre" readonly="True" type="text" /><span class="input-group-addon">litre</span>'
+                    //option_kg='<input class="form-control" id="id_quantity_kg" name="quantity_kg" placeholder="#Quantity in Kg" readonly="True" type="text" /><span class="input-group-addon">kg</span>'
+                    //$("#id_quantity_kg").html(option_kg);
+                    $("#id_quantity_lt").attr('disabled', true);
+                    //$("#id_quantity_lt").html(option_lt);
+                }
+                else if ($(this).val() == 'Liquid')  {
+                  $("#id_quantity_kg").attr('disabled', true);
+                  $("#id_quantity_lt").attr('disabled', false);
+                }
+                else{
+                  $("#id_quantity_lt").attr('disabled', true);
+                  $("#id_quantity_kg").attr('disabled',false);
+                }
+            });
+    });
+</script>
+<script>
+      
+    $(document).ready(function() {
+            $("#id_farm").change(function() {
+                if ($(this).val() == '') {
+                    $("#id_water_application").html("<option>Choose pumping source</option>");
+                    $("#id_water_application").attr('disabled', true);
+                }
+                else {
+                    var url = "/id_water_application/" + $(this).val() + "/" + $('#id_farm').val() + "/water_applications";
+  
+                    $.getJSON(url, function(water_applications) {
+                        var options = '<option value="">Choose pumping source..</option>';
+                        for (var i = 0; i < water_applications.length; i++) {
+                            
+                            options += '<option value="' + water_applications[i].pk + '">' + water_applications[i].pk + '</option>';
+                        }
+                        $("#id_pumping_source").html(options);
+                        $("#id_pumping_source option:first").attr('selected', 'selected');
+                        $("#id_pumping_source").attr('disabled', false);
+                    });
+                }
+            });
+    });
+
+</script>
+
+<script>
+    
+    $(document).ready(function() {
+            $("#id_water_application").change(function() {
+                if ($(this).val() == '') {
+                    $('#start_time').hide();
+                    $('#end_time').hide();
+                    $('#total_time').hide();
+                    $('#discharge').hide();
+                    $('#buttonfurrowwidth').hide();
+                    $('#topfurrowwidth').hide();
+                    $('#waterheight').hide();
+                    $('#wetteddiameteraroundplant').hide();
+                    $('#waterheight').hide();
+                    $('#wetteddiameteraroundplant').hide();
+                    $('#buttonfurrowwidth').hide();
+                    $('#topfurrowwidth').hide();
+                    $('#waterheight').hide();
+                    $('#bucketvolume').hide();
+                    $('#bucketnumbers').hide();
+                }
+                else if ($(this).val() == 'Bucket' || $(this).val() == 'Watering Can' ) {
+                    value = ''; 
+                    $('#start_time').hide();
+                    $('#bucketnumbers').show();
+                    $('#bucketvolume').shows();
+                    $('#id_start_time').val(value);
+                    $('#end_time').hide();
+                    $('#id_end_time').val(value);
+                    $('#total_time').hide();
+                    $('#id_total_time').val(value);
+                    $('#discharge').hide();
+                    $('#id_discharge').val(value);
+                    $('#buttonfurrowwidth').hide();
+                    $('#id_buttonfurrowwidth').val(value);
+                    $('#topfurrowwidth').hide();
+                    $('#id_topfurrowwidth').val(value);
+                    $('#waterheight').hide();
+                    $('#id_waterheight').val(value);
+                    //$('#wetteddiameteraroundplant').hide();
+                    //$('#id_wetteddiameteraroundplant').val(value);
+                }
+                else if ($(this).val() == 'Furrow/bed') {
+                    $('#start_time').show();
+                    $('#end_time').show();
+                    $('#total_time').show();
+                    $('#discharge').show();
+                    $('#buttonfurrowwidth').show();
+                    $('#topfurrowwidth').show();
+                    $('#waterheight').show();
+                    $('#bucketvolume').hide();
+                    $('#bucketnumbers').hide();
+
+                }
+            });
+    });
+</script>
+<script>
+  /*
+  $(window).load(function() {
+    if ($("#id_farm").val() == '') {
+      $("#id_plot").html("<option>Choose field..</option>");
+      $("#id_plot").attr('disabled', true);
+      $("#id_water_application").val='';
+      $("#id_water_application").attr('readonly',true);
+    }
+  });
+  */  
+$(document).ready(function() {
+  $("#id_farm").change(function() {
+    if ($(this).val() == '') {
+      $("#id_plot").html("<option>Choose field..</option>");
+      $("#id_plot").attr('disabled', true);
+      }
+      else {
+        var url = "/plot/" + $(this).val() + "/plots";
+        $.getJSON(url, function(plots) {
+        var options = '<option value="">Choose plot..</option>';
+        for (var i = 0; i < plots.length; i++) {
+          options += '<option value="' + plots[i].pk + '">' + plots[i].fields['plotID']  + '</option>';
+        }
+        $("#id_plot").html(options);
+        $("#id_plot option:first").attr('selected', 'selected');
+        $("#id_plot").attr('disabled', false);
+      });
+    }
+  });
+});
+</script>
+<script>
+  /*
+  $(window).load(function() {
+    if ($("#id_farm").val() == '') {
+      $("#id_plot").html("<option>Choose field..</option>");
+      $("#id_plot").attr('disabled', true);
+      $("#id_water_application").val='';
+      $("#id_water_application").attr('readonly',true);
+    }
+  });
+  */  
+$(document).ready(function() {
+  $("#id_farm").change(function() {
+    if ($(this).val() == '') {
+      $("#id_plot").html("<option>Choose field..</option>");
+      $("#id_plot").attr('disabled', true);
+      }
+      else {
+        var url = "/plot/" + $(this).val() + "/plots";
+        $.getJSON(url, function(plots) {
+        var options = '<option value="">Choose plot..</option>';
+        for (var i = 0; i < plots.length; i++) {
+          options += '<option value="' + plots[i].pk + '">' + plots[i].fields['plotID']  + '</option>';
+        }
+        $("#id_plot").html(options);
+        $("#id_plot option:first").attr('selected', 'selected');
+        $("#id_plot").attr('disabled', false);
+      });
+    }
+  });
+});
+</script>
+
+<script>
+  $(window).load(function() {
+  
+    if ($("#id_water_application").val() == 'Sprinkler')  {
+      $('#tankvolume,#tanknumber,#tankdiameter,#average_discharge_message,#number_of_plants_message').hide();
+      $('#id_tankvolume,#id_tanknumber,#id_tankdiameter').val();
+      $('#start_time,#end_time,#total_time,#bucketvolume,#bucketnumbers,#bucketdiameter,#discharge,#submit').show();
+      $('#buttonfurrowwidth,#topfurrowwidth,#waterheight,#irrigate_whole_or_per_plant,#wetteddiameteraroundplant,#conveyance_efficiency,#field_efficiency,#calibrationmessage').hide();
+      $("#dripline_length,#dripline_spacing,#emitter_spacing,#driptank_volume,#calibrationcup_volume,#calibration_method,#dripline_numbers,#calibration_cup_time,#emitter_wetted_diameter").hide();
+      $('#id_buttonfurrowwidth,#id_irrigate_whole_or_per_plant,#id_topfurrowwidth,#id_waterheight,#id_wetteddiameteraroundplant,#id_emitter_wetted_diameter,#id_calibration_method,#id_discharge').val();
+      $("#id_dripline_length,#id_conveyance_efficiency,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume,#id_calibrationcup_volume,#id_field_efficiency,#id_calibration_cup_time").val();
+    }
+  
+    else if ($("#id_water_application").val() == 'Furrow/bed' ) {
+      $('#tankvolume,#tanknumber,#tankdiameter,#average_discharge_message,#number_of_plants_message').hide();
+      $('#id_tankvolume,#id_tanknumber,#id_tankdiameter').val();
+      $('#waterheight,#buttonfurrowwidth,#topfurrowwidth,#conveyance_efficiency,#field_efficiency,#discharge,#submit').show();
+      $('#bucketvolume,#calibration_method,#bucketnumbers,#emitter_wetted_diameter,#bucketdiameter,#wetteddiameteraroundplant,#start_time,#end_time,#total_time,#irrigate_whole_or_per_plant,#calibrationmessage').hide();
+      $('#id_bucketvolume,#id_calibration_method,#id_bucketnumbers,#id_bucketdiameter,#id_wetteddiameteraroundplant,#id_start_time,#id_end_time,#id_total_time,#id_discharge').val();
+      $("#dripline_length,#dripline_spacing,#emitter_spacing,#driptank_volume,#dripline_numbers,#calibrationcup_volume,#calibration_cup_time").hide();
+      $("#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_emitter_wetted_diameter,#id_driptank_volume,#id_calibration_cup_time,#id_calibrationcup_volume").val();
+      $('#id_irrigate_whole_or_per_plant,#id_conveyance_efficiency,#id_field_efficiency').val();
+     
+    }
+    else if ($("#id_water_application").val() == 'Tank and hose' )  {
+        //$('#tankvolume,#tanknumber,#tankdiameter').show();
+        //$('#id_tankvolume','#id_tanknumber','#id_tankdiameter').val();
+        $('#tankvolume,#tanknumber,#tankdiameter').show();
+        $('#bucketnumbers,#bucketdiameter,#bucketvolume,#average_discharge_message,#number_of_plants_message').hide();
+        $('#start_time,#end_time,#total_time,#irrigate_whole_or_per_plant,#wetteddiameteraroundplant,#discharge,#submit').show();
+        $('#buttonfurrowwidth,#topfurrowwidth,#waterheight,#emitter_wetted_diameter,#bucketdiameter,#conveyance_efficiency,#field_efficiency,#calibrationmessage').hide();
+        $("#dripline_length,#calibration_method,#dripline_spacing,#emitter_spacing,#driptank_volume,#dripline_numbers,#calibration_cup_time,#calibrationcup_volume").hide();
+        $('#id_tankvolume,#id_tanknumber,#id_tankdiameter').val();
+        $('#id_irrigate_whole_or_per_plant,#id_start_time,#id_calibration_method,#id_emitter_wetted_diameter,#id_end_time,#id_total_time,#id_bucketvolume,#id_irrigate_whole_or_per_plant,#id_wetteddiameteraroundplant,#id_discharge').val();
+        $('#id_buttonfurrowwidth,#id_topfurrowwidth,#id_waterheight,#id_bucketnumbers,#id_bucketdiameter,#id_discharge,#id_conveyance_efficiency,#id_calibration_cup_time').val();
+        $("#id_conveyance_efficiency,#id_field_efficiency,#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume,#id_calibrationcup_volume").val();
+    }
+    else if ($("#id_water_application").val() == 'Drip' )  {
+        $('#start_time,#end_time,#total_time,#average_discharge_message,#number_of_plants_message').hide();
+        $('#tankvolume,#tanknumber,#tankdiameter').hide();
+        $('#id_tankvolume,#id_tanknumber,#id_tankdiameter').val();
+        $("#dripline_length,#dripline_numbers,#dripline_spacing,#emitter_spacing,#emitter_wetted_diameter,#driptank_volume,#calibrationcup_volume,#calibration_method,#discharge,#submit").show();
+        $("#id_start_time,#id_end_time,#id_total_time,#id_dripline_length,#id_dripline_spacing,#id_calibration_method,#id_emitter_spacing,#id_driptank_volume,#id_calibrationcup_volume,#id_discharge").val();
+        $('#bucketvolume,#irrigate_whole_or_per_plant,#wetteddiameteraroundplant').hide();
+        $('#id_bucketvolume,#id_irrigate_whole_or_per_plant,#id_wetteddiameteraroundplant').val();
+        $('#id_irrigate_whole_or_per_plant,#id_field_efficiency,#id_conveyance_efficiency').val();
+        $('#buttonfurrowwidth,#topfurrowwidth,#waterheight,#bucketnumbers,#bucketdiameter,#conveyance_efficiency,#field_efficiency,#calibrationmessage').hide();
+        $('#id_buttonfurrowwidth,#id_topfurrowwidth,#id_waterheight,#id_bucketnumbers,#id_calibration_cup_time,#id_bucketdiameter').val();
+          
+    }
+    else{
+      $('#tankvolume,#tanknumber,#tankdiameter,#average_discharge_message,#number_of_plants_message').hide();
+      $('#id_tankvolume,#id_tanknumber,#id_tankdiameter').val();
+      $('#waterheight,#buttonfurrowwidth,#topfurrowwidth,#conveyance_efficiency,#field_efficiency,#bucketvolume,#bucketnumbers,#bucketdiameter,#wetteddiameteraroundplant,#start_time,#end_time,#total_time,#irrigate_whole_or_per_plant,#discharge,#calibrationmessage').hide();
+    $("#dripline_length,#calibration_method,#dripline_numbers,#calibration_cup_time,#dripline_spacing,#emitter_spacing,#emitter_wetted_diameter,#driptank_volume,#calibrationcup_volume").hide()
+    }
+    
+  });
+$(document).ready(function() {
+  $("#id_plot").change(function() {
+    if ($(this).val() == '') {
+      
+      $("#id_water_application").attr('disabled', true);
+      $('#tankvolume,#tanknumber,#tankdiameter,#number_of_plants_message').hide();
+      $('#waterheight,#buttonfurrowwidth,#topfurrowwidth,#conveyance_efficiency,#field_efficiency,#bucketvolume,#bucketnumbers,#calibration_method,#bucketdiameter,#wetteddiameteraroundplant,#start_time,#end_time,#total_time,#irrigate_whole_or_per_plant,#discharge,#calibrationmessage').hide();
+      $("#dripline_length,#dripline_spacing,#emitter_spacing,#emitter_wetted_diameter,#driptank_volume,#calibration_cup_time,#calibrationcup_volume,#average_discharge_message").hide()
+      $("#id_water_application").html("<option>Choose water application..</option>");
+      }
+      else {
+        var url = "/water_application/" + $(this).val() +'/'+ $('#id_farm').val() +"/water_applications";
+        $.getJSON(url, function(plotlist) {
+        $("#id_fieldsize").val(plotlist[1]);
+        $("#id_water_application").val(plotlist[0]);
+        var average_discharge = plotlist[2]
+        var number_of_plants = plotlist[3]
+        if (((average_discharge == 'NONE' || number_of_plants == 'NONE') && plotlist[0] != 'Furrow/bed') && ((average_discharge == 'NONE' || number_of_plants == 'NONE') && plotlist[0] != 'Drip') ){
+          if (average_discharge == 'NONE' ) {
+            //alert('mimi');
+            $('#average_discharge_message').show();
+            $('#number_of_plants_message').hide();
+            $('#tankvolume,#tanknumber,#tankdiameter').hide();
+            $('#bucketnumbers,#bucketdiameter,#bucketvolume').hide();
+            $('#start_time,#end_time,#total_time,#irrigate_whole_or_per_plant,#wetteddiameteraroundplant,#discharge,#submit').hide();
+            $('#buttonfurrowwidth,#topfurrowwidth,#waterheight,#emitter_wetted_diameter,#bucketdiameter,#conveyance_efficiency,#field_efficiency,#calibrationmessage').hide();
+            $("#dripline_length,#calibration_method,#dripline_spacing,#emitter_spacing,#driptank_volume,#dripline_numbers,#calibration_cup_time,#calibrationcup_volume").hide();
+          }
+          else if (number_of_plants == 'NONE'){
+            //alert('yes we can');
+            $('#number_of_plants_message').show();
+            $('#average_discharge_message').hide();
+            $('#tankvolume,#tanknumber,#tankdiameter').hide();
+            $('#bucketnumbers,#bucketdiameter,#bucketvolume').hide();
+            $('#start_time,#end_time,#total_time,#irrigate_whole_or_per_plant,#wetteddiameteraroundplant,#discharge,#submit').hide();
+            $('#buttonfurrowwidth,#topfurrowwidth,#waterheight,#emitter_wetted_diameter,#bucketdiameter,#conveyance_efficiency,#field_efficiency,#calibrationmessage').hide();
+            $("#dripline_length,#calibration_method,#dripline_spacing,#emitter_spacing,#driptank_volume,#dripline_numbers,#calibration_cup_time,#calibrationcup_volume").hide();
+          }
+        }
+        else {
+        $("#id_water_application").attr('readonly',true);
+        if ($("#id_water_application").val() == 'Sprinkler')  {
+          $('#tankvolume,#tanknumber,#tankdiameter,#average_discharge_message,#number_of_plants_message').hide();
+          $('#id_tankvolume,#id_tanknumber,#id_tankdiameter').val(0);
+          $('#start_time,#end_time,#total_time,#bucketvolume,#bucketnumbers,#bucketdiameter,#discharge,#submit').show();
+          $('#buttonfurrowwidth,#topfurrowwidth,#waterheight,#irrigate_whole_or_per_plant,#wetteddiameteraroundplant,#conveyance_efficiency,#field_efficiency,#calibrationmessage').hide();
+          $("#dripline_length,#dripline_numbers,#dripline_spacing,#emitter_spacing,#driptank_volume,#calibration_method,#emitter_wetted_diameter,#calibrationcup_volume,#calibration_cup_time").hide();
+          $('#id_buttonfurrowwidth,#id_topfurrowwidth,#id_waterheight,#id_wetteddiameteraroundplant,#id_discharge,#id_calibration_cup_time').val(0);
+          $("#id_dripline_length,#id_dripline_numbers,#id_dripline_spacing,#id_emitter_spacing,#id_emitter_wetted_diameter,#id_driptank_volume,#id_calibrationcup_volume").val(0);
+              $('select[name=calibration_method] option:eq(1)').attr('selected', 'selected');
+              $('select[name=field_efficiency] option:eq(1)').attr('selected', 'selected');
+              $('select[name=conveyance_efficiency] option:eq(1)').attr('selected', 'selected');
+              $('select[name=irrigate_whole_or_per_plant] option:eq(1)').attr('selected', 'selected');
+          $('#id_start_time,#id_end_time,#id_bucketvolume,#id_bucketnumbers,#id_bucketdiameter').on('propertychange change click keyup input paste', function () {
+            if ($("#id_total_time").val()=='') {
+                  $("#id_discharge").val(0);
+                }
+            else{
+                setTimeout(function () {
+                var application_rate = (($('#id_bucketvolume').val() * 1000000 )/ (Math.PI * Math.pow(($('#id_bucketdiameter').val() * 10), 2) * 0.25 )) / ($('#id_total_time').val()/60); // in mm/hr
+                    $('#id_discharge').val(application_rate.toFixed(3));
+                  },0);  
+                }
+                })
+        }
+        else if ($("#id_water_application").val() == 'Furrow/bed' )  {
+            $('#tankvolume,#tanknumber,#tankdiameter,#average_discharge_message,#number_of_plants_message').hide();
+            $('#id_tankvolume,#id_tanknumber,#id_tankdiameter').val(0);
+            $('#waterheight,#buttonfurrowwidth,#topfurrowwidth,#conveyance_efficiency,#field_efficiency,#discharge,#submit').show();
+            $('#id_field_efficiency').prop('selectedIndex',0);
+            $('#id_conveyance_efficiency').prop('selectedIndex',0);
+            $('select[name=irrigate_whole_or_per_plant] option:eq(1)').attr('selected', 'selected');
+            
+            $('#id_waterheight,#id_buttonfurrowwidth,#id_topfurrowwidth,#id_conveyance_efficiency,#id_field_efficiency').on('propertychange change click keyup input paste', function () {
+              setTimeout(function () {
+                var furrow_area = ($('#id_waterheight').val()/2) * ($('#id_buttonfurrowwidth').val() + $('#id_topfurrowwidth').val()) * 0.01; //into mm2
+                var application_rate = (($('#id_conveyance_efficiency').val() * $('#id_field_efficiency').val() * 0.01 * 0.01 * 1000000* average_discharge)/(furrow_area))/3600;
+                $('#id_discharge').val(application_rate.toFixed(3));
+              },0); 
+            }) 
+            $('#bucketvolume,#calibration_method,#bucketnumbers,#bucketdiameter,#wetteddiameteraroundplant,#emitter_wetted_diameter,#start_time,#end_time,#total_time,#irrigate_whole_or_per_plant,#calibrationmessage,#calibration_cup_time').hide();
+            $('#id_bucketvolume,#id_bucketnumbers,#id_bucketdiameter,#id_wetteddiameteraroundplant,#id_emitter_wetted_diameter,#id_calibration_cup_time,#id_discharge').val(0);
+            $('select[name=calibration_method] option:eq(1)').attr('selected', 'selected');
+            $("#id_start_time").val("00:00");
+            $("#id_end_time").val("01:00");
+            $("#id_total_time").val(60);
+            $("#dripline_length,#dripline_numbers,#dripline_spacing,#emitter_spacing,#driptank_volume,#calibrationcup_volume").hide();
+            $("#id_dripline_length,#id_dripline_numbers,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume,#id_calibrationcup_volume").val(0);
+        }
+        else if ($("#id_water_application").val() == 'Bucket' || $("#id_water_application").val() == 'Watering Can')  {
+            $('#tankvolume,#tanknumber,#tankdiameter,#number_of_plants_message').hide();
+              $('#submit,#waterheight,#buttonfurrowwidth,#topfurrowwidth,#conveyance_efficiency,#field_efficiency,#emitter_wetted_diameter,#bucketvolume,#bucketnumbers,#bucketdiameter,#wetteddiameteraroundplant,#start_time,#end_time,#total_time,#irrigate_whole_or_per_plant,#discharge,#calibrationmessage').hide();
+              $("#dripline_length,#calibration_method,#calibration_cup_time,#dripline_numbers,#dripline_spacing,#emitter_spacing,#driptank_volume,#calibrationcup_volume").hide();
+              $('#calibrationmessage').show();
+          
+        }
+        else if  ($("#id_water_application").val() == 'Tank and hose' )  {
+              $('#tankvolume,#tanknumber,#tankdiameter').show();
+              $('#id_tankvolume,#id_tanknumber,#id_tankdiameter').val('');
+              $('#bucketvolume,#bucketdiameter,#bucketnumbers,#average_discharge_message,#number_of_plants_message').hide();
+              $('#id_bucketvolume,#id_bucketnumbers,#id_bucketdiameter').val(0);
+              $('#start_time,#end_time,#total_time,#irrigate_whole_or_per_plant,#wetteddiameteraroundplant,#discharge,#submit').show();
+              $('#id_start_time,#id_end_time,#id_total_time,#id_irrigate_whole_or_per_plant,#id_wetteddiameteraroundplant,#id_discharge').val('');
+              
+              $('#id_irrigate_whole_or_per_plant').prop('selectedIndex',0);
+              $('#buttonfurrowwidth,#topfurrowwidth,#waterheight,#emitter_wetted_diameter,#conveyance_efficiency,#field_efficiency,#calibrationmessage').hide();
+              $("#dripline_length,#calibration_method,#dripline_numbers,#dripline_spacing,#emitter_spacing,#driptank_volume,#calibration_cup_time,#calibrationcup_volume").hide();
+              $("#id_dripline_length,#id_dripline_numbers,#id_dripline_spacing,#id_emitter_wetted_diameter,#id_emitter_spacing,#id_driptank_volume,#id_calibrationcup_volume").val(0);
+              $('#id_buttonfurrowwidth,#id_topfurrowwidth,#id_waterheight,#id_calibration_cup_time,#id_discharge,#id_conveyance_efficiency').val(0);
+              $('select[name=field_efficiency] option:eq(1)').attr('selected', 'selected');
+              $('select[name=calibration_method] option:eq(1)').attr('selected', 'selected');
+              $('select[name=conveyance_efficiency] option:eq(1)').attr('selected', 'selected');
+              
+              $('#id_start_time,#id_end_time,#id_bucketvolume,#id_irrigate_whole_or_per_plant,#id_wetteddiameteraroundplant').on('propertychange change click keyup input paste', function () {
+              if ($("#id_total_time").val()=='') {
+                  $("#id_discharge").val(0);
+                  
+                }
+              else{
+                setTimeout(function () {
+                  if ($("#id_irrigate_whole_or_per_plant").val() == 'Perplant' )  {
+                    //alert(22);
+                      var application_rate = (($('#id_tankvolume').val() * 60 )/($('#id_total_time').val() * 1000)) / ( number_of_plants * Math.PI * Math.pow(($('#id_wetteddiameteraroundplant').val() * 0.01), 2) * 0.25 );
+                      $('#id_discharge').val(application_rate.toFixed(3));
+                }
+                else if ($("#id_irrigate_whole_or_per_plant").val() == 'Wholefield' ) {
+                  //alert(99);
+                      var application_rate = (($('#id_tankvolume').val() * 60 )/($('#id_total_time').val() * 1000)) / ($('#id_fieldsize').val());
+                      $('#id_discharge').val(application_rate.toFixed(5));
+                      
+                }
+                },0); 
+                }
+                })
+        }
+        else if  ($("#id_water_application").val() == 'Drip' )  {
+          $("#calibration_method,#dripline_length,#dripline_numbers,#dripline_spacing,#emitter_spacing,#emitter_wetted_diameter,#driptank_volume,#calibrationcup_volume,#discharge,#submit").show();
+          $("#id_start_time,#id_end_time,#id_total_time,#id_dripline_length,#id_dripline_spacing,#id_emitter_spacing,#id_driptank_volume,#id_calibrationcup_volume,#id_discharge").val('');
+          $('#tankvolume,#tanknumber,#tankdiameter,#average_discharge_message').hide();
+          $('#id_tankvolume,#id_tanknumber,#id_tankdiameter').val(0);
+          $('#start_time,#end_time,#total_time').hide();
+          $('#irrigate_whole_or_per_plant,#wetteddiameteraroundplant,#number_of_plants_message').hide();
+          $('#id_calibration_method').prop('selectedIndex',0);
+          $('#id_bucketvolume,#id_irrigate_whole_or_per_plant,#id_wetteddiameteraroundplant').val(0);
+           $('select[name=irrigate_whole_or_per_plant] option:eq(1)').attr('selected', 'selected');
+          $('select[name=field_efficiency] option:eq(1)').attr('selected', 'selected');
+              $('select[name=conveyance_efficiency] option:eq(1)').attr('selected', 'selected');
+          $('#buttonfurrowwidth,#topfurrowwidth,#waterheight,#bucketnumbers,#bucketdiameter,#conveyance_efficiency,#field_efficiency,#calibrationmessage').hide();
+          $('#id_buttonfurrowwidth,#id_topfurrowwidth,#id_waterheight,#id_bucketnumbers,#id_bucketdiameter').val(0);
+           
+          $("#id_start_time,#id_calibration_method,#id_end_time,#id_calibration_cup_time,#id_emitter_wetted_diameter,#id_calibrationcup_volume,#id_driptank_volume").on('propertychange change click keyup input paste', function () {
+            if ($("#id_total_time").val()=='') {
+                  $("#id_discharge").val(0);
+                 
+                }
+              else{//,
+                setTimeout(function () {
+                      var area = Math.PI * Math.pow(($("#id_emitter_wetted_diameter").val() * 10 * 0.5),2);// into mm2
+                      // value 10 convert cm to mm
+                      if ($("#id_calibration_method").val()=='Calibration cup') {
+                        var dicharge = ($('#id_calibrationcup_volume').val() * 1000) / ($('#id_calibration_cup_time').val() / 60); // in to mm3/hr
+                        // 1000 convert ml to cubic mm
+                        //60 convert minute to hr
+                      }
+                      else if($("#id_calibration_method").val()=='Full field tanker')  {
+                        var dicharge = (($('#id_driptank_volume').val() * 1000000)/ ( $('#id_dripline_numbers').val() * ( $('#id_dripline_length').val() / $('#id_emitter_spacing').val())))/ ($('#id_total_time').val() / 60);
+                        // 1000000 convert L to cubic mm
+                        //60 convert minute to hr
+                      }
+                      var application_rate = dicharge/  area; // into mm/hr
+                      $('#id_discharge').val(application_rate.toFixed(3));
+                },0); 
+                }
+            })
+        }
+      }
+      });
+    }
+  });
+});
+</script>
+
+<script>
+$(window).load(function() {
+    if ($('#id_calibration_method').val() == 'Calibration cup') {
+      $('#calibration_cup_time,#calibrationcup_volume').show();
+      $('#start_time,#end_time,#total_time').hide();
+      $("#id_start_time,#id_end_time,#id_total_time").val();
+      $('#id_calibration_cup_time,#id_calibrationcup_volume').val();
+      
+    }
+    else if ($('#id_calibration_method').val() == 'Full field tanker'){
+        $('#calibration_cup_time,#calibrationcup_volume').hide();
+        $('#id_calibration_cup_time,#id_calibrationcup_volume').val();
+        $('#start_time,#end_time,#total_time').show();
+        $("#id_start_time,#id_end_time,#id_total_time").val();
+    }
+});
+  
+$(document).ready(function() {
+    $("#id_calibration_method").change(function() {
+      if ($(this).val() == 'Calibration cup') {
+        $('#calibration_cup_time,#calibrationcup_volume').show();
+        $('#id_calibration_cup_time,#id_calibrationcup_volume').val('');
+        $('#start_time,#end_time,#total_time').hide();
+        $("#id_start_time").val("00:00");
+        $("#id_end_time").val("01:00");
+        $("#id_total_time").val(60);
+      }
+      else if ($('#id_calibration_method').val() == 'Full field tanker'){
+        $('#start_time,#end_time,#total_time').show();
+        $('#calibration_cup_time,#calibrationcup_volume').hide();
+        $('#id_calibration_cup_time,#id_calibrationcup_volume').val(0);
+        $("#id_start_time,#id_end_time,#id_total_time").val('');
+      }
+    });
+});
+</script> 
+<script>
+$(window).load(function() {
+  if (typeof $('#uservillage').val() === "undefined"){
+    var url = "/select_all/";
+    $.getJSON(url, function(farmers) {
+    var options = '<option value="">Choose Field..</option>';
+      for (var i = 0; i < farmers.length; i++) {
+        options += '<option value="' + farmers[i].pk + '">' + farmers[i].fields['firstname'] + ' ' + farmers[i].fields['middlename'] + ' ' + farmers[i].fields['lastname'] + '</option>';
+          }
+          $("#id_farm").html(options);
+          $("#id_farm option:selected").attr('selected', 'selected');
+      });
+    }
+    else if (typeof $('#researcher').val() === "undefined"){
+    var village = $('#uservillage').val();
+    var url = "/farmer/" + village + "/farmers";
+    $.getJSON(url, function(farmers) {
+    var options = '<option value="">Choose Field..</option>';
+      for (var i = 0; i < farmers.length; i++) {
+        options += '<option value="' + farmers[i].pk + '">' + farmers[i].fields['firstname'] + ' ' + farmers[i].fields['middlename'] + ' ' + farmers[i].fields['lastname'] + '</option>';
+          }
+          $("#id_farm").html(options);
+          $("#id_farm option:selected").attr('selected', 'selected');
+      });
+    }
+});
+</script>
+{% endblock %}
+<!--
+buttonfurrowwidth,topfurrowwidth,waterheight,irrigate_whole_or_per_plant,bucketdiameter,bucketvolume,bucketnumbers,wetteddiameteraroundplant,start_time,end_time,total_time,discharge
+-->

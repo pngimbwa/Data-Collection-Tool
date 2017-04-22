@@ -1,0 +1,406 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block title %}
+    <title>Farmer list</title>
+{% endblock %}
+
+{% block main_section %}
+<script>
+  $(function() {
+    $( "#id_date" ).datepicker({
+        onSelect: function() {
+        $('#edit_landclearance_form').formValidation('revalidateField', 'date');
+    }
+  });
+  });
+</script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+       
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+{% if user_village %}
+<input type="hidden" id="uservillage" name="uservillage" value="{{user_village}}" readonly='readonly' />
+{% elif researcher %}
+<input type="hidden" id="researcher" name="researcher" value="{{researcher}}" readonly='readonly' />
+{% elif user_country %}
+
+{% endif %}
+
+<form class="well form-horizontal" action=" " method="post"  id="edit_landclearance_form">{% csrf_token %} 
+<!-- Form Name -->
+<fieldset>
+<legend>Field Info..</legend>
+<div class="form-group"> 
+    {{ weeding_form.date.errors }}
+    <label for="date" class="col-md-4 control-label">Date:</label>
+        <div class="col-md-4 selectContainer">
+            {{ weeding_form.date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ weeding_form.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farmer:</label>
+        <div class="col-md-4 selectContainer">
+            {{ weeding_form.farm }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ weeding_form.plot.errors }}
+    <label for="plotID" class="col-md-4 control-label">Field ID:</label>
+        <div class="col-md-4 selectContainer">
+            {{ weeding_form.plotID }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ weeding_form.weed_activities.errors }}
+    <label for="weed_activities" class="col-md-4 control-label">Weeding activities:</label>
+        <div class="col-md-4 selectContainer">
+            {{ weeding_form.weed_activities }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ labourmanagement_form.labour.errors }}
+    <label for="labour" class="col-md-4 control-label">Labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ labourmanagement_form.labour }}
+        </div>
+</div>
+<div id='hireddv'>
+<div class="form-group"> 
+    {{ labourmanagement_form.hired_female_number.errors }}
+    <label for="hired_female_number" class="col-md-4 control-label">hired female number:</label>
+        <div class="col-md-4 selectContainer">
+            {{ labourmanagement_form.hired_female_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ labourmanagement_form.hired_female_time.errors }}
+    <label for="hired_female_time" class="col-md-4 control-label">Hired female time:</label>
+        <div class="col-md-4 selectContainer">
+            {{ labourmanagement_form.hired_female_time }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ labourmanagement_form.hired_male_number.errors }}
+    <label for="hired_male_number" class="col-md-4 control-label">Hired male number:</label>
+        <div class="col-md-4 selectContainer">
+            {{ labourmanagement_form.hired_male_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ labourmanagement_form.hired_male_time.errors }}
+    <label for="hired_male_time" class="col-md-4 control-label">Hired male time:</label>
+        <div class="col-md-4 selectContainer">
+            {{ labourmanagement_form.hired_male_time }}
+        </div>
+</div>
+</div>
+<div id='familydv'>
+<div class="form-group"> 
+    {{ labourmanagement_form.family_female_number.errors }}
+    <label for="family_female_number" class="col-md-4 control-label">Family female number:</label>
+        <div class="col-md-4 selectContainer">
+            {{ labourmanagement_form.family_female_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ labourmanagement_form.family_female_time.errors }}
+    <label for="family_female_time" class="col-md-4 control-label">Family female time:</label>
+        <div class="col-md-4 selectContainer">
+            {{ labourmanagement_form.family_female_time }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ labourmanagement_form.family_male_number.errors }}
+    <label for="family_male_number" class="col-md-4 control-label">Family male number:</label>
+        <div class="col-md-4 selectContainer">
+            {{ labourmanagement_form.family_male_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ labourmanagement_form.family_male_time.errors }}
+    <label for="family_male_time" class="col-md-4 control-label">Family male time:</label>
+        <div class="col-md-4 selectContainer">
+            {{ labourmanagement_form.family_male_time }}
+        </div>
+</div>
+</div>
+<div class="form-group"> 
+    {{ labourmanagement_form.wage.errors }}
+    <label for="wage" class="col-md-4 control-label">Wage:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ labourmanagement_form.wage }}<span class="input-group-addon">{{ currency}}</span>
+            </div>
+        </div>
+</div>
+
+</fieldset>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+
+</div>
+
+{% endblock %}
+{% block extended_javascripts_code %}
+   
+	<script>
+    $(document).ready(function () {
+    $('#edit_landclearance_form').formValidation({
+        framework: 'bootstrap',
+        icon: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            date: {
+                validators: {
+                    date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: {
+                        message: 'Please fill in date' }
+                        }
+                    },
+            weed_activities: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose one option' }
+                        }
+                    },
+            family_female_time: {
+                validators:{
+                        numeric: {
+                            message: 'invalid number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            family_male_time:{
+                validators:{
+                        numeric: {
+                            message: 'invalid number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            hired_female_time:{
+                validators:{
+                        numeric: {
+                            message: 'invalid number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            hired_male_time:{
+                validators:{
+                        numeric: {
+                            message: 'invalid number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },   
+            labour: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose labour' }
+                        }
+                    },
+            hired_female_number: {
+                validators:{
+                        integer: {
+                          message: 'invalid, must be an integer'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of hired female' }
+                }
+            },
+            hired_male_number: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            family_female_number: {
+                validators:{
+                        integer: {
+                          message: 'invalid, must be an integer'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of hired family female' }
+                }
+            },
+            
+            labour_time_taken: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please enter time taken' }
+                        }
+                    },
+            family_male_number: {
+                validators:{
+                        integer: {
+                          message: 'invalid, must be an integer'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of hired family male' }
+                }
+            },
+            wage: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill the wage' }
+                }
+            },  
+        }
+    });
+});
+</script>
+    
+<script>
+$(window).load(function() {
+  if ($('#id_labour').val() == '') {
+    $('#familydv,#hireddv').hide();
+  }
+  else if ($('#id_labour').val() == 'Family')  {
+      $('#familydv').show();
+      $('#hireddv').hide();
+      $("#id_hired_female_number").val();
+      $("#id_hired_male_number").val();
+      $("#id_family_female_time").val();
+      $("#id_family_male_time").val();
+  }
+  else if ($('#id_labour').val() == 'Hired')  {
+    $('#hireddv').show();
+    $('#familydv').hide();
+    $("#id_family_female_number").val();
+    $("#id_family_male_number").val();
+    $("#id_hired_female_time").val();
+    $("#id_hired_male_time").val();
+  }
+  else{
+      $('#familydv,#hireddv').show();
+      $("#id_family_female_time,#id_family_male_time,#id_hired_female_time,#id_hired_male_time").val();
+  }
+  });
+</script>
+<script>
+    $(document).ready(function() {
+            $("#id_labour").change(function() {
+              value=0;
+                if ($(this).val() == '') {
+                    $('#familydv,#hireddv').hide();
+                }//family_female_time,family_male_time,hired_female_time,hired_male_time
+                else if ($(this).val() == 'Family')  {
+                    $('#familydv').show();
+                    $("#id_family_female_number").val();
+                    $("#id_family_male_number").val();
+                    $("#id_family_female_time").val();
+                    $("#id_family_male_time").val();
+                    $('#hireddv').hide();
+                    $("#id_hired_female_number").val(value);
+                    $("#id_hired_male_number").val(value);
+                    $("#id_hired_female_time").val(value);
+                    $("#id_hired_male_time").val(value);
+                }
+                else if ($(this).val() == 'Hired')  {
+                    $('#hireddv').show();
+                    $('#familydv').hide();
+                    $("#id_hired_female_number").val();
+                    $("#id_hired_male_number").val();
+                    $("#id_hired_female_time").val();
+                    $("#id_hired_male_time").val();
+                    $("#id_family_female_number").val(value);
+                    $("#id_family_male_number").val(value);
+                    $("#id_family_female_time").val(value);
+                    $("#id_family_male_time").val(value);
+                }
+                else{
+                    $('#familydv,#hireddv').show();
+                    $("#id_hired_female_number").val();
+                    $("#id_hired_male_number").val(); 
+                    $("#id_family_female_number").val();
+                    $("#id_family_male_number").val();
+                    $("#id_family_female_time").val();
+                    $("#id_family_male_time").val();
+                    $("#id_hired_female_time").val();
+                    $("#id_hired_male_time").val();
+                }
+            });
+    });
+</script>
+
+<script>
+
+$(window).load(function(){
+  var url = "/get_farmer_name/" + $('#id_farm').val() + "/get_farmer_name";
+  $.getJSON(url, function(farmer_name) {
+    //alert(farmer_name);
+    var options = '<option value="' + farmer_name[0] + '">' + farmer_name[1] + ' ' + farmer_name[2] + ' ' + farmer_name[3] + '</option>';
+    $("#id_farm").html(options);
+    $("#id_farm option:selected").attr('selected', 'selected');
+  })
+});
+
+$(window).load(function(){
+  var url = "/get_plot_name/" + $('#id_plotID').val() + "/get_plot_name";
+  $.getJSON(url, function(plot_name) {
+    var options = '<option value="' + plot_name[0] + '">' + plot_name[1] + '</option>';
+    $("#id_plotID").html(options);
+    $("#id_plotID option:selected").attr('selected', 'selected');
+  })
+});
+
+</script>
+{% endblock %}
+
+
+

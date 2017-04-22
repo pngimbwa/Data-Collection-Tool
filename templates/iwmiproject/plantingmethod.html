@@ -1,0 +1,1569 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>Planting method</title>
+{% endblock %}
+
+{% block main_section %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script>
+   $(function() {
+    $( "#id_seeding_date" ).datepicker({
+    	onSelect: function() {
+        $('#plantingmethod_form').formValidation('revalidateField', 'seeding_date');
+    }
+    });
+  });
+  
+  $(function() {
+    $( "#id_seeding_date2" ).datepicker({
+    	onSelect: function() {
+        $('#plantingmethod_form').formValidation('revalidateField', 'seeding_date2');
+    }
+    });
+  });
+  
+   $(function() {
+    $( "#id_transplanting_date_one" ).datepicker({
+    	onSelect: function() {
+        $('#plantingmethod_form').formValidation('revalidateField', 'transplanting_date_one');
+    }
+    });
+  });
+  
+  $(function() {
+    $( "#id_transplanting_date_two" ).datepicker({
+    	onSelect: function() {
+        $('#plantingmethod_form').formValidation('revalidateField', 'transplanting_date_two');
+    }
+    });
+  });
+  
+  </script>
+ <style>
+  /* HOVER STYLES */
+  div#error999_pop-up {
+      display: none;
+      position: absolute;
+      width: 280px;
+      padding: 10px;
+      background: #eeeeee;
+      color: #000000;
+      border: 1px solid #1a1a1a;
+      font-size: 90%;
+  }
+</style>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+
+    <form class="well form-horizontal" action=" " method="post"  id="plantingmethod_form">{% csrf_token %} 
+<!-- Form Name -->
+<fieldset>
+<legend>Planting method...</legend>
+
+{% if user_village %}
+<input type="hidden" id="uservillage" name="uservillage" value="{{user_village}}" readonly='readonly' />
+{% elif researcher %}
+<input type="hidden" id="researcher" name="researcher" value="{{researcher}}" readonly='readonly' />
+{% elif user_country %}
+
+{% endif %}
+<label class="warning" for="message" id="message" style="color: red"><small><i>{{message}}</i></small></label>
+
+<div class="form-group"> 
+    {{ plantingmethodform.farmer.errors }}
+    <label for="farmer" class="col-md-4 control-label">Farm:</label>
+        <div class="col-md-4 selectContainer">
+        {{ plantingmethodform.farmer }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ plantingmethodform.plotID.errors }}
+    <label for="plotID" class="col-md-4 control-label">PlotID:</label>
+        <div class="col-md-4 selectContainer">
+        {{ plantingmethodform.plotID }}
+        </div>
+</div>
+{{ plantingmethodform.errors }}
+<!--
+<div class="form-group"> 
+    {{ plantingmethodform.planting_method.errors }}
+    <label for="planting_method" class="col-md-4 control-label">Planting method:</label>
+        <div class="col-md-4 selectContainer">
+        {{ plantingmethodform.planting_method }}
+        </div>
+</div>
+-->
+</fieldset>
+
+<fieldset id ='first_seeding_fieldset'>
+<legend>Crop: </legend>
+
+<div id='first_seedingdv'>
+<div class="form-group"> 
+    {{ plantingmethodform.seeding_date.errors }}
+    <label for="seeding_date" class="col-md-4 control-label">Seeding date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ plantingmethodform.seeding_date }}
+        </div>
+</div>
+<div class="form-group"> 
+    {{ plantingmethodform.seed_quantity.errors }}
+    <label for="seed_quantity" class="col-md-4 control-label">Seed quantity:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ plantingmethodform.seed_quantity }}<span class="input-group-addon">kg</span>
+            </div>
+        </div>
+</div>
+</div>
+
+<div id='first_transplantingdv'>
+<div class="form-group"> 
+    {{ plantingmethodform.transplanting_date_one.errors }}
+    <label for="transplanting_date_one" class="col-md-4 control-label">Transplanting date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ plantingmethodform.transplanting_date_one }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ plantingmethodform.nurseryID_one.errors }}
+    <label for="nurseryID_one" class="col-md-4 control-label">Transplanted from nursery:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plantingmethodform.nurseryID_one }}
+        </div>
+</div>
+</div>
+
+<div class="form-group" id='number_of_plants_per_row'> 
+    {{ plantingmethodform.number_of_plants_per_row.errors }}
+    <label for="number_of_plants_per_row" class="col-md-4 control-label">Plant/seed number per row:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plantingmethodform.number_of_plants_per_row }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ plantingmethodform.spacing_within_a_row.errors }}
+    <label for="spacing_within_a_row" class="col-md-4 control-label">Spacing within a row:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ plantingmethodform.spacing_within_a_row }}<span class="input-group-addon">cm</span><span class="input-group-addon"><i class="fa fa-info-circle" aria-hidden="true" id='spacing_within_a_row-info-circle'></i></span>
+            </div>
+        </div>
+</div>
+</fieldset>
+
+<fieldset id ='second_seeding_fieldset'>
+<legend>Crop: </legend>
+<div id='second_seedingdv'>
+<div class="form-group"> 
+    {{ plantingmethodform.seeding_date2.errors }}
+    <label for="seeding_date2" class="col-md-4 control-label">Seeding date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ plantingmethodform.seeding_date2 }}
+        </div>
+</div>
+<div class="form-group"> 
+    {{ plantingmethodform.seed_quantity2.errors }}
+    <label for="seed_quantity2" class="col-md-4 control-label">Seed quantity:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ plantingmethodform.seed_quantity2 }}<span class="input-group-addon">kg</span>
+            </div>
+        </div>
+</div>
+</div>
+
+<div id='second_transplantingdv'>
+<div class="form-group"> 
+    {{ plantingmethodform.transplanting_date_two.errors }}
+    <label for="transplanting_date_two" class="col-md-4 control-label">Transplanting date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ plantingmethodform.transplanting_date_two }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ plantingmethodform.nurseryID_two.errors }}
+    <label for="nurseryID_two" class="col-md-4 control-label">Transplanted from nursery:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plantingmethodform.nurseryID_two }}
+        </div>
+</div>
+</div>
+
+<div class="form-group" id='number_of_plants_per_row_two'> 
+    {{ plantingmethodform.number_of_plants_per_row_two.errors }}
+    <label for="number_of_plants_per_row_two" class="col-md-4 control-label">Plant/seed number per row:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plantingmethodform.number_of_plants_per_row_two }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ plantingmethodform.spacing_within_a_row_two.errors }}
+    <label for="spacing_within_a_row_two" class="col-md-4 control-label">Spacing within a row:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ plantingmethodform.spacing_within_a_row_two }}<span class="input-group-addon">cm</span><span class="input-group-addon"><i class="fa fa-info-circle" aria-hidden="true" id='spacing_within_a_row_two-info-circle'></i></span>
+            </div>
+        </div>
+</div>
+
+</fieldset>
+
+<fieldset>
+<legend></legend>
+
+<div class="form-group"> 
+    {{ plantingmethodform.spacing_btn_a_row.errors }}
+    <label for="spacing_btn_a_row" class="col-md-4 control-label">Spacing btn a row:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ plantingmethodform.spacing_btn_a_row }}<span class="input-group-addon">cm</span><span class="input-group-addon"><i class="fa fa-info-circle" aria-hidden="true" id='spacing_btn_a_row-info-circle'></i></span>
+            </div>
+        </div>
+</div>
+
+<!--HIDDEN/POP-UP DIV-->
+<div id="error999_pop-up">
+  <p>
+    <small><i>When it's direct seedingin and value is not available; you're allowed to enter -999</i></small>
+  </p>
+</div>
+
+<div class="form-group" id='total_plants'> 
+    {{ plantingmethodform.total_plants.errors }}
+    <label for="total_plants" class="col-md-4 control-label">Total number of plants :</label>
+        <div class="col-md-4 selectContainer">
+             {{ plantingmethodform.total_plants }}  
+        </div>
+</div>
+<div class="form-group" id='total_seed_quantity'> 
+    {{ plantingmethodform.total_seed_quantity.errors }}
+    <label for="total_seed_quantity" class="col-md-4 control-label">Total seed quantity :</label>
+        <div class="col-md-4 selectContainer">
+             {{ plantingmethodform.total_seed_quantity }}  
+        </div>
+</div>
+</fieldset>
+
+<fieldset>
+<legend>Labour Info</legend>
+
+<div class="form-group"> 
+    {{ plantingmethodform.labour.errors }}
+    <label for="labour" class="col-md-4 control-label">Labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plantingmethodform.labour }}
+        </div>
+</div>
+
+<div id='hireddv'>
+<div class="form-group"> 
+    {{ plantingmethodform.hired_female_number.errors }}
+    <label for="hired_female_number" class="col-md-4 control-label">Number of hired female:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plantingmethodform.hired_female_number }}
+        </div>
+</div>
+<div class="form-group"> 
+    {{ plantingmethodform.hired_female_time.errors }}
+    <label for="hired_female_time" class="col-md-4 control-label">Time taken per female labour:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ plantingmethodform.hired_female_time}}<span class="input-group-addon">hr(s)</span>
+            </div>
+        </div>
+</div>
+<div class="form-group"> 
+    {{ plantingmethodform.hired_male_number.errors }}
+    <label for="hired_male_number" class="col-md-4 control-label">Number of hired male:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plantingmethodform.hired_male_number }}
+        </div>
+</div>
+<div class="form-group"> 
+    {{ plantingmethodform.hired_male_time.errors }}
+    <label for="hired_male_time" class="col-md-4 control-label">Time taken per male labour:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ plantingmethodform.hired_male_time}}<span class="input-group-addon">hr(s)</span>
+            </div>
+        </div>
+</div>
+</div>
+
+<div id='familydv'>
+<div class="form-group"> 
+    {{ plantingmethodform.family_female_number.errors }}
+    <label for="family_female_number" class="col-md-4 control-label">Number of female family  labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plantingmethodform.family_female_number }}
+        </div>
+</div>
+<div class="form-group"> 
+    {{ plantingmethodform.family_female_time.errors }}
+    <label for="family_female_time" class="col-md-4 control-label">Time taken per female labour:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ plantingmethodform.family_female_time}}<span class="input-group-addon">hr(s)</span>
+            </div>
+        </div>
+</div>
+<div class="form-group"> 
+    {{ plantingmethodform.family_male_number.errors }}
+    <label for="family_male_number" class="col-md-4 control-label">Number of male family labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ plantingmethodform.family_male_number}}
+        </div>
+</div>
+<div class="form-group"> 
+    {{ plantingmethodform.family_male_time.errors }}
+    <label for="family_male_time" class="col-md-4 control-label">Time taken per male labour:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ plantingmethodform.family_male_time}}<span class="input-group-addon">hr(s)</span>
+            </div>
+        </div>
+</div>
+</div>
+
+<div class="form-group"> 
+    {{ plantingmethodform.wage.errors }}
+    <label for="wage" class="col-md-4 control-label">Daily wage:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+             {{ plantingmethodform.wage }}<span class="input-group-addon">{{ currency }}</span>
+            </div>
+        </div>
+</div>
+</fieldset>
+
+{{ plantingmethodform.CroppingSystem }}
+{{ plantingmethodform.crop1_plantingMethod }}
+{{ plantingmethodform.crop2_plantingMethod }}
+<input type='text' value="" hidden='hidden' id='crop_one'>
+<input type='text' value="" hidden='hidden' id='crop_two'>
+<!--
+<input type='text' value="" hidden='hidden' id='crop_one'>
+-->
+
+<label for="message" style="color:#636363"><small>Note: If data is not available please enter -999 and not 0”</small></label>
+ 
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group" id='submit'>
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+    {% endblock %}
+    
+{% block extended_javascripts_code %}
+<script>
+  $(document).ready(function () {
+    $('#plantingmethod_form').formValidation({
+        framework: 'bootstrap',
+        icon: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            farmer: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill in nursery ID' }
+                        }
+                    },
+            seeding_date: {
+                validators: {
+                    date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: {
+                        message: 'Please fill in date' }
+                        }
+                    },
+            seeding_date2: {
+                validators: {
+                    date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: {
+                        message: 'Please fill in date' }
+                        }
+                    },
+            transplanting_date_one:{
+                validators: {
+                    date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: {
+                        message: 'Please fill in date' }
+                        }
+                    },
+            transplanting_date_two: {
+                validators: {
+                    date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: {
+                        message: 'Please fill in date' }
+                        }
+                    },
+            planting_method: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select the field' }
+                        }
+                    },
+            plotID: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose plotID' }
+                }
+            },
+          
+            seed_quantity: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            seed_quantity2: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            spacing_btn_a_row: {
+                enabled: true,
+                validators: {
+					greaterThan: {
+							 value:0,
+							 message: 'The value must be greater than or equal to zero'
+						 },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            nurseryID_one: {
+                validators: {
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            nurseryID_two: {
+                validators: {
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            total_plants:{
+                validators:{
+                        greaterThan: {
+                        value: 1,
+                        message: 'The value must be greater than or equal to one'
+                        },
+                        integer: {
+                          message: 'invalid, must be an integer'
+                        }
+                }
+            },
+			total_plants:{
+                enabled: false,
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+			total_seed_quantity:{
+                enabled: false,
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            spacing_within_a_row_two:{
+                enabled: true,
+                validators:{
+						greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+						 },
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            spacing_within_a_row:{
+               enabled: true,
+                validators:{
+						greaterThan: {
+							 value:0,
+							 message: 'The value must be greater than or equal to zero'
+						 },
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            number_of_plants_per_row:{
+                validators:{
+                        integer: {
+                          message: 'invalid, must be an integer'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            number_of_plants_per_row_two:{
+                validators:{
+                        integer: {
+                          message: 'invalid, must be an integer'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            family_female_time: {
+                validators:{
+                        numeric: {
+                            message: 'invalid number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            family_male_time:{
+                validators:{
+                        numeric: {
+                            message: 'invalid number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            hired_female_time:{
+                validators:{
+                        numeric: {
+                            message: 'invalid number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            hired_male_time:{
+                validators:{
+                        numeric: {
+                            message: 'invalid number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },   
+            labour: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose labour' }
+                        }
+                    },
+            hired_female_number: {
+                validators:{
+                        integer: {
+                          message: 'invalid, must be an integer'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of hired female' }
+                }
+            },
+            hired_male_number: {
+                validators:{
+                        integer: {
+                          message: 'invalid, must be an integer'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of hired male' }
+                }
+            },
+            family_female_number: {
+                validators:{
+                        integer: {
+                          message: 'invalid, must be an integer'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of hired family female' }
+                }
+            },
+            labour_time_taken: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please enter time taken' }
+                        }
+                    },
+            family_male_number: {
+                validators:{
+                        integer: {
+                          message: 'invalid, must be an integer'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of hired family male' }
+                }
+            },
+            wage: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill the wage' }
+                }
+            },   
+        }
+    })
+});
+</script>
+
+<script>
+$(window).load(function() {
+  if ($('#id_labour').val() == '') {
+    $('#familydv,#hireddv').hide();
+  }
+  else if ($('#id_labour').val() == 'Family')  {
+      $('#familydv').show();
+      $('#hireddv').hide();
+      $("#id_hired_female_number").val();
+      $("#id_hired_male_number").val();
+      $("#id_family_female_time").val();
+      $("#id_family_male_time").val();
+  }
+  else if ($('#id_labour').val() == 'Hired')  {
+    $('#hireddv').show();
+    $('#familydv').hide();
+    $("#id_family_female_number").val();
+    $("#id_family_male_number").val();
+    $("#id_hired_female_time").val();
+    $("#id_hired_male_time").val();
+  }
+  else{
+      $('#familydv,#hireddv').show();
+      $("#id_family_female_time,#id_family_male_time,#id_hired_female_time,#id_hired_male_time").val();
+  }
+  });
+</script>
+<script>
+    $(document).ready(function() {
+            $("#id_labour").change(function() {
+              value=0;
+                if ($(this).val() == '') {
+                    $('#familydv,#hireddv').hide();
+                }//family_female_time,family_male_time,hired_female_time,hired_male_time
+                else if ($(this).val() == 'Family')  {
+                    $('#familydv').show();
+                    $("#id_family_female_number").val('');
+                    $("#id_family_male_number").val('');
+                    $("#id_family_female_time").val('');
+                    $("#id_family_male_time").val('');
+                    $('#hireddv').hide();
+                    $("#id_hired_female_number").val(value);
+                    $("#id_hired_male_number").val(value);
+                    $("#id_hired_female_time").val(value);
+                    $("#id_hired_male_time").val(value);
+                }
+                else if ($(this).val() == 'Hired')  {
+                    $('#hireddv').show();
+                    $('#familydv').hide();
+                    $("#id_hired_female_number").val('');
+                    $("#id_hired_male_number").val('');
+                    $("#id_hired_female_time").val('');
+                    $("#id_hired_male_time").val('');
+                    $("#id_family_female_number").val(value);
+                    $("#id_family_male_number").val(value);
+                    $("#id_family_female_time").val(value);
+                    $("#id_family_male_time").val(value);
+                }
+                else{
+                    $('#familydv,#hireddv').show();
+                    $("#id_hired_female_number").val('');
+                    $("#id_hired_male_number").val(''); 
+                    $("#id_family_female_number").val('');
+                    $("#id_family_male_number").val('');
+                    $("#id_family_female_time").val('');
+                    $("#id_family_male_time").val('');
+                    $("#id_hired_female_time").val('');
+                    $("#id_hired_male_time").val('');
+                }
+            });
+    });
+</script>
+<script>
+  $(window).load(function() {
+    var village = $('#uservillage').val();
+    var url = "/farmer/" + village + "/farmers";
+    $.getJSON(url, function(farmers) {
+      var options = '<option value="">Choose Field..</option>';
+        for (var i = 0; i < farmers.length; i++) {
+          options += '<option value="' + farmers[i].pk + '">' + farmers[i].fields['firstname'] + ' ' + farmers[i].fields['middlename'] + ' ' + farmers[i].fields['lastname'] + '</option>';
+            }
+            $("#id_farm").html(options);
+            $("#id_farm option:selected").attr('selected', 'selected');
+            });
+          });
+</script>
+
+<script>
+$(window).load(function() {
+  if (typeof $('#uservillage').val() === "undefined"){
+    var url = "/select_all/";
+    $.getJSON(url, function(farmers) {
+    var options = '<option value="">Choose Field..</option>';
+      for (var i = 0; i < farmers.length; i++) {
+        options += '<option value="' + farmers[i].pk + '">' + farmers[i].fields['firstname'] + ' ' + farmers[i].fields['middlename'] + ' ' + farmers[i].fields['lastname'] + '</option>';
+          }
+          $("#id_farmer").html(options);
+          $("#id_farmer option:selected").attr('selected', 'selected');
+      });
+    }
+    else if (typeof $('#researcher').val() === "undefined"){
+    var village = $('#uservillage').val();
+    var url = "/farmer/" + village + "/farmers";
+    $.getJSON(url, function(farmers) {
+    var options = '<option value="">Choose Field..</option>';
+      for (var i = 0; i < farmers.length; i++) {
+        options += '<option value="' + farmers[i].pk + '">' + farmers[i].fields['firstname'] + ' ' + farmers[i].fields['middlename'] + ' ' + farmers[i].fields['lastname'] + '</option>';
+          }
+          $("#id_farmer").html(options);
+          $("#id_farmer option:selected").attr('selected', 'selected');
+      });
+    }
+});
+</script>
+<script>
+$(document).ready(function() {
+        $("#id_farmer").change(function() {
+        if ($(this).val() == '') {
+            $("#id_plotID").html("<option>Choose field..</option>");
+            $("#id_plotID").attr('disabled', true);
+        }
+        else {
+            var url = "/plot/" + $(this).val() + "/plots";
+            $.getJSON(url, function(plots) {
+            var options = '<option value="">Choose plot..</option>';
+        for (var i = 0; i < plots.length; i++) {
+          options += '<option value="' + plots[i].pk + '">' + plots[i].fields['plotID']  + '</option>';
+        }
+        $("#id_plotID").html(options);
+        $("#id_plotID option:first").attr('selected', 'selected');
+        $("#id_plotID").attr('disabled', false);
+      });
+    }
+  });
+});
+</script>
+<script>
+  
+ $(document).ready(function () {
+     $('#id_time_started,#id_time_ended').on('propertychange change click keyup input paste', function () {
+      setTimeout(function () {
+         var time_started = $("#id_time_started").val().split(':')
+         var time_ended = $("#id_time_ended").val().split(':');
+         var hours1 = parseInt(time_started[0], 10), 
+             hours2 = parseInt(time_ended[0], 10),
+             mins1 = parseInt(time_started[1], 10),
+             mins2 = parseInt(time_ended[1], 10);
+         var hours = hours2 - hours1, mins = 0;
+         if(hours < 0) hours = 24 + hours;
+         if(mins2 >= mins1) {
+             mins = mins2 - mins1;
+         }
+         else {
+             mins = (mins2 + 60) - mins1;
+             hours--;
+         }
+         //mins = mins / 60; // take percentage in 60
+         totaltime = (hours*60)+mins;
+         //hours += mins;
+         //alert(hours)
+         //hours = hours.toFixed(2);
+         $("#id_total_time").val(totaltime);
+      },0);
+    })
+ });
+</script>
+<script>
+$(document).ready(function() {
+  $("#id_farmer").change(function() {
+    if ($(this).val() == '') {
+      $("#id_nurseryID_one,#id_nurseryID_two").html("<option>Choose NurseryID</option>");
+      $("#id_nurseryID_one,#id_nurseryID_two").attr('disabled', true);
+      }
+      else {
+        var url = "/id_nurseryID/" + $(this).val() + "/nurseryIDs";
+        $.getJSON(url, function(nurseries) {
+        
+        var options = '<option value="">Choose NurseryID</option>';
+        for (var i = 0; i < nurseries.length; i++) {
+          options += '<option value="' + nurseries[i].pk + '">' + nurseries[i].pk + '</option>';
+        }
+        $("#id_nurseryID_one,#id_nurseryID_two").html(options);
+        $("#id_nurseryID_one,#id_nurseryID_two option:first").attr('selected', 'selected');
+        $("#id_nurseryID_one,#id_nurseryID_two").attr('disabled', false);
+      });
+    }
+  });
+});
+
+</script>
+<script>
+$(window).load(function() {
+   if ($('#id_CroppingSystem').val() == "Monocropping"){
+     if ($('#id_crop1_plantingMethod').val()=='direct seeding') {
+        $('#id_seed_quantity').val();
+        $('#id_total_seed_quantity').val();
+     }
+     else if ($('#id_crop1_plantingMethod').val()=='transplanting') {
+       $('#id_spacing_btn_a_row').val();
+       $('#id_number_of_plants_per_row').val();
+       $('#id_total_plants').val();
+     } 
+   }
+   else if ($('#id_CroppingSystem').val() == "Intercropping"){
+     if ($('#id_crop1_plantingMethod').val()=='direct seeding' && $('#id_crop2_plantingMethod').val()=='direct seeding') {
+       $('#id_seed_quantity').val();
+       $('#id_seed_quantity2').val();
+       $('#id_total_seed_quantity').val();
+      }
+     else if ($('#id_crop1_plantingMethod').val()=='direct seeding' && $('#id_crop2_plantingMethod').val()=='transplanting') {
+        $('#id_seed_quantity').val();
+        $('#id_total_seed_quantity').val();
+        $('#id_spacing_btn_a_row').val();
+        $('#id_number_of_plants_per_row_two').val();
+        $('#id_total_plants').val();
+      }
+     else if ($('#id_crop1_plantingMethod').val()=='transplanting' && $('#id_crop2_plantingMethod').val()=='direct seeding') {
+        $('#id_seed_quantity2').val();
+        $('#id_total_seed_quantity').val();
+        $('#id_spacing_btn_a_row').val();
+        $('#id_number_of_plants_per_row').val();
+        $('#id_total_plants').val();
+     }
+     else if  ($('#id_crop1_plantingMethod').val()=='transplanting' && $('#id_crop2_plantingMethod').val()=='transplanting') {
+        $('#id_spacing_btn_a_row').val();
+        $('#id_number_of_plants_per_row').val();
+        $('#id_spacing_btn_a_row').val();
+        $('#id_number_of_plants_per_row_two').val();
+        $('#id_total_plants').val();
+      }
+    }
+});
+
+$(document).ready(function() {
+ $("#id_plotID").change(function() {
+  if ($(this).val() == '') {
+
+    }
+  else  {
+     var url = "/waterapplication/" + $(this).val() + "/" + $("#id_farmer").val()+ "/waterapplications";
+     $.getJSON(url, function(plotlist) {
+      var waterapplication =plotlist[0];
+      //alert(waterapplication);
+      var bedlength = plotlist[1];
+      var bedwidth = plotlist[2];
+      var number_of_beds = plotlist[3];
+	  var plotfieldtype  = plotlist[4];
+ 
+	   if (plotfieldtype == 'Pocket garden') {
+		  $("#id_total_plants").attr('readonly', false);
+        }
+		else{
+		   $("#id_total_plants").attr('readonly', true);
+		}
+      if (waterapplication !='Furrow/bed'&& waterapplication !='Drip') {
+	   //alert('yes');
+       $('#id_plotID,#id_spacing_btn_a_row,#id_number_of_plants_per_row,#id_number_of_plants_per_row_two,#id_seed_quantity,#id_seed_quantity2,#id_plotID,#id_planting_method,#id_CroppingSystem,#id_spacing_within_a_row_two,#id_spacing_within_a_row').on('click keyup input change', function () {
+       setTimeout(function () {
+         if ($('#id_CroppingSystem').val() == "Monocropping"){
+		  
+           if ($('#id_crop1_plantingMethod').val()=='direct seeding') {
+			  var  spacing_btn_a_row  = $('#plantingmethod_form').find('[name="spacing_btn_a_row"]').val(),
+			       spacing_within_a_row  = $('#plantingmethod_form').find('[name="spacing_within_a_row"]').val(),
+				   number_of_plants_per_row  = $('#plantingmethod_form').find('[name="number_of_plants_per_row"]').val();
+			  if (spacing_btn_a_row == -999) {
+			   $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_btn_a_row',false);
+			   }
+			  else{
+			   $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_btn_a_row',true);
+			   }
+			  if (spacing_within_a_row == -999 ) {
+			   $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row',false);
+			   }
+			  else{
+			   $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row',true);
+			   }
+			  if (spacing_btn_a_row == -999 || spacing_within_a_row == -999 ) {
+			   $('#id_total_plants').val('NONE');
+			   }
+			  else {
+			   
+				 var total_plants = ((bedwidth)/(spacing_btn_a_row/100)) * (bedlength/(spacing_within_a_row/100)) * number_of_beds; 
+				 $('#id_total_plants').val(total_plants.toFixed(0));
+					 //$('#id_total_plants').val(total_plants.toFixed(0).toString());
+			  }
+				 var total_seed_quantity = $('#id_seed_quantity').val();
+				 $('#id_total_seed_quantity').val(total_seed_quantity);
+			  }
+          else if ($('#id_crop1_plantingMethod').val()=='transplanting') {
+			   $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_btn_a_row',true);
+			   $('#plantingmethod_form').formValidation('revalidateField', 'spacing_btn_a_row');
+			   $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row',true);
+			   $('#plantingmethod_form').formValidation('revalidateField', 'spacing_within_a_row');
+             var total_plants = ((bedwidth)/($('#id_spacing_btn_a_row').val()/100)) * ($('#id_number_of_plants_per_row').val() * number_of_beds);
+             $('#id_total_plants').val(total_plants.toFixed(0));
+           } 
+         }
+         else if ($('#id_CroppingSystem').val() == "Intercropping"){
+           if ($('#id_crop1_plantingMethod').val()=='direct seeding' && $('#id_crop2_plantingMethod').val()=='direct seeding') {
+			  var  spacing_btn_a_row  = $('#plantingmethod_form').find('[name="spacing_btn_a_row"]').val(),
+			       spacing_within_a_row  = $('#plantingmethod_form').find('[name="spacing_within_a_row"]').val(),
+				   spacing_within_a_row_two = $('#plantingmethod_form').find('[name="spacing_within_a_row_two"]').val();
+				   //number_of_plants_per_row_two = $('#plantingmethod_form').find('[name="number_of_plants_per_row_two"]').val();
+				   
+			  if (spacing_btn_a_row == -999) {$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_btn_a_row',false);}
+			  else{$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_btn_a_row',true);}
+			  if (spacing_within_a_row == -999 ) {$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row',false);}
+			  else{$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row',true);}
+			  if (spacing_within_a_row_two == -999 ) {$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row_two',false);}
+			  else{$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row_two',true);}
+			  
+			  if (spacing_btn_a_row == -999 || spacing_within_a_row == -999 || spacing_within_a_row_two == -999) {$('#id_total_plants').val('NONE');}
+			  else {
+				 var total_plant_one = (( bedwidth)/(spacing_btn_a_row/100)) * (bedlength/(spacing_within_a_row/100)) * number_of_beds;
+				 var total_plant_two = ((bedwidth)/(spacing_btn_a_row/100)) * (bedlength/(spacing_within_a_row_two/100)) * number_of_beds;
+				 var total_plants = total_plant_one + total_plant_two;
+				 $('#id_total_plants').val(total_plants.toFixed(0));
+				 //$('#id_total_plants').val(total_plants.toFixed(0).toString());
+			  }
+				   
+              var total_seed_quantity =parseInt($('#id_seed_quantity').val(), 10) + parseInt($('#id_seed_quantity2').val(), 10);
+              $('#id_total_seed_quantity').val(total_seed_quantity);
+           }
+           else if ($('#id_crop1_plantingMethod').val()=='direct seeding' && $('#id_crop2_plantingMethod').val()=='transplanting') {
+			 $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_btn_a_row',true);
+			 $('#plantingmethod_form').formValidation('revalidateField', 'spacing_btn_a_row');
+			 $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row',true);
+			 $('#plantingmethod_form').formValidation('revalidateField', 'spacing_within_a_row');
+			 $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row_two',true);
+			 $('#plantingmethod_form').formValidation('revalidateField', 'spacing_within_a_row_two');
+			
+			
+			 var total_plants_directseeding = ((bedwidth)/($('#id_spacing_btn_a_row').val()/100)) * (bedlength/($('#id_spacing_within_a_row').val()/100)) * number_of_beds; 
+             var total_plants_transplanting = ((bedwidth)/($('#id_spacing_btn_a_row').val()/100)) * ($('#id_number_of_plants_per_row_two').val() * number_of_beds);
+			 var total_plants = total_plants_directseeding + total_plants_transplanting;
+             $('#id_total_plants').val(total_plants.toFixed(0));
+			 
+			 var total_seed_quantity = $('#id_seed_quantity').val();
+             $('#id_total_seed_quantity').val(total_seed_quantity);
+           }
+           else if ($('#id_crop1_plantingMethod').val()=='transplanting' && $('#id_crop2_plantingMethod').val()=='direct seeding') {
+			
+			 $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_btn_a_row',true);
+			 $('#plantingmethod_form').formValidation('revalidateField', 'spacing_btn_a_row');
+			 $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row',true);
+			 $('#plantingmethod_form').formValidation('revalidateField', 'spacing_within_a_row');
+			 $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row_two',true);
+			 $('#plantingmethod_form').formValidation('revalidateField', 'spacing_within_a_row_two');
+			 
+             var total_seed_quantity = $('#id_seed_quantity2').val();
+             $('#id_total_seed_quantity').val(total_seed_quantity);
+			 
+			 var total_plants_directseeding = ((bedwidth)/($('#id_spacing_btn_a_row').val()/100)) * (bedlength/($('#id_spacing_within_a_row_two').val()/100)) * number_of_beds;
+             var total_plants_transplanting = ((bedwidth)/($('#id_spacing_btn_a_row').val()/100)) * ($('#id_number_of_plants_per_row').val() * number_of_beds);
+			 
+			 var total_plants = total_plants_directseeding + total_plants_transplanting;
+             $('#id_total_plants').val(total_plants.toFixed(0));
+           }
+           else if  ($('#id_crop1_plantingMethod').val()=='transplanting' && $('#id_crop2_plantingMethod').val()=='transplanting') {
+			   $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_btn_a_row',true);
+			   $('#plantingmethod_form').formValidation('revalidateField', 'spacing_btn_a_row');
+			   $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row',true);
+			   $('#plantingmethod_form').formValidation('revalidateField', 'spacing_within_a_row');
+			   $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row_two',true);
+			   $('#plantingmethod_form').formValidation('revalidateField', 'spacing_within_a_row_two');
+			   
+               var total_plants_one = ((bedwidth)/($('#id_spacing_btn_a_row').val()/100)) * ($('#id_number_of_plants_per_row').val() * number_of_beds);
+               var total_plants_two = ((bedwidth)/($('#id_spacing_btn_a_row').val()/100)) * ($('#id_number_of_plants_per_row_two').val() * number_of_beds);
+               //alert(total_plants_one);
+               //alert(total_plants_two);
+               var total_plants = parseInt(total_plants_one, 10) + parseInt(total_plants_two, 10);
+               $('#id_total_plants').val(total_plants.toFixed(0));
+           }
+         }
+           //var total_plants = ((bedlength * bedwidth)/$('#id_spacing_btn_a_row').val()) * ($('#id_number_of_plants_per_row').val() * number_of_beds);
+           //$('#id_total_plants').val(total_plants.toFixed(0));
+         }, 0);
+        });
+      }
+      else {
+	   //alert('no');
+         //$('#id_number_of_plants_per_row,#id_plotID').on(' click keyup input change', function () {
+         $('#id_plotID,#id_spacing_within_a_row,#id_spacing_within_a_row_two,#id_spacing_btn_a_row,#id_number_of_plants_per_row,#id_number_of_plants_per_row_two,#id_seed_quantity,#id_seed_quantity2,#id_plotID,#id_planting_method,#id_CroppingSystem').on('click keyup input change', function () {
+         setTimeout(function () {
+           if ($('#id_CroppingSystem').val() == "Monocropping"){
+               if ($('#id_crop1_plantingMethod').val()=='direct seeding') {
+			  var  spacing_btn_a_row  = $('#plantingmethod_form').find('[name="spacing_btn_a_row"]').val(),
+			       spacing_within_a_row  = $('#plantingmethod_form').find('[name="spacing_within_a_row"]').val(),
+				   number_of_plants_per_row  = $('#plantingmethod_form').find('[name="number_of_plants_per_row"]').val();
+			  
+			  if (spacing_btn_a_row == -999) {$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_btn_a_row',false);}
+			  else{$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_btn_a_row',true);}
+			  if (spacing_within_a_row == -999 ) {$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row',false);}
+			  else{$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row',true);}
+			  if (spacing_btn_a_row == -999 || spacing_within_a_row == -999 ) {$('#id_total_plants').val('NONE');}
+			  else {
+				 var total_plants = (bedlength/(spacing_within_a_row/100)) * number_of_beds; 
+				 //var total_plants = ((bedlength * bedwidth)/(spacing_btn_a_row/100)) * (bedlength/(spacing_within_a_row/100)) * number_of_beds; 
+				 $('#id_total_plants').val(total_plants.toFixed(0));
+				 //$('#id_total_plants').val(total_plants.toFixed(0).toString());
+			  }
+			  
+              var total_seed_quantity = $('#id_seed_quantity').val();
+                  $('#id_total_seed_quantity').val(total_seed_quantity);
+         }
+        else if ($('#id_crop1_plantingMethod').val()=='transplanting') {
+			   $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_btn_a_row',true);
+			   $('#plantingmethod_form').formValidation('revalidateField', 'spacing_btn_a_row');
+			   $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row',true);
+			   $('#plantingmethod_form').formValidation('revalidateField', 'spacing_within_a_row');
+                var total_plants = number_of_beds * $('#id_number_of_plants_per_row').val();
+                 $('#id_total_plants').val(total_plants.toFixed(0));
+               }
+         }
+         else if ($('#id_CroppingSystem').val() == "Intercropping"){
+          if ($('#id_crop1_plantingMethod').val()=='direct seeding' && $('#id_crop2_plantingMethod').val()=='direct seeding') {
+			   var  spacing_btn_a_row  = $('#plantingmethod_form').find('[name="spacing_btn_a_row"]').val(),
+			       spacing_within_a_row  = $('#plantingmethod_form').find('[name="spacing_within_a_row"]').val(),
+				   spacing_within_a_row_two = $('#plantingmethod_form').find('[name="spacing_within_a_row_two"]').val();
+				   //number_of_plants_per_row_two = $('#plantingmethod_form').find('[name="number_of_plants_per_row_two"]').val();
+				   
+			  if (spacing_btn_a_row == -999) {$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_btn_a_row',false);}
+			  else{$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_btn_a_row',true);}
+			  if (spacing_within_a_row == -999 ) {$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row',false);}
+			  else{$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row',true);}
+			  if (spacing_within_a_row_two == -999 ) {$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row_two',false);}
+			  else{$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row_two',true);}
+			  
+			  if (spacing_btn_a_row == -999 || spacing_within_a_row == -999 || spacing_within_a_row_two == -999) {$('#id_total_plants').val('NONE');}
+			  else {
+				
+				 var total_plant_one =  (bedlength/(spacing_within_a_row/100)) * number_of_beds;
+				 var total_plant_two = (bedlength/(spacing_within_a_row_two/100)) * number_of_beds;
+
+				 //var total_plant_one = ((bedlength * bedwidth)/(spacing_btn_a_row/100)) * (bedlength/(spacing_within_a_row/100)) * number_of_beds;
+				 //var total_plant_two = ((bedlength * bedwidth)/(spacing_btn_a_row/100)) * (bedlength/(spacing_within_a_row_two/100)) * number_of_beds;
+				 var total_plants = total_plant_one + total_plant_two;
+				 $('#id_total_plants').val(total_plants.toFixed(0));
+				 //$('#id_total_plants').val(total_plants.toFixed(0).toString());
+			  }
+			  
+             var total_seed_quantity =parseInt($('#id_seed_quantity').val(), 10) + parseInt($('#id_seed_quantity2').val(), 10);
+             $('#id_total_seed_quantity').val(total_seed_quantity); 
+          }
+          else if ($('#id_crop1_plantingMethod').val()=='direct seeding' && $('#id_crop2_plantingMethod').val()=='transplanting') {
+			  $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_btn_a_row',true);
+			  $('#plantingmethod_form').formValidation('revalidateField', 'spacing_btn_a_row');
+			  $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row',true);
+			  $('#plantingmethod_form').formValidation('revalidateField', 'spacing_within_a_row');
+			  $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row_two',true);
+			  $('#plantingmethod_form').formValidation('revalidateField', 'spacing_within_a_row_two');
+			 
+			  var total_plants_directseeding = (bedlength/($('#id_spacing_within_a_row').val()/100)) * number_of_beds; 
+			  //var total_plants_directseeding = ((bedlength * bedwidth)/($('#id_spacing_btn_a_row').val()/100)) * (bedlength/($('#id_spacing_within_a_row').val()/100)) * number_of_beds; 
+			  var total_plants_transplanting = number_of_beds * $('#id_number_of_plants_per_row_two').val();
+			  
+			  var total_plants = total_plants_directseeding + total_plants_transplanting;
+              $('#id_total_plants').val(total_plants.toFixed(0));
+			 
+              var total_seed_quantity = $('#id_seed_quantity').val();
+              $('#id_total_seed_quantity').val(total_seed_quantity);
+
+          }
+          else if ($('#id_crop1_plantingMethod').val()=='transplanting' && $('#id_crop2_plantingMethod').val()=='direct seeding') {
+		   
+				$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_btn_a_row',true);
+				$('#plantingmethod_form').formValidation('revalidateField', 'spacing_btn_a_row');
+				$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row',true);
+				$('#plantingmethod_form').formValidation('revalidateField', 'spacing_within_a_row');
+				$('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row_two',true);
+				$('#plantingmethod_form').formValidation('revalidateField', 'spacing_within_a_row_two');
+				
+				var total_plants_directseeding = (bedlength/($('#id_spacing_within_a_row_two').val()/100)) * number_of_beds;
+				//var total_plants_directseeding = ((bedlength * bedwidth)/($('#id_spacing_btn_a_row').val()/100)) * (bedlength/($('#id_spacing_within_a_row_two').val()/100)) * number_of_beds;
+				var total_plants_transplanting = number_of_beds * $('#id_number_of_plants_per_row').val();
+				
+				var total_plants = total_plants_directseeding + total_plants_transplanting;
+				$('#id_total_plants').val(total_plants.toFixed(0));
+
+                var total_seed_quantity = $('#id_seed_quantity2').val();
+                $('#id_total_seed_quantity').val(total_seed_quantity);
+          }
+          else if  ($('#id_crop1_plantingMethod').val()=='transplanting' && $('#id_crop2_plantingMethod').val()=='transplanting') {
+			 $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_btn_a_row',true);
+			 $('#plantingmethod_form').formValidation('revalidateField', 'spacing_btn_a_row');
+			 $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row',true);
+			 $('#plantingmethod_form').formValidation('revalidateField', 'spacing_within_a_row');
+			 $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row_two',true);
+			 $('#plantingmethod_form').formValidation('revalidateField', 'spacing_within_a_row_two');
+				
+             var total_plants_one = number_of_beds * $('#id_number_of_plants_per_row').val();
+             var total_plants_two = number_of_beds * $('#id_number_of_plants_per_row_two').val();
+             var total_plants = parseInt(total_plants_one, 10) + parseInt(total_plants_two, 10);
+             $('#id_total_plants').val(total_plants.toFixed(0));
+          }
+         }
+         //var total_plants = number_of_beds * $('#id_number_of_plants_per_row').val();
+         //$('#id_total_plants').val(total_plants.toFixed(0));
+         }, 0);
+        });
+      }
+      })
+  }
+  });
+});
+
+
+</script>
+
+<script>
+$(window).load(function() {
+  if ($('#id_CroppingSystem').val() == "Monocropping"){ 
+      if ($('#id_crop1_plantingMethod').val()=='direct seeding') {
+        $('#total_seed_quantity').show();
+        $('#id_total_seed_quantity').val();
+        $('#total_plants').show();
+        $('#id_total_plants').val();
+        $("#first_seeding_fieldset,#first_seedingdv").show();
+        $("#id_seed_quantity,#id_seeding_date").val();
+
+        $("#first_seeding_fieldset legend").html($('#crop_one').val());
+        $("#second_seeding_fieldset,#second_seedingdv,#number_of_plants_per_row,#number_of_plants_per_row_two").hide();
+        $('#id_number_of_plants_per_row,#id_number_of_plants_per_row_two,#id_seed_quantity2,#id_spacing_within_a_row_two').val();
+        
+        $("#first_transplantingdv,#second_transplantingdv").hide();
+        $("#id_seeding_date2,#id_transplanting_date_one,#id_transplanting_date_two").val();
+        $('#id_nurseryID_one,#id_nurseryID_two').val();
+      }
+      else if ($('#id_crop1_plantingMethod').val()=='transplanting') {
+        $('#total_seed_quantity').hide();
+        $('#id_total_seed_quantity').val();
+        $('#total_plants').show();
+        $('#id_total_plants').val();
+        $("#first_seeding_fieldset,#first_transplantingdv,#number_of_plants_per_row").show();
+        $('#id_number_of_plants_per_row').val();
+
+        $("#first_seeding_fieldset legend").html($('#crop_one').val());
+        $("#second_seeding_fieldset,#first_seedingdv,#second_seedingdv,#number_of_plants_per_row_two").hide();
+        $("#id_seeding_date2,#id_seeding_date").val();
+        $("#id_seed_quantity,#id_seed_quantity2,#id_number_of_plants_per_row_two,#id_spacing_within_a_row_two").val();
+        
+        $('#id_transplanting_date_one').val();
+        $('#id_nurseryID_one').val();
+     
+        $("#second_transplantingdv").show();
+        $("#id_transplanting_date_two").val();
+        $('#id_nurseryID_two').val();
+      }
+  }
+  else if ($('#id_CroppingSystem').val() == "Intercropping"){
+     if ($('#id_crop1_plantingMethod').val()=='direct seeding' && $('#id_crop2_plantingMethod').val()=='direct seeding') {
+        $('#total_seed_quantity').show();
+        $('#id_total_seed_quantity').val();
+        $('#total_plants').show();
+        $('#id_total_plants').val();
+        $("#first_seeding_fieldset,#second_seeding_fieldset,#first_seedingdv,#second_seedingdv").show();
+        $("#id_seed_quantity,#id_seeding_date,#id_seeding_date2,#id_seed_quantity2,#id_spacing_within_a_row,#id_spacing_within_a_row_two").val();
+ 
+        $("#first_seeding_fieldset legend").html($('#crop_one').val());
+        $("#second_seeding_fieldset legend").html($('#crop_two').val());
+        
+        $('#number_of_plants_per_row,#number_of_plants_per_row_two').hide();
+        $('#id_number_of_plants_per_row,#id_number_of_plants_per_row_two').val();
+        $("#first_transplantingdv,#second_transplantingdv").hide();
+        $("#id_transplanting_date_one,#id_transplanting_date_two").val();
+        $('#id_nurseryID_one,#id_nurseryID_two').val();
+     }
+     else if ($('#id_crop1_plantingMethod').val()=='direct seeding' && $('#id_crop2_plantingMethod').val()=='transplanting') {
+        $('#total_seed_quantity').show();  
+        $('#id_total_seed_quantity').val();                     
+        $('#total_plants').show(); 
+        $('#id_total_plants').val(); 
+        $("#first_seeding_fieldset,#first_seedingdv").show();
+        $("#id_seed_quantity,#id_seeding_date,#id_spacing_within_a_row,#id_spacing_within_a_row_two").val();
+        $("#second_seedingdv").hide();
+        $("#second_seeding_fieldset").show();
+        $("#id_seed_quantity2").val();
+        $("#id_seeding_date2").val();
+        
+        $("#first_seeding_fieldset legend").html($('#crop_one').val());
+        $("#second_seeding_fieldset legend").html($('#crop_two').val());
+        
+        $('#number_of_plants_per_row').hide();
+        $('#number_of_plants_per_row_two').show();
+        $('#id_number_of_plants_per_row').val();
+        $('#id_number_of_plants_per_row_two').val();
+        
+        $("#first_transplantingdv").hide();
+        $("#second_transplantingdv").show();
+        $("#id_transplanting_date_one").val();
+        $("#id_transplanting_date_two").val();
+        $('#id_nurseryID_one').val();
+        $('#id_nurseryID_two').val();
+     }
+     else if ($('#id_crop1_plantingMethod').val()=='transplanting' && $('#id_crop2_plantingMethod').val()=='direct seeding') {
+		
+        $('#total_seed_quantity').show();
+        $('#id_total_seed_quantity').val();    
+        $('#total_plants').show();
+        $('#id_total_plants').val();                    
+        
+        $("#first_seeding_fieldset,#second_seeding_fieldset").show();    
+        $("#second_seedingdv").show();  
+        $("#id_seeding_date2,#id_seed_quantity2,#id_spacing_within_a_row,#id_spacing_within_a_row_two").val();    
+        $("#first_seedingdv").hide();               
+        $("#id_seed_quantity").val();
+        $("#id_seeding_date").val();
+                            
+        $("#first_seeding_fieldset legend").html($('#crop_one').val());
+        $("#second_seeding_fieldset legend").html($('#crop_two').val());
+        
+        $('#number_of_plants_per_row').show();
+        $('#id_number_of_plants_per_row').val();
+        $('#number_of_plants_per_row_two').hide();
+        $('#id_number_of_plants_per_row_two').val();
+        
+        $("#first_transplantingdv").show();
+        $("#id_transplanting_date_one").val();
+        $('#id_nurseryID_one').val();
+        $("#second_transplantingdv").hide();
+        $("#id_transplanting_date_two").val();
+        $('#id_nurseryID_two').val();
+     }
+     else if ($('#id_crop1_plantingMethod').val()=='transplanting' && $('#id_crop2_plantingMethod').val()=='transplanting') {
+        $('#total_seed_quantity').hide();
+        $('#id_total_seed_quantity').val();
+        $('#total_plants').show();
+        $('#id_total_plants').val();
+        $("#first_seeding_fieldset,#second_seeding_fieldset,#number_of_plants_per_row,#number_of_plants_per_row_two").show();
+        $('#id_number_of_plants_per_row,#id_number_of_plants_per_row_two,#id_spacing_within_a_row,#id_spacing_within_a_row_two').val();
+        $('#first_seedingdv,#second_seedingdv').hide();
+        $("#id_seed_quantity,#id_seed_quantity2").val();
+        $("#id_seeding_date,#id_seeding_date2").val();
+  
+        $("#first_seeding_fieldset legend").html($('#crop_one').val());
+        $("#second_seeding_fieldset legend").html($('#crop_two').val());
+        
+        $("#first_transplantingdv,#second_transplantingdv").show();
+        $('#id_transplanting_date_one,#id_transplanting_date_two').val();
+        $('#id_nurseryID_one,#id_nurseryID_two').val();
+     }
+  }
+  else{
+    $('#total_seed_quantity').hide();
+    $('#total_plants').hide();
+    $("#first_transplantingdv,#second_transplantingdv,#second_seeding_fieldset,#first_seeding_fieldset").hide();
+  }
+});
+
+$(document).ready(function() {
+ $("#id_plotID,#id_planting_method").change(function() {
+  if ($("#id_plotID").val() == '') {
+   $("#id_planting_method").attr('disabled',true);
+   }
+  else {
+    var url = "/plot_croppingsystem/" + $("#id_plotID").val() +'/'+ $('#id_farmer').val() +"/plot_croppingsystem";
+    $.getJSON(url, function(plot_detail) {
+     $('#id_CroppingSystem').val(plot_detail[0]);
+     $('#id_crop1_plantingMethod').val(plot_detail[1]);
+     //alert(plot_detail[2] );
+     if (plot_detail[2] == null || plot_detail[2] == '') {
+        $('#id_crop2_plantingMethod').val('N/A');
+		//alert('yes we can');
+     }
+     else{
+      $('#id_crop2_plantingMethod').val(plot_detail[2]);
+      }
+     $('#crop_one').val(plot_detail[3]);
+     $('#crop_two').val(plot_detail[4]);
+
+     if (plot_detail[0] == 'NONE') {
+      $('#total_seed_quantity').hide();
+      $('#total_plants,#submit').hide();
+      $("#first_transplantingdv,#second_transplantingdv,#second_seeding_fieldset,#first_seeding_fieldset").hide();
+      //alert('None');
+     }
+     else if ( plot_detail[0] == "Monocropping"){
+       if (plot_detail[1] == 'direct seeding') {
+        $('#total_seed_quantity').show();
+        $('#id_total_seed_quantity').val('');
+        $('#total_plants').show();
+        $('#id_total_plants').val('');
+        $("#first_seeding_fieldset,#first_seedingdv").show();
+        $("#id_seed_quantity,#id_seeding_date").val('');
+        crop_one = plot_detail[3]
+        crop_one ='Crop: ' + crop_one;
+        $("#first_seeding_fieldset legend").html(crop_one);
+        $("#second_seeding_fieldset,#second_seedingdv,#number_of_plants_per_row,#number_of_plants_per_row_two").hide();
+        $('#id_number_of_plants_per_row,#id_number_of_plants_per_row_two,#id_seed_quantity2,#id_spacing_within_a_row_two').val(0);
+        
+        $("#first_transplantingdv,#second_transplantingdv").hide();
+        $("#id_seeding_date2,#id_transplanting_date_one,#id_transplanting_date_two").datepicker('setDate',new Date());
+        $('#id_nurseryID_one,#id_nurseryID_two').removeAttr('required');
+        
+      }
+      else if (plot_detail[1] == 'transplanting') {
+        $('#total_seed_quantity').hide();
+        $('#id_total_seed_quantity').val(0);
+        $('#total_plants').show();
+        $('#id_total_plants').val('');
+        $("#first_seeding_fieldset,#first_transplantingdv,#number_of_plants_per_row").show();
+        $('#id_number_of_plants_per_row').val('');
+  
+        crop_one = plot_detail[3]
+        crop_one ='Crop: ' + crop_one;
+        $("#first_seeding_fieldset legend").html(crop_one);
+        $("#second_seeding_fieldset,#first_seedingdv,#second_seedingdv,#number_of_plants_per_row_two").hide();
+        $("#id_seeding_date2,#id_seeding_date").datepicker('setDate',new Date());
+        $("#id_seed_quantity,#id_seed_quantity2,#id_number_of_plants_per_row_two,#id_spacing_within_a_row_two").val(0);
+        
+        $('#id_transplanting_date_one').val('');
+        $('#id_nurseryID_one').prop('selectedIndex',0);
+     
+        $("#second_transplantingdv").show();
+        $("#id_transplanting_date_two").datepicker('setDate',new Date());
+        $('#id_nurseryID_two').removeAttr('required');
+      }
+     }
+     else if (plot_detail[0] == 'Intercropping'){
+      if (plot_detail[1] == 'direct seeding' && plot_detail[2] == 'direct seeding') {
+       $('#total_seed_quantity').show();
+       $('#id_total_seed_quantity').val('');
+       $('#total_plants').show();
+       $('#id_total_plants').val('');
+       $("#first_seeding_fieldset,#second_seeding_fieldset,#first_seedingdv,#second_seedingdv").show();
+       $("#id_seed_quantity,#id_seeding_date,#id_seeding_date2,#id_seed_quantity2,#id_spacing_within_a_row,#id_spacing_within_a_row_two").val('');
+       crop_one = plot_detail[3]
+       crop_two = plot_detail[4]
+       crop_one ='Crop: ' + crop_one;
+       crop_two ='Crop: ' + crop_two;
+       $("#first_seeding_fieldset legend").html(crop_one);
+       $("#second_seeding_fieldset legend").html(crop_two);
+       
+       $('#number_of_plants_per_row,#number_of_plants_per_row_two').hide();
+       $('#id_number_of_plants_per_row,#id_number_of_plants_per_row_two').val(0);
+       $("#first_transplantingdv,#second_transplantingdv").hide();
+       $("#id_transplanting_date_one,#id_transplanting_date_two").datepicker('setDate',new Date());
+       $('#id_nurseryID_one,#id_nurseryID_two').removeAttr('required');
+      }
+      else if (plot_detail[1] == 'direct seeding' && plot_detail[2] == 'transplanting') {
+       $('#total_seed_quantity').show();  
+       $('#id_total_seed_quantity').val('');                    
+       $('#total_plants').show(); 
+       $('#id_total_plants').val(''); 
+       $("#first_seeding_fieldset,#first_seedingdv").show();
+       $("#id_seed_quantity,#id_seeding_date,#id_spacing_within_a_row,#id_spacing_within_a_row_two").val('');
+       $("#second_seedingdv").hide();
+       $("#second_seeding_fieldset").show();
+       $("#id_seed_quantity2").val(0);
+       $("#id_seeding_date2").datepicker('setDate',new Date());
+       
+       crop_one = plot_detail[3]
+       crop_two = plot_detail[4]
+       crop_one ='Crop: ' + crop_one;
+       crop_two ='Crop: ' + crop_two;
+       $("#first_seeding_fieldset legend").html(crop_one);
+       $("#second_seeding_fieldset legend").html(crop_two);
+       
+       $('#number_of_plants_per_row').hide();
+       $('#number_of_plants_per_row_two').show();
+       $('#id_number_of_plants_per_row').val(0);
+       $('#id_number_of_plants_per_row_two').val('');
+       
+       $("#first_transplantingdv").hide();
+       $("#second_transplantingdv").show();
+       $("#id_transplanting_date_one").datepicker('setDate',new Date());
+       $("#id_transplanting_date_two").val('');
+       $('#id_nurseryID_one').removeAttr('required');
+       $('#id_nurseryID_two').prop('selectedIndex',0);
+      }
+      else if (plot_detail[1] == 'transplanting' && plot_detail[2] == 'direct seeding') {
+       $('#total_seed_quantity').show();
+       $('#id_total_seed_quantity').val('');    
+       $('#total_plants').show();
+       $('#id_total_plants').val('');                    
+
+       $("#first_seeding_fieldset,#second_seeding_fieldset").show();    
+       $("#second_seedingdv").show();  
+       $("#id_seeding_date2,#id_seed_quantity2,#id_spacing_within_a_row,#id_spacing_within_a_row_two").val('');    
+       $("#first_seedingdv").hide();               
+       $("#id_seed_quantity").val(0);
+       $("#id_seeding_date").datepicker('setDate',new Date());
+
+       crop_one = plot_detail[3]
+       crop_two = plot_detail[4]
+       crop_one ='Crop: ' + crop_one;
+       crop_two ='Crop: ' + crop_two;
+       $("#first_seeding_fieldset legend").html(crop_one);
+       $("#second_seeding_fieldset legend").html(crop_two);
+
+       $('#number_of_plants_per_row').show();
+       $('#id_number_of_plants_per_row').val('');
+       $('#number_of_plants_per_row_two').hide();
+       $('#id_number_of_plants_per_row_two').val(0);
+
+       $("#first_transplantingdv").show();
+       $("#id_transplanting_date_one").val('');
+       $('#id_nurseryID_one').val('');
+       $("#second_transplantingdv").hide();
+       $("#id_transplanting_date_two").datepicker('setDate',new Date());
+       $('#id_nurseryID_two').removeAttr('required');
+      }
+      else if (plot_detail[1] == 'transplanting' && plot_detail[2] == 'transplanting') {
+        $('#total_seed_quantity').hide();
+        $('#id_total_seed_quantity').val(0);
+        $('#total_plants').show();
+        $('#id_total_plants').val('');
+        $("#first_seeding_fieldset,#second_seeding_fieldset,#number_of_plants_per_row,#number_of_plants_per_row_two").show();
+        $('#id_number_of_plants_per_row,#id_number_of_plants_per_row_two,#id_spacing_within_a_row,#id_spacing_within_a_row_two').val('');
+        $('#first_seedingdv,#second_seedingdv').hide();
+        $("#id_seed_quantity,#id_seed_quantity2").val(0);
+        $("#id_seeding_date,#id_seeding_date2").datepicker('setDate',new Date());
+
+        crop_one = plot_detail[3]
+        crop_two = plot_detail[4]
+        crop_one ='Crop: ' + crop_one;
+        crop_two ='Crop: ' + crop_two;
+        $("#first_seeding_fieldset legend").html(crop_one);
+        $("#second_seeding_fieldset legend").html(crop_two);
+
+        $("#first_transplantingdv,#second_transplantingdv").show();
+        $('#id_transplanting_date_one,#id_transplanting_date_two').val('');
+        $('#id_nurseryID_one,#id_nurseryID_two').prop('selectedIndex',0);
+      }
+     }
+    });
+    $("#id_planting_method").attr('disabled',false);
+   }
+ })
+});
+</script>
+<script>
+$(document).on('click keyup input change','[name="spacing_within_a_row_two"],[name="spacing_within_a_row"],[name="spacing_btn_a_row"]',function(e){
+     var     spacing_within_a_row_two  = $('#plantingmethod_form').find('[name="spacing_within_a_row_two"]').val(),
+             spacing_within_a_row  = $('#plantingmethod_form').find('[name="spacing_within_a_row"]').val(),
+             spacing_btn_a_row  = $('#plantingmethod_form').find('[name="spacing_btn_a_row"]').val();
+             
+             switch ($(this).attr('name')) {
+                case 'spacing_within_a_row_two':
+                  if (spacing_within_a_row_two == -999) {
+                   $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row_two',false);
+                  }
+                  else{
+                    $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row_two',true);
+                  }
+                case 'spacing_within_a_row':
+                  if (spacing_within_a_row == -999) {
+                   $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row',false);
+                  }
+                  else{
+                    $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_within_a_row',true);
+                  }
+                case 'spacing_btn_a_row':
+                  if (spacing_btn_a_row == -999) {
+                   $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_btn_a_row',false);
+                  }
+                  else{
+                    $('#plantingmethod_form').formValidation('enableFieldValidators','spacing_btn_a_row',true);
+                  }
+            } 
+});
+</script>
+
+<script>
+$(function() {
+  var moveLeft = 20;
+  var moveDown = 10;
+  $('#spacing_btn_a_row-info-circle,#spacing_within_a_row-info-circle,#spacing_within_a_row_two-info-circle').hover(function(e) {
+    $('div#error999_pop-up').show()
+    .css('top',e.pageY + moveDown)
+    .css('left', e.pageX + moveLeft)
+    .appendTo('body');
+  },function(){
+    $('div#error999_pop-up').hide();
+  });
+  $('#spacing_btn_a_row-info-circle,#spacing_within_a_row-info-circle,#spacing_within_a_row_two-info-circle').mousemove(function(e) {
+    $("div#error999_pop-up").css('top', e.pageY + moveDown).css('left', e.pageX + moveLeft);
+  });
+  //for multiple popup::
+  //http://creativeindividual.co.uk/2011/08/create-multiple-pop-up-divs-using-the-jquery-prev-method/
+});
+</script>
+
+{% endblock %}
+

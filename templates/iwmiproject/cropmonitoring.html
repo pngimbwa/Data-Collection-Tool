@@ -1,0 +1,914 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    <title>Crop monitoring</title>
+{% endblock %}
+
+{% block main_section %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script>
+  $(function() {
+    $( "#id_date" ).datepicker({
+    	onSelect: function() {
+        $('#cropmonitoring_form').formValidation('revalidateField', 'date');
+    }
+     })
+  });
+    
+</script>
+
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+
+  <form class="well form-horizontal" action=" " method="post"  id="cropmonitoring_form">{% csrf_token %} 
+
+<!-- Form Name -->
+<fieldset>
+<legend>Crop monitoring..</legend>
+
+
+{% if user_village %}
+<input type="hidden" id="uservillage" name="uservillage" value="{{user_village}}" readonly='readonly' />
+{% elif researcher %}
+<input type="hidden" id="researcher" name="researcher" value="{{researcher}}" readonly='readonly' />
+{% elif user_country %}
+
+{% endif %}
+<label class="warning" for="message" id="message" align='center' style="color: red"><small><i>{{message}}</i></small></label>
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.date.errors }}
+    <label for="date" class="col-md-4 control-label">Date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.crop_stage.errors }}
+    <label for="crop_stage" class="col-md-4 control-label">Crop stage:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.crop_stage }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farm:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.farm }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plot.errors }}
+    <label for="plot" class="col-md-4 control-label">Plot:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.plot }}
+        </div>
+</div>
+
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.row_number.errors }}
+    <label for="row_number" class="col-md-4 control-label">Row/Bed number:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.row_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.number_of_good_plants.errors }}
+    <label for="number_of_good_plants" class="col-md-4 control-label">Number of good plants per bed/row:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.number_of_good_plants }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.number_of_bad_plants.errors }}
+    <label for="number_of_bad_plants" class="col-md-4 control-label">Number of bad plants per bed/row:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.number_of_bad_plants }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_density_per_bed.errors }}
+    <label for="plant_density_per_bed" class="col-md-4 control-label">Plant density per bed/row:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.plant_density_per_bed }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_density_per_sqm.errors }}
+    <label for="plant_density_per_sqm" class="col-md-4 control-label">Plant density per square meter:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.plant_density_per_sqm }}
+        </div>
+</div>
+
+<div class="form-group" id='Crop'> 
+    {{ cropmonitoringplantheightform.Crop.errors }}
+    <label for="Crop" class="col-md-4 control-label">Crop:</label>
+        <div class="col-md-4 selectContainer">
+             {{ cropmonitoringplantheightform.Crop }}
+        </div>
+</div>
+<fieldset id='plant_density_section'>
+<legend>plant density section..</legend>
+<div class="form-group" id='sub_plot_size'> 
+    {{ cropmonitoringplantheightform.sub_plot_size.errors }}
+    <label for="sub_plot_size" class="col-md-4 control-label">Sub plot size:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+             {{ cropmonitoringplantheightform.sub_plot_size }}<span class="input-group-addon">m<sup>2</sup></span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='sub_plot_plant_number'> 
+    {{ cropmonitoringplantheightform.sub_plot_plant_number.errors }}
+    <label for="sub_plot_plant_number" class="col-md-4 control-label">Number of plants in the sub-plot:</label>
+        <div class="col-md-4 selectContainer">
+             {{ cropmonitoringplantheightform.sub_plot_plant_number }}
+        </div>
+</div>
+
+<div class="form-group" id='total_plant_number'> 
+    {{ cropmonitoringplantheightform.total_plant_number.errors }}
+    <label for="total_plant_number" class="col-md-4 control-label">Total number of plants :</label>
+        <div class="col-md-4 selectContainer">
+             {{ cropmonitoringplantheightform.total_plant_number }}
+        </div>
+</div>
+</fieldset>
+	
+<fieldset id='PLANT_ONE'>
+<legend>plant one..</legend>
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_height_one.errors }}
+    <label for="plant_height_one" class="col-md-4 control-label">Plant height:</label>
+        <div class="col-md-4 selectContainer">
+             {{ cropmonitoringplantheightform.plant_height_one }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.LAI_one.errors }}
+    <label for="LAI_one" class="col-md-4 control-label">Leaf area index (LAI):</label>
+        <div class="col-md-4 selectContainer">
+             {{ cropmonitoringplantheightform.LAI_one }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_canopy_width_one.errors }}
+    <label for="plant_canopy_width_one" class="col-md-4 control-label">Plant canopy width</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+             {{ cropmonitoringplantheightform.plant_canopy_width_one }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.lenght_of_crop_stage_one.errors }}
+    <label for="lenght_of_crop_stage_one" class="col-md-4 control-label">Lenght of crop stage:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+             {{ cropmonitoringplantheightform.lenght_of_crop_stage_one }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_leave_number_one.errors }}
+    <label for="plant_leave_number_one" class="col-md-4 control-label">Plant leave number:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.plant_leave_number_one }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_leave_length_one.errors }}
+    <label for="plant_leave_length_one" class="col-md-4 control-label">Plant leave length:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+              {{ cropmonitoringplantheightform.plant_leave_length_one }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_leave_width_one.errors }}
+    <label for="plant_leave_width_one" class="col-md-4 control-label">Plant leave width:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+              {{ cropmonitoringplantheightform.plant_leave_width_one }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+</fieldset>
+
+<fieldset id='PLANT_TWO'>
+<legend>plant two..</legend>
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_height_two.errors }}
+    <label for="plant_height_two" class="col-md-4 control-label">Plant height:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+             {{ cropmonitoringplantheightform.plant_height_two }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.LAI_two.errors }}
+    <label for="LAI_two" class="col-md-4 control-label">Leaf area index (LAI):</label>
+        <div class="col-md-4 selectContainer">
+             {{ cropmonitoringplantheightform.LAI_two }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_canopy_width_two.errors }}
+    <label for="plant_canopy_width_two" class="col-md-4 control-label">Plant canopy width</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+             {{ cropmonitoringplantheightform.plant_canopy_width_two }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.lenght_of_crop_stage_two.errors }}
+    <label for="lenght_of_crop_stage_two" class="col-md-4 control-label">Lenght of crop stage:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+             {{ cropmonitoringplantheightform.lenght_of_crop_stage_two }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_leave_number_two.errors }}
+    <label for="plant_leave_number_two" class="col-md-4 control-label">Plant leave number:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.plant_leave_number_two }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_leave_length_two.errors }}
+    <label for="plant_leave_length_two" class="col-md-4 control-label">Plant leave length:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+              {{ cropmonitoringplantheightform.plant_leave_length_two }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_leave_width_two.errors }}
+    <label for="plant_leave_width_two" class="col-md-4 control-label">Plant leave width:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+              {{ cropmonitoringplantheightform.plant_leave_width_two }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+</fieldset>
+
+<fieldset id='PLANT_THREE'>
+<legend>plant three..</legend>
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_height_three.errors }}
+    <label for="plant_height_three" class="col-md-4 control-label">Plant height:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+             {{ cropmonitoringplantheightform.plant_height_three }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.LAI_three.errors }}
+    <label for="LAI_three" class="col-md-4 control-label">Leaf area index (LAI):</label>
+        <div class="col-md-4 selectContainer">
+             {{ cropmonitoringplantheightform.LAI_three }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_canopy_width_three.errors }}
+    <label for="plant_canopy_width_three" class="col-md-4 control-label">Plant canopy width</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+             {{ cropmonitoringplantheightform.plant_canopy_width_three }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.lenght_of_crop_stage_three.errors }}
+    <label for="lenght_of_crop_stage_three" class="col-md-4 control-label">Lenght of crop stage:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+             {{ cropmonitoringplantheightform.lenght_of_crop_stage_three }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_leave_number_three.errors }}
+    <label for="plant_leave_number_three" class="col-md-4 control-label">Plant leave number:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.plant_leave_number_three }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_leave_length_three.errors }}
+    <label for="plant_leave_length_three" class="col-md-4 control-label">Plant leave length:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+              {{ cropmonitoringplantheightform.plant_leave_length_three }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_leave_width_three.errors }}
+    <label for="plant_leave_width_three" class="col-md-4 control-label">Plant leave width:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+              {{ cropmonitoringplantheightform.plant_leave_width_three }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+</fieldset>
+{{ cropmonitoringplantheightform.totalPlant }}
+<label for="plot_message" id="plot_message" style="color: green"><small><i>Looks like plot is not registered under <strong>"Planting Method tab"</strong>.Please register the plot first before proceeding with this tab</i></small></label>
+<label for="message" style="color:#636363"><small>Note: If data is not available please enter -999 and not 0”</small></label>
+ <input value='' id='croppingsystem' hidden='hidden'>
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group" id='submit'>
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block extended_javascripts_code %}
+	<script>
+    $(document).ready(function () {
+    $('#cropmonitoring_form').formValidation({
+        framework: 'bootstrap',
+        icon: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select farm' }
+                        }
+                    },
+                    
+            date: {
+                validators: {
+                    date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: {
+                        message: 'Please fill in date' }
+                        }
+                    },
+            Crop: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose crop' }
+                        }
+                    },
+            plot: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select row' }
+                        }
+                    },
+            crop_stage: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select crop_stage' }
+                        }
+                    },
+                    
+            plant_density_per_bed: {
+                validators: {
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: {
+                        message: 'Please fill plant density/bed' }
+                        }
+                    },
+            plant_density_per_sqm: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill plant density per square meter' }
+                }
+            },
+
+            number_of_good_plants: {
+                validators:{
+                        integer: {
+                        message: 'The value is not an integer'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of good plants' }
+                }
+            },
+            row_number: {
+                validators:{
+                        notEmpty:{
+                                message:'Please choose row number' }
+                }
+            },
+            number_of_bad_plants: {
+                validators:{
+                        integer: {
+                        message: 'The value is not an integer'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of bad plants' }
+                }
+            },
+            
+            plant_number: {
+                validators:{
+                        notEmpty:{
+                                message:'Please choose plant number' }
+                }
+            },            
+            LAI_one: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            plant_height_one: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill plant height' }
+                }
+            },
+            
+            plant_canopy_width_one: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill plant canopy width' }
+                }
+            },           
+            lenght_of_crop_stage_one: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill lenght of crop stage' }
+                }
+            },
+            plant_leave_number_one: {
+                validators:{
+                        integer: {
+                        message: 'The value is not an integer'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of plant leaves' }
+                }
+            },
+            plant_leave_length_one: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill plant leave length' }
+                }
+            },
+            plant_leave_width_one: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill plant leave width' }
+                }
+            },          
+            LAI_two: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            plant_height_two: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill plant height' }
+                }
+            },
+            
+            plant_canopy_width_two: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill plant canopy width' }
+                }
+            },           
+            lenght_of_crop_stage_two: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill lenght of crop stage' }
+                }
+            },
+            plant_leave_number_two: {
+                validators:{
+                        integer: {
+                        message: 'The value is not an integer'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of plant leaves' }
+                }
+            },
+            plant_leave_length_two: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill plant leave length' }
+                }
+            },
+            plant_leave_width_two: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill plant leave width' }
+                }
+            },          
+            LAI_three: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'This field is required' }
+                }
+            },
+            plant_height_three: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill plant height' }
+                }
+            },
+            
+            plant_canopy_width_three: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill plant canopy width' }
+                }
+            },           
+            lenght_of_crop_stage_three: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill lenght of crop stage' }
+                }
+            },
+            plant_leave_number_three: {
+                validators:{
+                        integer: {
+                        message: 'The value is not an integer'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of plant leaves' }
+                }
+            },
+            plant_leave_length_three: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill plant leave length' }
+                }
+            },
+            plant_leave_width_three: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill plant leave width' }
+                }
+            },          
+        }
+    })
+});
+      //# sourceURL=pen.js
+
+    </script>
+    <script>
+            if (document.location.search.match(/type=embed/gi)) {
+                window.parent.postMessage("resize", "*");
+                }
+    </script>
+
+<script>
+$(document).ready(function() {
+  $("#id_farm").change(function() {
+    if ($(this).val() == '') {
+      $("#id_plot").html("<option>Choose field..</option>");
+      $("#id_plot").attr('disabled', true);
+      }
+      else {
+        var url = "/plot/" + $(this).val() + "/plots";
+        $.getJSON(url, function(plots) {
+        var options = '<option value="">Choose plot..</option>';
+        for (var i = 0; i < plots.length; i++) {
+          options += '<option value="' + plots[i].pk + '">' + plots[i].fields['plotID']  + '</option>';
+        }
+        $("#id_plot").html(options);
+        $("#id_plot option:first").attr('selected', 'selected');
+        $("#id_plot").attr('disabled', false);
+      });
+    }
+  });
+});
+</script>
+<script>
+$(window).load(function() {
+  if (typeof $('#uservillage').val() === "undefined"){
+    var url = "/select_all/";
+    $.getJSON(url, function(farmers) {
+    var options = '<option value="">Choose Field..</option>';
+      for (var i = 0; i < farmers.length; i++) {
+        options += '<option value="' + farmers[i].pk + '">' + farmers[i].fields['firstname'] + ' ' + farmers[i].fields['middlename'] + ' ' + farmers[i].fields['lastname'] + '</option>';
+          }
+          $("#id_farm").html(options);
+          $("#id_farm option:selected").attr('selected', 'selected');
+      });
+    }
+    else if (typeof $('#researcher').val() === "undefined"){
+    var village = $('#uservillage').val();
+    var url = "/farmer/" + village + "/farmers";
+    $.getJSON(url, function(farmers) {
+    var options = '<option value="">Choose Field..</option>';
+      for (var i = 0; i < farmers.length; i++) {
+        options += '<option value="' + farmers[i].pk + '">' + farmers[i].fields['firstname'] + ' ' + farmers[i].fields['middlename'] + ' ' + farmers[i].fields['lastname'] + '</option>';
+          }
+          $("#id_farm").html(options);
+          $("#id_farm option:selected").attr('selected', 'selected');
+          
+      });
+    }
+});
+</script>
+
+<script>
+$(window).load(function() {
+  if ($('#id_farm').val() == '' || $('#id_plot').val() == '') {
+      $('#Crop').hide();
+	  $('#plot_message').hide();
+    }
+  else {
+     if ($('#croppingsystem').val() == 'Monocropping') {
+        $('#Crop').hide();
+        $('#id_Crop').val();
+     }
+     else if ($('#croppingsystem').val() == 'Intercropping')  {
+        $('#Crop').show();
+        $('#id_Crop').val();
+     }
+  }
+});
+
+$(document).ready(function() {
+  $("#id_farm,#id_plot").change(function() {
+    if ($('#id_farm').val() == '' || $('#id_plot').val() == '') {
+      $('#Crop').hide();
+    }
+    else{
+      var url = "/plotmanagement_info/" + $('#id_farm').val() + '/' + $('#id_plot').val() + "/plotmanagement_info";
+      $.getJSON(url, function(plotmanagement_info) {
+       var  croppingsystem = plotmanagement_info[0],
+			total_plants = plotmanagement_info[1];
+		if (croppingsystem == '' || croppingsystem == null ) {
+            $('#PLANT_ONE,#PLANT_TWO,#PLANT_THREE,#Crop,#plant_density_section,#submit').hide();
+			$('#plot_message').show();
+        }
+		else{
+		  $('#PLANT_ONE,#PLANT_TWO,#PLANT_THREE,#submit').show();
+		  $('#plot_message').hide();
+		if (croppingsystem == 'Monocropping') {
+		  //alert('yes we can');
+		  if (total_plants == null || total_plants == '') {
+			$('#id_totalPlant').val(-999);
+            $('#plant_density_section').show();
+			$('#sub_plot_size').show();
+			$('#id_sub_plot_size').val('');
+			$('#sub_plot_plant_number').show();
+			$('#id_sub_plot_plant_number').val('')
+			$('#total_plant_number').show();
+			$('#id_total_plant_number').val('');
+          }
+		  else{
+			$('#id_totalPlant').val(999);
+			$('#plant_density_section').hide();
+			$('#sub_plot_size').hide();
+			$('#id_sub_plot_size').val(0);
+			$('#sub_plot_plant_number').hide();
+			$('#id_sub_plot_plant_number').val(0);
+			$('#total_plant_number').hide();
+			$('#id_total_plant_number').val(0);
+		  }
+		  crop = plotmanagement_info[2][0];
+		  $('#Crop').hide();
+		  $('#id_Crop').html($('<option>', {
+				  value: crop,
+				  text: crop,
+		  }));
+		  $('select[name=Crop] option:eq(1)').attr('selected', 'selected');
+       }
+       else if (croppingsystem == 'Intercropping') {
+		if (total_plants == null || total_plants == '') {
+			$('#id_totalPlant').val(-999);
+            $('#plant_density_section').show();
+			$('#sub_plot_size').show();
+			$('#id_sub_plot_size').val('');
+			$('#sub_plot_plant_number').show();
+			$('#id_sub_plot_plant_number').val('')
+			$('#total_plant_number').show();
+			$('#id_total_plant_number').val('');
+          }
+		  else{
+			$('#id_totalPlant').val(999);
+			$('#plant_density_section').hide();
+			$('#sub_plot_size').hide();
+			$('#id_sub_plot_size').val(0);
+			$('#sub_plot_plant_number').hide();
+			$('#id_sub_plot_plant_number').val(0);
+			$('#total_plant_number').hide();
+			$('#id_total_plant_number').val(0);
+		  }
+		  
+        $('#Crop').show();
+        var options = '<option value="">Choose crop..</option>';
+        crops = plotmanagement_info[2];
+        for (var i = 0; i < crops.length; i++) {
+          options += '<option value="' + crops[i] + '">' + crops[i] + '</option>';
+          }
+          $("#id_Crop").html(options);
+          $("#id_Crop option:selected").attr('selected', 'selected');  
+       }
+		}
+      })
+    }
+  })
+});
+
+</script>
+<script>
+$(document).ready(function() {
+  $("#id_plot").change(function() {
+	var url = "/waterapplication/" + $(this).val() + "/" + $("#id_farm").val()+ "/waterapplications";
+	$.getJSON(url, function(plotlist) {
+	  var waterapplication =plotlist[0]
+      var bedlength = plotlist[1]
+      var bedwidth = plotlist[2]
+      var number_of_beds = plotlist[3]
+	  
+  $('#id_sub_plot_size,#id_sub_plot_plant_number').on('click keyup input change', function () {
+	setTimeout(function () {
+	//alert('dd');
+	var total_plant_number = ((bedlength * bedwidth) * number_of_beds * $('#id_sub_plot_plant_number').val()) / ($('#id_sub_plot_size').val())
+		$('#id_total_plant_number').val(total_plant_number.toFixed(0));
+	}, 0);
+  });
+  
+  $('#id_number_of_good_plants,#id_number_of_bad_plants,#id_plot').on('click keyup input change', function () {
+	setTimeout(function () {
+	//alert('dd');
+	var plant_density_per_sqm = ($('#id_number_of_good_plants').val() + $('#id_number_of_bad_plants').val()) / (bedlength * bedwidth);
+	var plant_density_per_bed = parseInt($('#id_number_of_good_plants').val(),10) + parseInt($('#id_number_of_bad_plants').val(),10);
+	
+	$('#id_plant_density_per_sqm').val(plant_density_per_sqm.toFixed(2));
+	$('#id_plant_density_per_bed').val(plant_density_per_bed);
+	}, 0);
+  });
+	})
+  });
+});
+</script>
+
+{% endblock %}

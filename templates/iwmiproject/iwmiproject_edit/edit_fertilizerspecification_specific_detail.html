@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    <title>FertilizerSpecification</title>
+{% endblock %}
+
+{% block main_section %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+
+<form class="well form-horizontal" action=" " method="post"  id="fertilizerspecification_form">{% csrf_token %} 
+
+<!-- Form Name -->
+<fieldset>
+<legend>Edit Fertilizer specification</legend>
+
+
+{% if user_village %}
+<input type="hidden" id="uservillage" name="uservillage" value="{{user_village}}" readonly='readonly' />
+{% elif researcher %}
+<input type="hidden" id="researcher" name="researcher" value="{{researcher}}" readonly='readonly' />
+{% elif user_country %}
+
+{% endif %}
+<label class="warning" for="message" id="message" style="color: red"><small><i>{{message}}</i></small></label>
+
+<div class="form-group"> 
+    {{ fertilizerspecificationform.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farm:</label>
+        <div class="col-md-4 selectContainer">
+        {{ fertilizerspecificationform.farm }}
+        </div>
+</div>
+
+<div class="form-group" id='plotID'> 
+    {{ fertilizerspecificationform.plot.errors }}
+    <label for="plotID" class="col-md-4 control-label">Field/Plot:</label>
+        <div class="col-md-4 selectContainer">
+        {{ fertilizerspecificationform.plotID }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ fertilizerspecificationform.fertilizer.errors }}
+    <label for="fertilizer" class="col-md-4 control-label">Fertilizer:</label>
+        <div class="col-md-4 selectContainer">
+        {{ fertilizerspecificationform.fertilizer }}
+        </div>
+</div>
+
+
+
+<div class="form-group" > 
+    {{ fertilizerspecificationform.nitrogen.errors }}
+    <label for="nitrogen" class="col-md-4 control-label">Nitrogen:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+        {{ fertilizerspecificationform.nitrogen }}<span class="input-group-addon">%</span>
+        </div>
+          </div>
+</div>
+
+<div class="form-group"> 
+    {{ fertilizerspecificationform.phosphorus.errors }}
+    <label for="phosphorus" class="col-md-4 control-label">Phosphorus:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ fertilizerspecificationform.phosphorus }}<span class="input-group-addon">%</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ fertilizerspecificationform.sulphur.errors }}
+    <label for="sulphur" class="col-md-4 control-label">Sulphur:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ fertilizerspecificationform.sulphur }}<span class="input-group-addon">%</span>
+            </div>
+        </div>
+</div>
+
+
+
+<div class="form-group"> 
+    {{ fertilizerspecificationform.potassium.errors }}
+    <label for="potassium" class="col-md-4 control-label">Potassium:</label>
+        <div class="col-md-4 selectContainer">
+         <div class="input-group">
+           {{ fertilizerspecificationform.potassium }}<span class="input-group-addon">%</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ fertilizerspecificationform.organic_matter.errors }}
+    <label for="organic_matter" class="col-md-4 control-label">Organic matter:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+           {{ fertilizerspecificationform.organic_matter }}<span class="input-group-addon">%</span>
+            </div>
+        </div>
+</div>
+
+
+</fieldset>
+<label for="message" style="color:#636363"><small>Note: If data is not available please enter -999 and not 0”</small></label>
+ 
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group" id='submit'>
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block extended_javascripts_code %}
+	<script>
+    $(document).ready(function () {
+    $('#fertilizerspecification_form').formValidation({
+        framework: 'bootstrap',
+        icon: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose farm' }
+                        }
+                    },
+
+            fertilizer: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select fertlizer' }
+                        }
+                    },
+            
+            nitrogen: {
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill nitrogen percentage' }
+                }
+            },
+            phosphorus: {
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill phosphorus value in ppm' }
+                }
+            },
+            potassium: {
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill potassium value in ppm' }
+                }
+            },
+            sulphur: {
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill sulphur value in ppm' }
+                }
+            },
+            organic_matter: {
+                validators: {
+                    greaterThan: {
+                        value:0,
+                        message: 'The value must be greater than or equal to zero'
+                    },
+                    numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                    notEmpty: { message: 'Please fill organic_matter percentage' }
+                }
+            }
+        }
+    }).on('click keyup input change','[name="organic_matter"],[name="sulphur"],[name="potassium"],[name="phosphorus"],[name="nitrogen"]',function(e){
+            var organic_matter  = $('#fertilizerspecification_form').find('[name="organic_matter"]').val(),
+                sulphur  = $('#fertilizerspecification_form').find('[name="sulphur"]').val(),
+                potassium  = $('#fertilizerspecification_form').find('[name="potassium"]').val(),
+                phosphorus  = $('#fertilizerspecification_form').find('[name="phosphorus"]').val(),
+                nitrogen  = $('#fertilizerspecification_form').find('[name="nitrogen"]').val();
+            switch ($(this).attr('name')) {
+                case 'organic_matter':
+                  if (organic_matter == -999) {$('#fertilizerspecification_form').formValidation('enableFieldValidators','organic_matter',false);}
+                  else{$('#fertilizerspecification_form').formValidation('enableFieldValidators','organic_matter',true);}
+                case 'sulphur':
+                  if (sulphur == -999) {$('#fertilizerspecification_form').formValidation('enableFieldValidators','sulphur',false);}
+                  else{$('#fertilizerspecification_form').formValidation('enableFieldValidators','sulphur',true);}
+                case 'potassium':
+                  if (potassium == -999) {$('#fertilizerspecification_form').formValidation('enableFieldValidators','potassium',false);}
+                  else{$('#fertilizerspecification_form').formValidation('enableFieldValidators','potassium',true); }
+                case 'phosphorus':
+                  if (phosphorus == -999) {$('#fertilizerspecification_form').formValidation('enableFieldValidators','phosphorus',false);}
+                  else{$('#fertilizerspecification_form').formValidation('enableFieldValidators','phosphorus',true); }
+                case 'nitrogen':
+                  if (nitrogen == -999) {$('#fertilizerspecification_form').formValidation('enableFieldValidators','nitrogen',false);}
+                  else{$('#fertilizerspecification_form').formValidation('enableFieldValidators','nitrogen',true);}
+            } 
+      });
+});
+    </script>
+
+<script>
+
+$(window).load(function(){
+  var url = "/get_farmer_name/" + $('#id_farm').val() + "/get_farmer_name";
+  $.getJSON(url, function(farmer_name) {
+    //alert(farmer_name);
+    var options = '<option value="' + farmer_name[0] + '">' + farmer_name[1] + ' ' + farmer_name[2] + ' ' + farmer_name[3] + '</option>';
+    $("#id_farm").html(options);
+    $("#id_farm option:selected").attr('selected', 'selected');
+  })
+});
+
+$(window).load(function(){
+  var url = "/get_plot_name/" + $('#id_plotID').val() + "/get_plot_name";
+  $.getJSON(url, function(plot_name) {
+    var options = '<option value="' + plot_name[0] + '">' + plot_name[1] + '</option>';
+    $("#id_plotID").html(options);
+    $("#id_plotID option:selected").attr('selected', 'selected');
+     $("#id_plotID").attr('disabled', false);
+  })
+});
+
+</script>
+
+<script>
+   
+$(window).load(function() {
+    var url = "/edit_fertilizerspecification/" + $('#id_farm').val() + '/' + $('#id_plotID').val() + '/'+ $('#id_fertilizer').val() + "/edit_fertilizerspecification";
+    $.getJSON(url, function(plot_fertilizer) {
+        var options = '<option value="' + plot_fertilizer + '">' + plot_fertilizer+ '</option>';
+        $("#id_fertilizer").html(options);
+        $("#id_fertilizer option:first").attr('selected', 'selected');
+        $("#id_fertilizer").attr('disabled', false);
+      });
+});
+
+</script>
+{% endblock %}

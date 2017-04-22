@@ -1,0 +1,463 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    <title>PlantLevelYield</title>
+{% endblock %}
+
+{% block main_section %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script>
+$(function() {
+  $( "#id_date" ).datepicker({
+    onSelect: function() {
+        $('#plant_level_yield_form').formValidation('revalidateField', 'date');
+    }
+    })
+});  
+</script>
+
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+
+    <form class="well form-horizontal" action=" " method="post"  id="plant_level_yield_form">{% csrf_token %} 
+
+<!-- Form Name -->
+<fieldset>
+<legend>Yield at plant level..</legend>
+
+
+{% if user_village %}
+<input type="hidden" id="uservillage" name="uservillage" value="{{user_village}}" readonly='readonly' />
+{% elif researcher %}
+<input type="hidden" id="researcher" name="researcher" value="{{researcher}}" readonly='readonly' />
+{% elif user_country %}
+
+{% endif %}
+<label class="warning" for="message" id="message" align='center' style="color: red"><small><i>{{message}}</i></small></label>
+
+
+<div class="form-group"> 
+    {{ yieldplantlevel_form.date.errors }}
+    <label for="date" class="col-md-4 control-label">Date:</label>
+        <div class="col-md-4 selectContainer">
+             {{ yieldplantlevel_form.date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ yieldplantlevel_form.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farm:</label>
+        <div class="col-md-4 selectContainer">
+             {{ yieldplantlevel_form.farm }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ yieldplantlevel_form.plotID.errors }}
+    <label for="plotID" class="col-md-4 control-label">Plot:</label>
+        <div class="col-md-4 selectContainer">
+             {{ yieldplantlevel_form.plotID }}
+        </div>
+</div>
+
+<div class="form-group" id='Crop'> 
+    {{ yieldplantlevel_form.Crop.errors }}
+    <label for="Crop" class="col-md-4 control-label">Crop:</label>
+        <div class="col-md-4 selectContainer">
+             {{ yieldplantlevel_form.Crop }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ yieldplantlevel_form.row_number.errors }}
+    <label for="row_number" class="col-md-4 control-label">Row number:</label>
+        <div class="col-md-4 selectContainer">
+        {{ yieldplantlevel_form.row_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ yieldplantlevel_form.plant_number.errors }}
+    <label for="plant_number" class="col-md-4 control-label">Plant Number:</label>
+        <div class="col-md-4 selectContainer">
+             {{ yieldplantlevel_form.plant_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ yieldplantlevel_form.fresh_dry.errors }}
+    <label for="fresh_dry" class="col-md-4 control-label">Dry or fresh:</label>
+        <div class="col-md-4 selectContainer">
+             {{ yieldplantlevel_form.fresh_dry }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ yieldplantlevel_form.harvest_method.errors }}
+    <label for="harvest_method" class="col-md-4 control-label">Harvesting method:</label>
+        <div class="col-md-4 selectContainer">
+             {{ yieldplantlevel_form.harvest_method }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ yieldplantlevel_form.marketable_produced.errors }}
+    <label for="marketable_produced" class="col-md-4 control-label">Number of marketable produced per plant:</label>
+        <div class="col-md-4 selectContainer">
+             {{ yieldplantlevel_form.marketable_produced }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ yieldplantlevel_form.unmarketable_produced.errors }}
+    <label for="unmarketable_produced" class="col-md-4 control-label">Number of unmarketable produced per plant:</label>
+        <div class="col-md-4 selectContainer">
+             {{ yieldplantlevel_form.unmarketable_produced }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ yieldplantlevel_form.marketable_produced_weight.errors }}
+    <label for="marketable_produced_weight" class="col-md-4 control-label">Weight of marketable produced per plant:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ yieldplantlevel_form.marketable_produced_weight }}<span class="input-group-addon">kg</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ yieldplantlevel_form.unmarketable_produced_weight.errors }}
+    <label for="unmarketable_produced_weight" class="col-md-4 control-label">Weight of unmarketable produced per plant:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ yieldplantlevel_form.unmarketable_produced_weight }}<span class="input-group-addon">kg</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ yieldplantlevel_form.diameter_width_produced.errors }}
+    <label for="diameter_width_produced" class="col-md-4 control-label">Diameter/width produced per plant:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ yieldplantlevel_form.diameter_width_produced }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ yieldplantlevel_form.length.errors }}
+    <label for="length" class="col-md-4 control-label">Length of the produce:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ yieldplantlevel_form.length }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ yieldplantlevel_form.residual_biomass.errors }}
+    <label for="residual_biomass" class="col-md-4 control-label">Residual biomass per plant:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ yieldplantlevel_form.residual_biomass }}<span class="input-group-addon">kg</span>
+            </div>
+        </div>
+</div>
+
+</fieldset>
+<label for="message" style="color:#636363"><small>Note: If data is not available please enter -999 and not 0”</small></label>
+ 
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block extended_javascripts_code %}
+	<script>
+    $(document).ready(function () {
+    $('#plant_level_yield_form').formValidation({
+        framework: 'bootstrap',
+        icon: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select farm' }
+                        }
+                    },
+                    
+            date:  {
+                validators: {
+                    date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: {
+                        message: 'Please fill in date' }
+                        }
+                    },
+            plotID: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select row' }
+                        }
+                    },
+            fresh_dry: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select dry or fresh' }
+                        }
+                    },
+                    
+            harvest_method: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose harvesting method' }
+                        }
+                    },
+            plant_number: {
+                validators:{
+                        notEmpty:{
+                                message:'Please choose plant number' }
+                }
+            },
+            marketable_produced: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of marketable fruit per plant' }
+                }
+            },
+            row_number: {
+                validators:{
+                        notEmpty:{
+                                message:'Please choose row number' }
+                }
+            },
+            unmarketable_produced: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill number of unmarketable fruit per plant' }
+                }
+            },
+            
+             marketable_produced_weight: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill the weight of marketable fruit per plant' }
+                }
+            },
+            unmarketable_produced_weight: {
+                validators:{
+                          numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill the weight of unmarketable fruit per plant' }
+                }
+            },
+            
+            diameter_width_produced: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill diameter/width' }
+                }
+            },           
+            residual_biomass: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill plant residual biomas' }
+                }
+            },
+            length: {
+                validators:{
+                        numeric: {
+                            message: 'The value is not a number',
+                            thousandsSeparator: '',
+                            decimalSeparator: '.'
+                        },
+                        notEmpty:{
+                                message:'Please fill length of  plant' }
+                }
+            },
+        }
+    })
+});
+      //# sourceURL=pen.js
+
+    </script>
+    <script>
+            if (document.location.search.match(/type=embed/gi)) {
+                window.parent.postMessage("resize", "*");
+                }
+    </script>
+<script>
+      
+    $(document).ready(function() {
+            $("#id_farm").change(function() {
+                if ($(this).val() == '') {
+                    $("#id_plotID").html("<option>Choose..</option>");
+                    $("#id_plotID").attr('disabled', true);
+                }
+                else {
+                    var url = "/id_plotID/" + $(this).val() + "/plots";
+              
+                    $.getJSON(url, function(plots) {
+                        var options = '<option value="">Choose plot..</option>';
+                        for (var i = 1; i < plots+1; i++) {
+                            
+                            options += '<option value="' + i + '">' + i + '</option>';
+                        }
+                        $("#id_plotID").html(options);
+                        $("#id_plotID option:first").attr('selected', 'selected');
+                        $("#id_plotID").attr('disabled', false);
+                    });
+                }
+            });
+        });
+
+</script>
+
+<script>
+
+$(document).ready(function() {
+  $("#id_farm").change(function() {
+    if ($(this).val() == '') {
+      $("#id_plotID").html("<option>Choose field..</option>");
+      $("#id_plotID").attr('disabled', true);
+      }
+      else {
+        var url = "/plot/" + $(this).val() + "/plots";
+        $.getJSON(url, function(plots) {
+        var options = '<option value="">Choose plot..</option>';
+        for (var i = 0; i < plots.length; i++) {
+          options += '<option value="' + plots[i].pk + '">' + plots[i].fields['plotID']  + '</option>';
+        }
+        $("#id_plotID").html(options);
+        $("#id_plotID option:first").attr('selected', 'selected');
+        $("#id_plotID").attr('disabled', false);
+      });
+    }
+  });
+});
+</script>
+
+<script>
+$(window).load(function() {
+  if ($('#id_farm').val() == '' || $('#id_plotID').val() == '') {
+      $('#Crop').hide();
+	  $('#plot_message').hide();
+    }
+  else {
+     if ($('#croppingsystem').val() == 'Monocropping') {
+        $('#Crop').hide();
+        $('#id_Crop').val();
+     }
+     else if ($('#croppingsystem').val() == 'Intercropping')  {
+        $('#Crop').show();
+        $('#id_Crop').val();
+     }
+  }
+});
+
+$(document).ready(function() {
+  $("#id_farm,#id_plot").change(function() {
+    if ($('#id_farm').val() == '' || $('#id_plotID').val() == '') {
+      $('#Crop').hide();
+    }
+    else{
+      var url = "/plotmanagement_info/" + $('#id_farm').val() + '/' + $('#id_plot').val() + "/plotmanagement_info";
+      $.getJSON(url, function(plotmanagement_info) {
+       var  croppingsystem = plotmanagement_info[0];
+		if (croppingsystem == 'Monocropping') {
+		  crop = plotmanagement_info[2][0];
+		  $('#Crop').hide();
+		  $('#id_Crop').html($('<option>', {
+				  value: crop,
+				  text: crop,
+		  }));
+		  $('select[name=Crop] option:eq(1)').attr('selected', 'selected');
+       }
+       else if (croppingsystem == 'Intercropping') {
+
+        $('#Crop').show();
+        var options = '<option value="">Choose crop..</option>';
+        crops = plotmanagement_info[2];
+        for (var i = 0; i < crops.length; i++) {
+          options += '<option value="' + crops[i] + '">' + crops[i] + '</option>';
+          }
+          $("#id_Crop").html(options);
+          $("#id_Crop option:selected").attr('selected', 'selected');  
+       }
+	
+      })
+    }
+  })
+});
+</script>
+
+<script>
+
+$(window).load(function(){
+  var url = "/get_farmer_name/" + $('#id_farm').val() + "/get_farmer_name";
+  $.getJSON(url, function(farmer_name) {
+    //alert(farmer_name);
+    var options = '<option value="' + farmer_name[0] + '">' + farmer_name[1] + ' ' + farmer_name[2] + ' ' + farmer_name[3] + '</option>';
+    $("#id_farm").html(options);
+    $("#id_farm option:selected").attr('selected', 'selected');
+  })
+});
+
+$(window).load(function(){
+  var url = "/get_plot_name/" + $('#id_plotID').val() + "/get_plot_name";
+  $.getJSON(url, function(plot_name) {
+    var options = '<option value="' + plot_name[0] + '">' + plot_name[1] + '</option>';
+    $("#id_plotID").html(options);
+    $("#id_plotID option:selected").attr('selected', 'selected');
+  })
+});
+
+</script>
+{% endblock %}

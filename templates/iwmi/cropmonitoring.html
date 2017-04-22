@@ -1,0 +1,335 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    <title>PlantLevelYield</title>
+{% endblock %}
+
+{% block main_section %}
+<script>
+  $(function() {
+    $( "#id_date" ).datepicker({
+        format: 'mm/dd/yyyy'
+        }).on('changeDate', function(e) {
+            // Revalidate the date field
+            $('#soilmoisture_form').formValidation('revalidateField','date');
+        });
+  });
+    
+  </script>
+
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+
+  <form class="well form-horizontal" action=" " method="post"  id="fuelconsumption_form">{% csrf_token %} 
+
+<!-- Form Name -->
+<fieldset>
+<legend>Crop monitoring..</legend>
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.date.errors }}
+    <label for="date" class="col-md-4 control-label">Date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farm:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.farm }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.crop_stage.errors }}
+    <label for="crop_stage" class="col-md-4 control-label">Crop stage:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.crop_stage }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plot.errors }}
+    <label for="plot" class="col-md-4 control-label">Plot number:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.plot }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_density_per_bed.errors }}
+    <label for="plant_density_per_bed" class="col-md-4 control-label">Plant density/bed:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.plant_density_per_bed }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_density_per_sqm.errors }}
+    <label for="plant_density_per_sqm" class="col-md-4 control-label">Plant density/m<sup>2</sup>:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.plant_density_per_sqm }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.number_of_good_plants.errors }}
+    <label for="number_of_good_plants" class="col-md-4 control-label">Number of good plants:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.number_of_good_plants }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.number_of_bad_plants.errors }}
+    <label for="number_of_bad_plants" class="col-md-4 control-label">Number of bad plants:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.number_of_bad_plants }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_number.errors }}
+    <label for="plant_number" class="col-md-4 control-label">Plant number:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.plant_number }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_height.errors }}
+    <label for="plant_height" class="col-md-4 control-label">Plant height:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+             {{ cropmonitoringplantheightform.plant_height }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_canopy_width.errors }}
+    <label for="plant_canopy_width" class="col-md-4 control-label">Plant canopy width</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+             {{ cropmonitoringplantheightform.plant_canopy_width }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.lenght_of_crop_stage.errors }}
+    <label for="lenght_of_crop_stage" class="col-md-4 control-label">Lenght of crop stage:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+             {{ cropmonitoringplantheightform.lenght_of_crop_stage }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_leave_number.errors }}
+    <label for="plant_leave_number" class="col-md-4 control-label">Plant leave number:</label>
+        <div class="col-md-4 selectContainer">
+        {{ cropmonitoringplantheightform.plant_leave_number }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_leave_length.errors }}
+    <label for="plant_leave_length" class="col-md-4 control-label">Plant leave length:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+              {{ cropmonitoringplantheightform.plant_leave_length }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ cropmonitoringplantheightform.plant_leave_width.errors }}
+    <label for="plant_leave_width" class="col-md-4 control-label">Plant leave width:</label>
+        <div class="col-md-4 selectContainer">
+		  <div class="input-group">
+              {{ cropmonitoringplantheightform.plant_leave_width }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block extended_javascripts_code %}
+	<script>
+    $(document).ready(function () {
+    $('#fuelconsumption_form').bootstrapValidator({
+        feedbackIcons: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select farm' }
+                        }
+                    },
+                    
+            date: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select date' }
+                        }
+                    },
+            plot: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select row' }
+                        }
+                    },
+            crop_stage: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select crop_stage' }
+                        }
+                    },
+                    
+            plant_density_per_bed: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill plant density/bed' }
+                        }
+                    },
+            plant_density_per_sqm: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill plant density per square meter' }
+                }
+            },
+            number_of_good_plants: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill number of good plants' }
+                }
+            },
+            number_of_bad_plants: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill number of bad plants' }
+                }
+            },
+            
+            plant_number: {
+                validators:{
+                        notEmpty:{
+                                message:'Please choose plant number' }
+                }
+            },
+            plant_height: {
+                validators:{ 
+                        notEmpty:{
+                                message:'Please fill plant height' }
+                }
+            },
+            
+            plant_canopy_width: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill plant canopy width' }
+                }
+            },           
+            lenght_of_crop_stage: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill lenght of crop stage' }
+                }
+            },
+            plant_leave_number: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill number of plant leaves' }
+                }
+            },
+            plant_leave_length: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill plant leave length' }
+                }
+            },
+            plant_leave_width: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill plant leave width' }
+                }
+            },          
+        }
+    }).on('success.form.bv', function (e) {
+        $('#success_message').slideDown({ opacity: 'show' }, 'slow');
+        $('#fuelconsumption_form').data('bootstrapValidator').resetForm();
+        e.preventDefault();
+        var $form = $(e.target);
+        var bv = $form.data('bootstrapValidator');
+        $.post($form.attr('action'), $form.serialize(), function (result) {
+            console.log(result);
+        }, 'json');
+    });
+});
+      //# sourceURL=pen.js
+
+    </script>
+    <script>
+            if (document.location.search.match(/type=embed/gi)) {
+                window.parent.postMessage("resize", "*");
+                }
+    </script>
+<script>
+      
+    $(document).ready(function() {
+            $("#id_farm").change(function() {
+                if ($(this).val() == '') {
+                    $("#id_plot").html("<option>Choose..</option>");
+                    $("#id_plot").attr('disabled', true);
+                }
+                else {
+                    var url = "/id_plot/" + $(this).val() + "/plots";
+              
+                    $.getJSON(url, function(plots) {
+                        var options = '<option value="">Choose plot..</option>';
+                        for (var i = 1; i < plots+1; i++) {
+                            
+                            options += '<option value="' + i + '">' + i + '</option>';
+                        }
+                        $("#id_plot").html(options);
+                        $("#id_plot option:first").attr('selected', 'selected');
+                        $("#id_plot").attr('disabled', false);
+                    });
+                }
+            });
+        });
+
+</script>
+{% endblock %}

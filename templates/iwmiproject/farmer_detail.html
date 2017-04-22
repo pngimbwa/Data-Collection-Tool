@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>Add Farmer</title>
+{% endblock %}
+
+{% block main_section %}
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+
+<form class="well form-horizontal" action=" " method="post"  id="addfarmer_form">{% csrf_token %} 
+
+
+<div class="form-group"> 
+    <label for="country" class="col-md-4 control-label">Country:</label>
+        <div class="col-md-4 selectContainer">
+            <select name="country" id="id_country" class="form-control selectpicker" >
+                <option value="">Choose Country..</option> 
+                    {% for country in countries  %}
+                <option value="{{country.name}}" {% if country == country.name %} selected="selected" {% endif %} >{{country.name}}</option>
+                    {% endfor %}
+            </select>
+        </div>
+</div>
+                
+<div class="form-group"> 
+    <label for="region" class="col-md-4 control-label">Region:</label>
+        <div class="col-md-4 selectContainer">
+            <select name="region" id="id_region" class="form-control selectpicker" disabled="True" >
+                <option value=" " >Choose Region....</option>
+            </select>
+        </div>
+</div>
+                
+<div class="form-group"> 
+    <label for="district" class="col-md-4 control-label">District:</label>
+        <div class="col-md-4 selectContainer">
+            <select name="district" id="id_district" disabled="true" class="form-control selectpicker" >
+                <option value=" " >Choose District...</option>
+            </select>
+        </div>
+</div>
+                
+<div class="form-group"> 
+    <label for="village" class="col-md-4 control-label">Village:</label>
+        <div class="col-md-4 selectContainer">
+            <select name="village" id="id_village" disabled="true" class="form-control selectpicker" >
+                <option value=" " >Choose....</option>
+            </select>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    <label for="farmer" class="col-md-4 control-label">Farmer:</label>
+        <div class="col-md-4 selectContainer">
+            <select name="farmer" id="id_farmer" disabled="true" class="form-control selectpicker" >
+                <option value=" " >Choose Farmer....</option>
+            </select>
+        </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+    <div class="col-md-4">
+        <button type="submit" class="btn btn-default" >View detail</button>
+    </div>
+</div>
+</form>
+    
+</div><!-- /.container -->
+{% endblock %}
+
+{% block extended_javascripts_code %}
+<script>
+      
+    $(document).ready(function() {
+            $("#id_country").change(function() {
+                if ($(this).val() == '') {
+                    $("#id_region").html("<option>Choose Region..</option>");
+                    $("#id_region").attr('disabled', true);
+                }
+                else {
+                    var url = "/id_region/" + $(this).val() + "/regions";
+              
+                    $.getJSON(url, function(regions) {
+                        var options = '<option value="">Choose Region..</option>';
+                        for (var i = 0; i < regions.length; i++) {
+                            
+                            options += '<option value="' + regions[i].pk + '">' + regions[i].pk + '</option>';
+                        }
+                        $("#id_region").html(options);
+                        $("#id_region option:first").attr('selected', 'selected');
+                        $("#id_region").attr('disabled', false);
+                    });
+                }
+            });
+            
+            $("#id_region").change(function() {
+                if ($(this).val() == '') {
+                    $("#id_district").html("<option>Choose District..</option>");
+                    $("#id_district").attr('disabled', true);
+                }
+                else {
+                    var url = "/id_district/" + $(this).val() + "/districts";
+                    $.getJSON(url, function(districts) {
+                        var options = '<option value="">Choose Region..</option>';
+                        for (var i = 0; i < districts.length; i++) {
+                            options += '<option value="' + districts[i].pk + '">' + districts[i].pk + '</option>';
+                        }
+                        $("#id_district").html(options);
+                        $("#id_district option:first").attr('selected', 'selected');
+                        $("#id_district").attr('disabled', false);
+                    });
+                }
+            });
+            
+             $("#id_district").change(function() {
+                if ($(this).val() == '') {
+                    $("#id_village").html("<option>Choose Village..</option>");
+                    $("#id_village").attr('disabled', true);
+                }
+                else {
+                    var url = "/id_village/" + $(this).val() + "/villages";
+                    $.getJSON(url, function(villages) {
+                        var options = '<option value="">Choose Village..</option>';
+                        for (var i = 0; i < villages.length; i++) {
+                            options += '<option value="' + villages[i].pk + '">' + villages[i].pk + '</option>';
+                        }
+                        $("#id_village").html(options);
+                        $("#id_village option:first").attr('selected', 'selected');
+                        $("#id_village").attr('disabled', false);
+                    });
+                }
+            });
+             
+             $("#id_village").change(function() {
+                if ($(this).val() == '') {
+                    $("#id_farmer").html("<option>Choose Farmer..</option>");
+                    $("#id_farmer").attr('disabled', true);
+                }
+                else {
+                    var url = "/id_farmer/" + $(this).val() + "/farmers";
+                    $.getJSON(url, function(farmers) {
+                        var options = '<option value="">Choose Farmer..</option>';
+                        for (var i = 0; i < farmers.length; i++) {
+                            options += '<option value="' + farmers[i].pk + '">' + farmers[i].fields['first_name'] + ' ' + farmers[i].fields['middle_name'] + ' ' +  farmers[i].fields['last_name']+ '</option>';
+                        }
+                        $("#id_farmer").html(options);
+                        $("#id_farmer option:first").attr('selected', 'selected');
+                        $("#id_farmer").attr('disabled', false);
+                    });
+                }
+            });
+             
+    });
+    /*
+    $.getJSON(url, function(error) {
+                       alert(error);
+    });
+    */
+</script>
+<script>
+        $(document).ready(function () {
+    $('#addfarmer_form').bootstrapValidator({
+        feedbackIcons: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            country: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select country' }
+                        }
+                    },
+                    
+            region: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select region' }
+                        }
+                    },
+            
+            district: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select district' }
+                        }
+                    },
+            
+            village: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select village' }
+                        }
+                    },
+            farmer: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select a farmer' }
+                        }
+                    },
+        }
+    }).on('success.form.bv', function (e) {
+        $('#success_message').slideDown({ opacity: 'show' }, 'slow');
+        $('#addfarmer_form').data('bootstrapValidator').resetForm();
+        e.preventDefault();
+        var $form = $(e.target);
+        var bv = $form.data('bootstrapValidator');
+        $.post($form.attr('action'), $form.serialize(), function (result) {
+            console.log(result);
+        }, 'json');
+    });
+});
+</script>
+{% endblock %}
+

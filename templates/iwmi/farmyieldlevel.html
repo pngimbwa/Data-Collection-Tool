@@ -1,0 +1,331 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    <title>FarmLevelYield</title>
+{% endblock %}
+
+{% block main_section %}
+
+<script>
+  $(function() {
+    $( "#id_date" ).datepicker({
+        format: 'mm/dd/yyyy'
+        }).on('changeDate', function(e) {
+            // Revalidate the date field
+            $('#soilmoisture_form').formValidation('revalidateField','date');
+        });
+  });
+    
+  </script>
+
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+
+    <form class="well form-horizontal" action=" " method="post"  id="fuelconsumption_form">{% csrf_token %} 
+
+<!-- Form Name -->
+<fieldset>
+<legend>Yield at farm level..</legend>
+
+<div class="form-group"> 
+    {{ farmyieldlevelform.date.errors }}
+    <label for="date" class="col-md-4 control-label">Date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmyieldlevelform.date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmyieldlevelform.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farm:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmyieldlevelform.farm }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmyieldlevelform.area.errors }}
+    <label for="area" class="col-md-4 control-label">Area:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farmyieldlevelform.area }}<span class="input-group-addon">m<sup>2</sup></span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmyieldlevelform.dry_fresh.errors }}
+    <label for="dry_fresh" class="col-md-4 control-label">Dry or fresh:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farmyieldlevelform.dry_fresh }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmyieldlevelform.quantity_harvested.errors }}
+    <label for="quantity_harvested" class="col-md-4 control-label">Harvested Amount:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farmyieldlevelform.quantity_harvested }}<span class="input-group-addon">kg</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmyieldlevelform.marketable_yield.errors }}
+    <label for="marketable_yield" class="col-md-4 control-label">Marketable yield:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farmyieldlevelform.marketable_yield }}<span class="input-group-addon">kg</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmyieldlevelform.unmarketable_yield.errors }}
+    <label for="unmarketable_yield" class="col-md-4 control-label">Unmarketable yield:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farmyieldlevelform.unmarketable_yield }}<span class="input-group-addon">kg</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ farmyieldlevelform.biomas.errors }}
+    <label for="biomas" class="col-md-4 control-label">Biomas:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+            {{ farmyieldlevelform.biomas }}<span class="input-group-addon">kg</span>
+            </div>
+        </div>
+</div>
+
+
+</fieldset>
+
+<fieldset>
+<legend>Labour Info</legend>
+
+<div class="form-group"> 
+    {{ farmyieldlevelform.labour.errors }}
+    <label for="labour" class="col-md-4 control-label">Labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ farmyieldlevelform.labour }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmyieldlevelform.hired_female_number.errors }}
+    <label for="hired_female_number" class="col-md-4 control-label">Number of hired female:</label>
+        <div class="col-md-4 selectContainer">
+            {{ farmyieldlevelform.hired_female_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmyieldlevelform.hired_male_number.errors }}
+    <label for="hired_male_number" class="col-md-4 control-label">Number of hired male:</label>
+        <div class="col-md-4 selectContainer">
+            {{ farmyieldlevelform.hired_male_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmyieldlevelform.family_female_number.errors }}
+    <label for="family_female_number" class="col-md-4 control-label">Number of female family  labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ farmyieldlevelform.family_female_number }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmyieldlevelform.family_male_number.errors }}
+    <label for="family_male_number" class="col-md-4 control-label">Number of male family labour:</label>
+        <div class="col-md-4 selectContainer">
+            {{ farmyieldlevelform.family_male_number}}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farmyieldlevelform.payement.errors }}
+    <label for="payement" class="col-md-4 control-label">Total payement:</label>
+        <div class="col-md-4 selectContainer">
+            {{ farmyieldlevelform.payement}}
+        </div>
+</div>
+
+</fieldset>
+
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block extended_javascripts_code %}
+	<script>
+    $(document).ready(function () {
+    $('#fuelconsumption_form').bootstrapValidator({
+        feedbackIcons: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            date: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please pick date' }
+                        }
+                    },
+            farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select farm' }
+                        }
+                    },
+            area: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill the harvested area size' }
+                        }
+                    },
+            dry_fresh: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose dry or fresh' }
+                        }
+                    },
+            marketable_yield: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill quantity of marketable yield' }
+                }
+            },
+            
+            unmarketable_yield: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill quantity of unmarketable yield' }
+                }
+            },
+            
+            biomas: {
+                validators:{ 
+                        notEmpty:{
+                                message:'Please fill average biomas amount' }
+                }
+            },
+            payement: {
+                validators:{ 
+                        notEmpty:{
+                                message:'Please fill total payement' }
+                }
+            },
+            quantity_harvested: {
+                validators:{ 
+                        notEmpty:{
+                                message:'Please fill quantity harvested' }
+                }
+            },
+            labour: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose labour' }
+                        }
+                    },
+            hired_female_number: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill number of hired female' }
+                }
+            },
+            hired_male_number: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill number of hired male' }
+                }
+            },
+            family_female_number: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill number of hired family female member' }
+                }
+            },
+             family_male_number: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill number of hired family male member' }
+                }
+            },
+        }
+    }).on('success.form.bv', function (e) {
+        $('#success_message').slideDown({ opacity: 'show' }, 'slow');
+        $('#fuelconsumption_form').data('bootstrapValidator').resetForm();
+        e.preventDefault();
+        var $form = $(e.target);
+        var bv = $form.data('bootstrapValidator');
+        $.post($form.attr('action'), $form.serialize(), function (result) {
+            console.log(result);
+        }, 'json');
+    });
+});
+      //# sourceURL=pen.js
+
+    </script>
+    <script>
+            if (document.location.search.match(/type=embed/gi)) {
+                window.parent.postMessage("resize", "*");
+                }
+    </script>
+    <script>
+    $(document).ready(function() {
+            $("#id_labour").change(function() {
+              value=0;
+                if ($(this).val() == '') {
+                    $("#id_hired_female_number").attr('readonly', true);
+                    $("#id_hired_female_number").val(value);
+                    $("#id_hired_male_number").attr('readonly', true);
+                    $("#id_hired_male_number").val(value);
+                    $("#id_family_female_number").attr('readonly', true);
+                    $("#id_family_female_number").vval(value);
+                    $("#id_family_male_number").attr('readonly', true);
+                    $("#id_family_male_number").val(value);
+                }
+                else if ($(this).val() == 'Family')  {
+                    $("#id_family_female_number").attr('readonly', false);
+                    $("#id_family_male_number").attr('readonly', false); 
+                    $("#id_hired_female_number").attr('readonly', true);
+                    $("#id_hired_female_number").val(value);
+                    $("#id_hired_male_number").attr('readonly', true);
+                    $("#id_hired_male_number").val(value);                    
+                }
+                else if ($(this).val() == 'Hired')  {
+                    $("#id_family_female_number").attr('readonly', true);
+                    $("#id_family_female_number").val(value);
+                    $("#id_family_male_number").attr('readonly', true);
+                    $("#id_family_male_number").val(value);
+                    $("#id_hired_female_number").attr('readonly', false);
+                    $("#id_hired_male_number").attr('readonly', false);
+                }
+                else{
+                    $("#id_family_female_number").attr('readonly', false);
+                    $("#id_family_male_number").attr('readonly', false); 
+                    $("#id_hired_female_number").attr('readonly', false);
+                    $("#id_hired_male_number").attr('readonly', false);
+                }
+            });
+    });
+</script>
+{% endblock %}

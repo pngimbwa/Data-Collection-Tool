@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+	<meta http-equiv="content-type" content="text/html; charset=iso-8859-1"/>
+	<title>jQuery treeView</title>
+	
+	<link rel="stylesheet" href="../jquery.treeview.css" />
+	<link rel="stylesheet" href="screen.css" />
+	
+	<script src="../lib/jquery.js" type="text/javascript"></script>
+	<script src="../lib/jquery.cookie.js" type="text/javascript"></script>
+	<script src="../jquery.treeview.js" type="text/javascript"></script>
+	
+	<script type="text/javascript" src="demo.js"></script>
+	
+	</head>
+	<body>
+
+	<div id="main">
+    
+<div>
+    <a id="collapseAll" href="#">Collapse All Outside of TreeControl</a>
+</div>
+
+<ul id="treeview" class="treeview-black" class="closed">
+	<li>Item 1</li>
+	<li class="closed">
+		<span>Item 2</span>
+		<ul>
+			<li class="closed">
+				<span>Item 2.1</span>
+				<ul>
+                    <li><a href="www.google.com">Item 2.1.1</a></li>
+					<li>Item 2.1.2</li>
+				</ul>
+			</li>
+			<li>Item 2.2</li>
+			<li class="closed">
+				<span>Item 2.3 (closed at start)</span>
+				<ul>
+					<li>Item 2.3.1</li>
+					<li>Item 2.3.2</li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+    <li class="closed">
+		<span>Item 3</span>
+		<ul>
+			<li class="closed">
+				<span>Item 3.1</span>
+				<ul>
+                    <li><a href="www.google.com">Item 3.1.1</a></li>
+					<li>Item 3.1.2</li>
+				</ul>
+			</li>
+			<li>Item 3.2</li>
+			<li class="closed">
+				<span>Item 3.3 (closed at start)</span>
+				<ul>
+					<li>Item 3.3.1</li>
+					<li>Item 3.3.2</li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+</ul>
+
+
+
+<div id="treecontrol">
+	<a href="#"></a><a href="#"></a><a href="#"></a>
+</div>
+
+
+</div>
+ 
+</body></html>

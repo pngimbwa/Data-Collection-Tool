@@ -1,0 +1,530 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>Add Farmer</title>
+{% endblock %}
+
+{% block main_section %}
+  <script>
+  $(function() {
+    $( "#id_planting_date" ).datepicker();
+  });
+   $(function() {
+    $( "#id_technology_date" ).datepicker();
+  });
+   
+  $(function() {
+    $( "#id_seed_date" ).datepicker();
+  });
+  </script> 
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
+    
+<!--<div class="col-sm-10 col-sm-offset-1 col-sm-offset-1 col-md-10 col-md-offset-1 col-md-offset-1 col-lg-10 col-lg-offset-1 col-lg-offset-1 container-fluid">
+-->
+    <form class="well form-horizontal" action=" " method="post"  id="farmerinfo_form">{% csrf_token %} 
+<!-- Form Name -->
+
+<legend>Field Info</legend>
+
+<div class="form-group"> 
+    {{ farminfoform.fieldID.errors }}
+    <label for="fieldID" class="col-md-4 control-label">Field ID:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.fieldID }}
+        </div>
+</div>
+
+<!--
+<div class="form-group"> 
+    {{ farminfoform.field_type.errors }}
+    <label for="field_type" class="col-md-4 control-label">Field type:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.field_type }}
+        </div>
+</div>
+-->
+<div class="form-group"> 
+    {{ farminfoform.fieldsize.errors }}
+    <label for="farmsize" class="col-md-4 control-label">Field size</label> 
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ farminfoform.fieldsize }}<span class="input-group-addon">m<sup>2</sup></span>
+            </div>
+        </div>
+</div>
+
+<!--
+<div class="form-group"> 
+    {{ farminfoform.number_of_plots.errors }}
+    <label for="number_of_plots" class="col-md-4 control-label">Number of plots:</label> 
+        <div class="col-md-4 selectContainer">
+            {{ farminfoform.number_of_plots }}
+        </div>
+</div>-->
+
+<div class="form-group"> 
+    {{ farminfoform.field_latitude.errors }}
+    <label for="field_latitude" class="col-md-4 control-label">Field longitude:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.field_latitude }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farminfoform.field_longitude.errors }}
+    <label for="field_longitude" class="col-md-4 control-label">Field longitude:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.field_longitude }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farminfoform.crop.errors }}
+    <label for="crop" class="col-md-4 control-label">Crop(s):</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.crop }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farminfoform.planting_method.errors }}
+    <label for="planting_method" class="col-md-4 control-label">Planting method:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.planting_method }}
+        </div>
+</div>
+
+<div id='transplantingdv'>
+<div class="form-group"> 
+    {{ farminfoform.planting_date.errors }}
+    <label for="planting_date" class="col-md-4 control-label">Planting date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.planting_date }}
+        </div>
+</div>
+</div>
+
+<div id='seedingdv'>
+  
+<div class="form-group"> 
+    {{ farminfoform.seed_date.errors }}
+    <label for="seed_date" class="col-md-4 control-label">Seeding date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.seed_date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farminfoform.seed_rate.errors }}
+    <label for="seed_rate" class="col-md-4 control-label">Seeding rate:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.seed_rate }}
+        </div>
+</div>
+  
+</div>
+
+
+<div class="form-group"> 
+    {{ farminfoform.bed_length.errors }}
+    <label for="bed_length" class="col-md-4 control-label">bed length:</label>
+        <div class="col-md-4 selectContainer">
+        <div class="input-group">
+            {{ farminfoform.bed_length }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farminfoform.bed_width.errors }}
+    <label for="bed_width" class="col-md-4 control-label">bed width:</label>
+        <div class="col-md-4 selectContainer">
+        <div class="input-group">
+            {{ farminfoform.bed_width }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farminfoform.bednumber.errors }}
+    <label for="bednumber" class="col-md-4 control-label">Number of beds:</label>
+        <div class="col-md-4 selectContainer">
+              {{ farminfoform.bednumber }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farminfoform.furrow_length.errors }}
+    <label for="furrow_length" class="col-md-4 control-label">Furrow length:</label>
+        <div class="col-md-4 selectContainer">
+        <div class="input-group">
+            {{ farminfoform.furrow_length }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farminfoform.furrow_width.errors }}
+    <label for="furrow_width" class="col-md-4 control-label">Furrow width:</label>
+        <div class="col-md-4 selectContainer">
+        <div class="input-group">
+            {{ farminfoform.furrow_width }}<span class="input-group-addon">m</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farminfoform.nfurrow.errors }}
+    <label for="nfurrow" class="col-md-4 control-label">Number of furrows:</label>
+        <div class="col-md-4 selectContainer">
+            {{ farminfoform.nfurrow }}
+        </div>
+</div>
+
+</fieldset>
+<fieldset>
+<legend>Irrigation application and management</legend>
+
+<div class="form-group"> 
+    {{ farminfoform.water_application.errors }}
+    <label for="water_application" class="col-md-4 control-label">Water application:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.water_application }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farminfoform.water_management_method.errors }}
+    <label for="water_management_method" class="col-md-4 control-label">Water management method:</label>
+        <div class="col-md-4 selectContainer">
+        {{ farminfoform.water_management_method }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ farminfoform.rootzone_depth.errors }}
+    <label for="rootzone_depth" class="col-md-4 control-label">Rootzone depth assumed:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ farminfoform.rootzone_depth }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='TDR_length'> 
+    {{ farminfoform.TDR_length.errors }}
+    <label for="TDR_length" class="col-md-4 control-label">Length of the measurement rods:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ farminfoform.TDR_length }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='WFD_yellow_depth'> 
+    {{ farminfoform.WFD_yellow_depth.errors }}
+    <label for="WFD_yellow_depth" class="col-md-4 control-label">Depth the yellow detector is installed:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ farminfoform.WFD_yellow_depth }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group" id='WFD_red_depth'> 
+    {{ farminfoform.WFD_red_depth.errors }}
+    <label for="WFD_red_depth" class="col-md-4 control-label">Depth the red detector is installed:</label>
+        <div class="col-md-4 selectContainer">
+          <div class="input-group">
+             {{ farminfoform.WFD_red_depth }}<span class="input-group-addon">cm</span>
+            </div>
+        </div>
+</div>
+
+</fieldset>
+
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+ 
+</div><!-- /.container -->
+{% endblock %}
+ 
+{% block extended_javascripts_code %} 
+<script>
+    $(document).ready(function () {
+    $('#farmerinfo_form').bootstrapValidator({
+        feedbackIcons: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {         
+            farmer: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose farmer' }
+                        }
+                    },         
+            fieldID: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please enter field ID' }
+                        }
+                    },
+            field_latitude: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill in field latitude' }
+                        }
+                    },
+            field_longitude: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please provide field longitude' }
+                        }
+                    },
+            crop: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose crop(s)' }
+                        }
+                    },
+            planting_date: {
+                validators: {
+                    stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill in the planting date' }
+                }
+            },
+            seed_date: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill seeding date' }
+                }
+            },
+            seed_rate: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please seed rate' }
+                }
+            },
+            fieldsize: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please fill field size' }
+                }
+            },
+            water_source: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please select water source' }
+                }
+            },
+            water_application: {
+                validators: {
+                    //stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose water application' }
+                }
+            },
+            water_management_method: {
+                validators: {
+                   // stringLength: { min: 2 },
+                    notEmpty: { message: 'Please choose water management method' }
+                }
+            },
+            technology: {
+                validators: {
+                    notEmpty: { message: 'Please choose technology' },
+                 
+                }
+            },
+            technology_date: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill date technology was installed' }
+                        }
+                    },
+            pumping_source: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select the pumping source' }
+                        }
+                    },
+            well_latitude: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill in the well latitude' }
+                        }
+                    },
+            well_longitude: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill in the well longitude' }
+                        }
+                    },
+            well_depth: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill in depth of well' }
+                        }
+                    },
+            well_diameter: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill the diameter of the well' }
+                        }
+                    },
+            bed_length: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill the bed length' }
+                        }
+                    },
+            bed_width: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill in the bed width' }
+                        }
+                    },
+            bednumber: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill number of beds' }
+                        }
+                    },
+                    
+            furrow_length: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill the furrow length' }
+                        }
+                    },
+            furrow_width: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill furrow width' }
+                        }
+                    },
+            nfurrow: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill number of furrows' }
+                        }
+                    },
+            field_type: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill number of rows' }
+                        }
+                    },
+            planting_method: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select planting method' }
+                        }
+                    },
+            number_of_plots: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill number of rows' }
+                        }
+                    },
+        }
+    }).on('success.form.bv', function (e) {
+        $('#success_message').slideDown({ opacity: 'show' }, 'slow');
+        $('#addfarmer_form').data('bootstrapValidator').resetForm();
+        e.preventDefault();
+        var $form = $(e.target);
+        var bv = $form.data('bootstrapValidator');
+        $.post($form.attr('action'), $form.serialize(), function (result) {
+            console.log(result);
+        }, 'json');
+    });
+});
+</script>
+
+<script>
+    $(window).load(function(){
+        if ($('#id_planting_method option:selected').text()=='Direct seeding') {
+            $("#seedingdv").show();
+            $("#id_seed_rate,#id_seed_date").val();
+            $("#transplantingdv").hide();
+            $("#id_planting_date").val();
+        }
+        else if ($('#id_planting_method option:selected').text()=='Transplanting'){
+            $("#transplantingdv").show();
+            $("#id_planting_date").val();
+            $("#seedingdv").hide();
+            $("#id_seed_rate,#id_seed_date").val();
+        }
+        else{
+            $("#seedingdv,#transplantingdv").hide();
+        }
+    });
+    $('#id_planting_method').change(function(){
+        value = 0;
+        value_date ='00/00/0000';
+        if ($('#id_planting_method option:selected').text()=='Direct seeding') {
+            $("#seedingdv").show();
+            $("#transplantingdv").hide();
+            $("#id_planting_date").val(value_date);
+            $("#id_seed_rate,#id_seed_date").val();
+        }
+        else if ($('#id_planting_method option:selected').text()=='Transplanting'){
+            $("#transplantingdv").show();
+            $("#id_planting_date").val();
+            $("#seedingdv").hide();
+            $("#id_seed_date").val(value_date);
+            $("#id_seed_rate").val(value);
+            
+        }
+        else{
+            $("#transplantingdv,#seedingdv").hide();
+        }
+    });
+</script>
+
+<script>
+$(window).load(function(){
+        if ($('#id_water_management_method:selected').text()=='WFD' || $('#id_water_management_method:selected').text()=='WFD WUA'){
+            $("#WFD_red_depth,#WFD_yellow_depth").show();
+            $("#id_WFD_red_depth,#id_WFD_yellow_depth").val();
+        }
+        else if ($('#id_water_management_method:selected').text() == 'TDR(soil moisture)') {
+          $('#TDR_length').show();
+          $("#WFD_red_depth,#WFD_yellow_depth").hide();
+          $("#id_WFD_red_depth,#id_WFD_yellow_depth").val();
+        }
+        else{
+            value='';
+            $("#WFD_red_depth,#WFD_yellow_depth,#TDR_length").hide();
+            $("#id_WFD_red_depth,#id_WFD_yellow_depth,#id_TDR_length").val(value);
+        }
+    });
+
+$(document).ready(function() {
+            $("#id_water_management_method").change(function() {
+                if ($(this).val() == 'WFD' || $(this).val() == 'WFD WUA') {
+                  $("#WFD_red_depth,#WFD_yellow_depth").show();
+                   $("#TDR_length").hide();
+                }
+                else if ($(this).val()== 'TDR(soil moisture)'){
+                 $("#TDR_length").show();
+                 $("#WFD_red_depth,#WFD_yellow_depth").hide();
+                }
+                else{
+                  $("#WFD_red_depth,#WFD_yellow_depth,#TDR_length").hide();
+                }
+            });
+    });
+  
+</script>
+{% endblock %}
+

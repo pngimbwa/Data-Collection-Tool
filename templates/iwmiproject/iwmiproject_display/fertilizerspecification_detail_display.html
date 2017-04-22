@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block title %}
+    <title>Farmer list</title>
+{% endblock %}
+
+{% block main_section %}
+<script>
+  $(function() {
+    $( "#id_date" ).datepicker();
+  });
+  
+  $(document).ready(function(){
+    $("#id_seasonstart").datepicker({
+        onSelect: function(selected) {
+          $("#id_seasonend").datepicker("option","minDate", selected)
+        }
+    });
+    $("#id_seasonend").datepicker({
+        onSelect: function(selected) {
+           $("#id_seasonstart").datepicker("option","maxDate", selected)
+        }
+    });  
+});
+  </script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+       
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+{% if user_village %}
+<input type="hidden" id="uservillage" name="uservillage" value="{{user_village}}" readonly='readonly' />
+{% elif researcher %}
+<input type="hidden" id="researcher" name="researcher" value="{{researcher}}" readonly='readonly' />
+{% elif user_country %}
+
+{% endif %}
+
+<table width="100%" class="table table-striped table-bordered table-hover" id="table">
+    <tr>
+        <td align=center> PlotID</td>
+		<td align=center> Fertilizer applied</td>
+        <td align=center> Nitrogen</td>
+		<td align=center> Phosphorus</td>
+        <td align=center> Potassium</td>
+		<td align=center> Sulphur</td>
+        <td align=center> Organic matter</td>
+		<td align=center><a href="">Download All</a></td>
+    </tr>
+    {% for obj in object_list %}
+    <tr>
+        <td align=center>{{ obj.plotID.plotID }}</td>
+        <td align=center>{{ obj.fertilizer }}</td>
+		<td align=center>{{ obj.nitrogen }}</td>
+        <td align=center>{{ obj.phosphorus }}</td>
+		<td align=center>{{ obj.potassium }}</td>
+        <td align=center>{{ obj.sulphur }}</td>
+        <td align=center>{{ obj.organic_matter }}</td>
+		<!--persopersonIDnID=obj.farm.farmID.personID?-->
+		<td><a href="{% url 'iwmiproject:edit_fertilizer_specification_specific_detail' plotID=obj.plotID.plotID personID=obj.farm.farmID.personID fertilizer=obj.fertilizer %}" alt="edit" >Edit</a></td>
+  </tr>
+    {% endfor %} 
+</table>
+
+<div class="text-center">
+{% if object_list.has_other_pages %}
+  <ul class="pagination">
+	{% if object_list.has_previous %}
+      <li><a href="?page={{ object_list.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in object_list.paginator.page_range %}
+      {% if object_list.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if object_list.has_next %}
+      <li><a href="?page={{ object_list.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+</div>
+
+
+{% endblock %}
+{% block extended_javascripts_code %}
+
+{% endblock %}
+
+
+
+

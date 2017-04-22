@@ -1,0 +1,439 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    <title>Soil information</title>
+{% endblock %}
+
+{% block main_section %}
+
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    
+
+    <form class="well form-horizontal" action=" " method="post"  id="fuelconsumption_form">{% csrf_token %} 
+
+<!-- Form Name -->
+<fieldset>
+<legend>Soil property..</legend>
+
+<div class="form-group"> 
+    {{ soilform.date.errors }}
+    <label for="date" class="col-md-4 control-label">Date:</label>
+        <div class="col-md-4 selectContainer">
+        {{ soilform.date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilform.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farm:</label>
+        <div class="col-md-4 selectContainer">
+        {{ soilform.farm }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilform.soilclass.errors }}
+    <label for="soilclass" class="col-md-4 control-label">Soil class:</label>
+        <div class="col-md-4 selectContainer">
+        {{ soilform.soilclass }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ soilform.sand.errors }}
+    <label for="sand" class="col-md-4 control-label">Sand:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilform.sand }}<span class="input-group-addon">%</span>
+            </div>
+        </div>
+</div>          
+
+<div class="form-group"> 
+    {{ soilform.clay.errors }}
+    <label for="clay" class="col-md-4 control-label">Clay:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilform.clay }}<span class="input-group-addon">%</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilform.silt.errors }}
+    <label for="silt" class="col-md-4 control-label">Silt:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilform.silt }}<span class="input-group-addon">%</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilform.fc.errors }}
+    <label for="fc" class="col-md-4 control-label">Field capacity:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilform.fc }}<span class="input-group-addon">%</span>
+             </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ soilform.pwp.errors }}
+    <label for="pwp" class="col-md-4 control-label">Permanent wilting point:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilform.pwp }}<span class="input-group-addon">%</span>
+             </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilform.bulkdensity.errors }}
+    <label for="bulkdensity" class="col-md-4 control-label">Bulk density:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilform.bulkdensity }}<span class="input-group-addon">g/cm<sup>3</sup></span>
+             </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilform.pH.errors }}
+    <label for="pH" class="col-md-4 control-label">Soil pH:</label>
+        <div class="col-md-4 selectContainer">
+        {{ soilform.pH }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilform.ec.errors }}
+    <label for="ec" class="col-md-4 control-label">EC:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilform.ec }}<span class="input-group-addon">dS/m</span>
+            </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ soilform.cec.errors }}
+    <label for="cec" class="col-md-4 control-label">CEC:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+        {{ soilform.cec }}<span class="input-group-addon">cmo/kg</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilform.om.errors }}
+    <label for="om" class="col-md-4 control-label">Organic matter:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilform.om }}<span class="input-group-addon">%</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilform.tn.errors }}
+    <label for="date" class="col-md-4 control-label">Total nitrogen(TN):</label>
+        <div class="col-md-4 selectContainer">
+             <div class="input-group">
+            {{ soilform.tn }}<span class="input-group-addon">%</span>
+             </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilform.av_p.errors }}
+    <label for="av_p" class="col-md-4 control-label">Available phosphorus(Av_P):</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+           {{ soilform.av_p }}<span class="input-group-addon">ppm</span>
+             </div>
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ soilform.fe.errors }}
+    <label for="fe" class="col-md-4 control-label">Fe:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+           {{ soilform.fe }}<span class="input-group-addon">ppm</span>
+             </div>
+        </div>
+</div>
+
+
+
+<div class="form-group"> 
+    {{ soilform.k.errors }}
+    <label for="k" class="col-md-4 control-label">K:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilform.k }}<span class="input-group-addon">cmol/kg</span>
+             </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilform.zn.errors }}
+    <label for="zn" class="col-md-4 control-label">Zn:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilform.zn }}<span class="input-group-addon">g/kg</span>
+             </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilform.se.errors }}
+    <label for="se" class="col-md-4 control-label">Se:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilform.se }}<span class="input-group-addon">g/kg</span>
+             </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilform.ca.errors }}
+    <label for="ca" class="col-md-4 control-label">Ca:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilform.ca }}<span class="input-group-addon">g/kg</span>
+             </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilform.s.errors }}
+    <label for="s" class="col-md-4 control-label">S:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilform.s }}<span class="input-group-addon">g/kg</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilform.mg.errors }}
+    <label for="mg" class="col-md-4 control-label">Mg:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilform.mg }}<span class="input-group-addon">g/kg</span>
+            </div>
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ soilform.na.errors }}
+    <label for="na" class="col-md-4 control-label">Na:</label>
+        <div class="col-md-4 selectContainer">
+            <div class="input-group">
+            {{ soilform.na }}<span class="input-group-addon">g/kg</span>
+            </div>
+        </div>
+</div>
+
+</fieldset>
+
+<!-- Success message -->
+<div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+    
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block extended_javascripts_code %}
+	<script>
+    $(document).ready(function () {
+    $('#fuelconsumption_form').bootstrapValidator({
+        feedbackIcons: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            date: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please select date' }
+                        }
+                    },
+                    
+            farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose farm' }
+                        }
+                    },
+            soilclass: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose soil type' }
+                        }
+                    },
+            pH: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill soil pH' }
+                        }
+                    },
+                    
+            ec: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please fill soil ec' }
+                        }
+                    },
+            sand : {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill soil sand %' }
+                }
+            },
+            
+            clay: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill soil clay %' }
+                }
+            },
+            
+            silt: {
+                validators:{ 
+                        notEmpty:{
+                                message:'Please fill soil silt %' }
+                }
+            },
+            cec: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill soil cec amount' }
+                }
+            },
+            
+            om: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill soil om amount' }
+                }
+            },
+            tn: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill soil tn amount' }
+                }
+            },
+            av_p: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill soil av_p' }
+                }
+            },
+            fe: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill soil fe amount' }
+                }
+            },
+            fc: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill soil fc amount' }
+                }
+            },
+            pwp: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill soil pwp' }
+                }
+            },
+            k: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill soil k amount' }
+                }
+            },
+            bulkdensity: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill soil bulk density' }
+                }
+            },
+            zn: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill soil zn amount' }
+                }
+            },
+            se: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill soil se amount' }
+                }
+            },
+            ca: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill soil ca amount' }
+                }
+            },
+            s: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill soil s amount' }
+                }
+            },
+            mg: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill soil mg amount' }
+                }
+            },
+            na: {
+                validators:{
+                        notEmpty:{
+                                message:'Please fill soil na amount' }
+                }
+            },
+
+            
+            
+        }
+    }).on('success.form.bv', function (e) {
+        $('#success_message').slideDown({ opacity: 'show' }, 'slow');
+        $('#fuelconsumption_form').data('bootstrapValidator').resetForm();
+        e.preventDefault();
+        var $form = $(e.target);
+        var bv = $form.data('bootstrapValidator');
+        $.post($form.attr('action'), $form.serialize(), function (result) {
+            console.log(result);
+        }, 'json');
+    });
+});
+      //# sourceURL=pen.js
+
+    </script>
+    <script>
+            if (document.location.search.match(/type=embed/gi)) {
+                window.parent.postMessage("resize", "*");
+                }
+    </script>
+{% endblock %}

@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block title %}
+    <title>Farmer list</title>
+{% endblock %}
+
+{% block main_section %}
+<script>
+   $(document).ready(function(){
+    $("#id_start_date").datepicker({
+        onSelect: function(selected) {
+          $("#id_end_date").datepicker("option","minDate", selected);
+          $('#edit_remark_form').formValidation('revalidateField', 'start_date');
+        }
+    });
+    $("#id_end_date").datepicker({
+        onSelect: function(selected) {
+           $("#id_start_date").datepicker("option","maxDate", selected);
+           $('#edit_remark_form').formValidation('revalidateField', 'end_date');
+        }
+    });  
+});
+   
+  </script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+       
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+{% if user_village %}
+<input type="hidden" id="uservillage" name="uservillage" value="{{user_village}}" readonly='readonly' />
+{% elif researcher %}
+<input type="hidden" id="researcher" name="researcher" value="{{researcher}}" readonly='readonly' />
+{% elif user_country %}
+
+{% endif %}
+
+<form class="well form-horizontal" action=" " method="post"  id="edit_remark_form">{% csrf_token %} 
+<!-- Form Name -->
+<fieldset>
+<legend>Field Info..</legend>
+
+{{ remarkform.errors }}
+
+
+<div class="form-group"> 
+    {{ remarkform.farm.errors }}
+    <label for="farm" class="col-md-4 control-label">Farmer:</label>
+        <div class="col-md-4 selectContainer">
+            {{ remarkform.farm }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ remarkform.plot.errors }}
+    <label for="plot" class="col-md-4 control-label">Field ID:</label>
+        <div class="col-md-4 selectContainer">
+            {{ remarkform.plot }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ remarkform.stress.errors }}
+    <label for="stress" class="col-md-4 control-label">Stress:</label>
+        <div class="col-md-4 selectContainer">
+            {{ remarkform.stress }}
+        </div>
+</div>
+
+<div class="form-group" id ='other'> 
+    {{ remarkform.other.errors }}
+    <label for="other" class="col-md-4 control-label">Please specify:</label>
+        <div class="col-md-4 selectContainer">
+        {{ remarkform.other }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ remarkform.start_date.errors }}
+    <label for="start_date" class="col-md-4 control-label">Stress start date:</label>
+        <div class="col-md-4 selectContainer">
+            {{ remarkform.start_date }}
+        </div>
+</div>
+
+<div class="form-group"> 
+    {{ remarkform.end_date.errors }}
+    <label for="end_date" class="col-md-4 control-label">Stress end date:</label>
+        <div class="col-md-4 selectContainer">
+            {{ remarkform.end_date }}
+        </div>
+</div>
+
+
+<div class="form-group"> 
+    {{ remarkform.severness.errors }}
+    <label for="severness" class="col-md-4 control-label">Severeness:</label>
+        <div class="col-md-4 selectContainer">
+            {{ remarkform.severness }}
+        </div>
+</div>
+</fieldset>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label"></label>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-default" >Submit</button>
+  </div>
+</div>
+</form>
+
+</div>
+
+{% endblock %}
+{% block extended_javascripts_code %}
+	<script>
+    $(document).ready(function () {
+    $('#edit_remark_form').formValidation({
+        framework: 'bootstrap',
+        icon: {
+            //valid: 'glyphicon glyphicon-ok',
+            //invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            end_date: {
+                validators: {
+                  date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            start_date: {
+                validators: {
+                  date: {
+                            format: 'MM/DD/YYYY',
+                            message: 'The date is not a valid'},
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            farm: {
+                validators: {
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            plot: {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose farm' }
+                        }
+                    },
+            stress: {
+                validators: {
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            other: {
+                validators: {
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+            severness: {
+                validators: {
+                    notEmpty: {
+                        message: 'This field is required' }
+                        }
+                    },
+
+        }
+    });
+});
+
+    </script>
+<script>
+
+$(window).load(function(){
+  var url = "/get_farmer_name/" + $('#id_farm').val() + "/get_farmer_name";
+  $.getJSON(url, function(farmer_name) {
+    //alert(farmer_name);
+    var options = '<option value="' + farmer_name[0] + '">' + farmer_name[1] + ' ' + farmer_name[2] + ' ' + farmer_name[3] + '</option>';
+    $("#id_farm").html(options);
+    $("#id_farm option:selected").attr('selected', 'selected');
+  })
+});
+
+$(window).load(function(){
+  var url = "/get_plot_name/" + $('#id_plot').val() + "/get_plot_name";
+  $.getJSON(url, function(plot_name) {
+    var options = '<option value="' + plot_name[0] + '">' + plot_name[1] + '</option>';
+    $("#id_plot").html(options);
+    $("#id_plot option:selected").attr('selected', 'selected');
+  })
+});
+
+</script>
+
+<script>
+  
+$(window).load(function() {
+    if ($('#id_stress').val() == '' || $('#id_stress').val() == null) {
+        $('select[name=stress] option:eq(6)').attr('selected', 'selected');
+        var url = "/get_plot_stress/" + $('#id_plot').val() + '/'+ $('#id_farm').val() +'/' + $('#id_start_date').val() + '/'+ $('#id_end_date').val() + "/get_plot_stress";
+        $.getJSON(url, function(plot_stress) {
+        var stress = plot_stress[0];
+        $("#other").show();
+        $("#id_other").val(stress);
+        })
+        
+    }
+    else {
+        $("#other").hide();
+        $("#id_other").val('99999999');
+    }
+});
+
+$(document).ready(function() {
+  $("#id_stress").change(function() {
+    if ($(this).val() == '') {
+      $("#other").hide();
+      $("#id_other").val('99999999');
+      }
+    else if ($(this).val() == 'Other') {
+        $("#other").show();
+        $("#id_other").val('');
+    }
+    else{
+        $("#other").hide();
+        $("#id_other").val('99999999');
+    }
+    })
+});
+$(document).ready(function() {
+  $("#id_farm").change(function() {
+    if ($(this).val() == '') {
+      $("#id_plot").html("<option>Choose field..</option>");
+      $("#id_plot").attr('disabled', true);
+      }
+      else {
+        var url = "/plot/" + $(this).val() + "/plots";
+        $.getJSON(url, function(plots) {
+        var options = '<option value="">Choose plot..</option>';
+        for (var i = 0; i < plots.length; i++) {
+          options += '<option value="' + plots[i].pk + '">' + plots[i].fields['plotID']  + '</option>';
+        }
+        $("#id_plot").html(options);
+        $("#id_plot option:first").attr('selected', 'selected');
+        $("#id_plot").attr('disabled', false);
+      });
+    }
+  });
+});
+</script>
+{% endblock %}
+
+
+
